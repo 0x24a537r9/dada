@@ -1,4 +1,7 @@
 *.log
 *.pot
 *.pyc
+*.swp
+*.swo
+*.sublime-workspace
 local_settings.py
