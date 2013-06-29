@@ -1,0 +1,13 @@
+{
+	"folders":
+	[
+		{
+			"path": "~/dev/dada",
+      "file_exclude_patterns": ["*.pyc", "*/static/*"]
+		}
+	],
+  "settings":
+  {
+    "tab_size": 2
+  }
+}

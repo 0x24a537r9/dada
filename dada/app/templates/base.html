@@ -1,0 +1,16 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="en">
+<head>
+  <title>{% block title %}{% endblock %}</title>
+  {% load staticfiles %}
+  <link href="{% static 'base.css' %}" rel="stylesheet" type="text/css">
+  <script src="{% static 'jquery.min.js' %}"></script>
+  <script src="{% static 'jquery.cookie.js' %}"></script>
+  <script src="{% static 'ajax.js' %}"></script>
+  {% block head %}{% endblock %}
+</head>
+<body>
+  {% block content %}{% endblock %}
+  {% block footer_script %}{% endblock %}
+</body>
+</html>
