@@ -1,0 +1,46 @@
+{% extends "base_root.html" %}
+
+{% load tags %}
+
+{% block title %}Question &amp; Answer{% endblock %}
+
+{% block content %}
+<h1>Question &amp; Answer</h1>
+<div>Q: <span id="question"></span></div>
+<div>A: <span id="answer"></span></div>
+<button id="load-poem-button" disabled>Load poem</button>
+<div id="load-poem-error"></div>
+{% endblock %}
+
+{% block footer_script %}
+{{ block.super }}
+<script>
+  $(function () {
+    $('#load-poem-button').click(loadPoem);
+    loadPoem();
+  });
+
+  function loadPoem() {
+    $('#load-poem-button').attr('disabled', true);
+
+    var data = {};
+    $.ajax({
+      url: '{% url 'ajax-get-question-answer' %}',
+      data: data,
+      cache: false,
+      success: function (data) {
+        if (data.errors) {
+          $('#load-poem-error').text(data.errors.join());
+          return;
+        }
+        $('#question').text(data.question.text);
+        $('#answer').text(data.answer.text);
+      }
+    }).fail(function() {
+      $('#load-poem-error').text('Server error!');
+    }).always(function() {
+      $('#load-poem-button').removeAttr('disabled');
+    });
+  }
+</script>
+{% endblock %}

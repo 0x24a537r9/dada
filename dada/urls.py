@@ -9,5 +9,6 @@ admin.autodiscover()
 urlpatterns = patterns(
     '',
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^(?i)$', home, name='home'),
+    url(r'^(?i)question-answer/$', question_answer, name='question-answer'),
+    url(r'^(?i)x/get-question-answer/$', ajax_get_question_answer, name='ajax-get-question-answer'),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

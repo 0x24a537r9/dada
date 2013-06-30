@@ -21,3 +21,21 @@ class Response(object):
 def home(request):
   r = Response()
   return r.__dict__
+
+
+@render_to('question_answer.html')
+def question_answer(request):
+  r = Response()
+  return r.__dict__
+
+
+@ajax_request
+def ajax_get_question_answer(request):
+  r = Response()
+  if request.method != 'GET':
+    return Response.errors('Request must use GET; used: %s.' % request.method)
+
+  r.question = Entry.get_random(Entry.QUESTION).to_dict()
+  r.answer = Entry.get_random(Entry.ANSWER).to_dict()
+
+  return r.__dict__
