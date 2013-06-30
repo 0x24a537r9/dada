@@ -1,0 +1,54 @@
+@font-face {
+  font-family: bodonika;
+  src: local(bodonika), url('/static/bodonika.otf');
+}
+
+@font-face {
+  font-family: Ecuyer;
+  src: local(EcuyerDAX), url('/static/ecuyer.ttf');
+}
+
+@font-face {
+  font-family: Andes;
+  src: local(Andes), url('/static/andes.ttf');
+}
+
+@font-face {
+  font-family: Romantiques;
+  src: local(Romantiques), url('/static/romantiques.otf');
+}
+
+@font-face {
+  font-family: 'Betty Noir';
+  src: local('Betty Noir'), url('/static/betty_noir.ttf');
+}
+
+@font-face {
+  font-family: 'Deathe Maach';
+  src: local('DEATHE MAACH NCV'), url('/static/deathe_maach.otf');
+}
+
+@font-face {
+  font-family: 'Quentin Caps';
+  src: local('QuentinCaps'), url('/static/quentin_caps.ttf');
+}
+
+@font-face {
+  font-family: 'Riot Squad';
+  src: local('RiotSquad'), url('/static/riot_squad.ttf');
+}
+
+@font-face {
+  font-family: 'Zabatana Poster';
+  src: local('Zabatan Poster'), url('/static/zabatana_poster.otf');
+}
+
+@font-face {
+  font-family: 'Radley';
+  src: local('Radley'), url('/static/radley.woff');
+}
+
+h1 {
+  font-family: 'Radley';
+  font-weight: normal;
+}

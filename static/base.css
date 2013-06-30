@@ -1,272 +1,49 @@
-/* Base styles go here. */
-
-@import url(http://fonts.googleapis.com/css?family=Lobster);
-
-body {
-  background-attachment: fixed;
-  background-repeat: no-repeat;
-  background-size: cover;
-  padding: 0;
-  margin: 0;
-  font-family: Helvetica,Helvetica Neue,Arial,Liberation Sans,DejaVu Sans,sans-serif;
-  font-size: 14px;
+@font-face {
+  font-family: bodonika;
+  src: local(bodonika), url('/static/bodonika.otf');
 }
 
-.floating-text {
-  color: #FAFAFA;
-  text-shadow: rgba(0, 0, 0, 0.6) 0px 3px 10px, rgba(0, 0, 0, 0.1) 0px 0px 30px;
-}
-  
-.floating-box {
-  background-color: #FFF;
-  -moz-box-shadow: rgba(0, 0, 0, 0.6) 0px 3px 10px, rgba(0, 0, 0, 0.1) 0px 0px 30px;
-  -webkit-shadow:  rgba(0, 0, 0, 0.6) 0px 3px 10px, rgba(0, 0, 0, 0.1) 0px 0px 30px;
-  box-shadow:      rgba(0, 0, 0, 0.6) 0px 3px 10px, rgba(0, 0, 0, 0.1) 0px 0px 30px;
-  border: 1px solid #DDD;
+@font-face {
+  font-family: Ecuyer;
+  src: local(EcuyerDAX), url('/static/ecuyer.ttf');
 }
 
-#gutter {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: 225px;
+@font-face {
+  font-family: Andes;
+  src: local(Andes), url('/static/andes.ttf');
 }
 
-.gutter-title {
-  position: absolute;
-  top: 660px;
-  left: 22px;
-  width: 600px;
-  text-align: right;
-  -webkit-transform-origin: 0 0;
-  -moz-transform-origin:    0 0;
-  -ms-transform-origin:     0 0;
-  -o-transform-origin:      0 0;
-  transform-origin:         0 0;
-  -webkit-transform: rotate(-90deg);
-  -moz-transform:    rotate(-90deg);
-  -ms-transform:     rotate(-90deg);
-  -o-transform:      rotate(-90deg);
-  transform:         rotate(-90deg);
-  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
-  font-family: 'Lobster', cursive;
-  font-size: 100px;
-  font-weight: 700;
+@font-face {
+  font-family: Romantiques;
+  src: local(Romantiques), url('/static/romantiques.otf');
 }
 
-.gutter-title.subtitle {
-  top: 725px;
-  left: 132px;
-  font-size: 36px;
+@font-face {
+  font-family: 'Betty Noir';
+  src: local('Betty Noir'), url('/static/betty_noir.ttf');
 }
 
-#gutter-box {
-  position: absolute;
-  bottom: 15px;
-  text-align: center;
-  width: 100%;
-  font-family: 'Lobster', cursive;
-  font-size: 28px;
+@font-face {
+  font-family: 'Deathe Maach';
+  src: local('DEATHE MAACH NCV'), url('/static/deathe_maach.otf');
 }
 
-#nav {
-  margin-top: 35px;
+@font-face {
+  font-family: 'Quentin Caps';
+  src: local('QuentinCaps'), url('/static/quentin_caps.ttf');
 }
 
-#nav ul {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 0 225px;
-  width: 100%;
+@font-face {
+  font-family: 'Riot Squad';
+  src: local('RiotSquad'), url('/static/riot_squad.ttf');
 }
 
-#nav li {
-  float: left;
-  margin: 0 1em 0 0;
-}
-
-#nav a {
-  text-decoration: none;
-  display: block;
-  width: 5em;
-  padding: 0 0.5em;
-  color: white;
-  font-family: 'Lobster', cursive;
-  font-size: 18px;
-  color: rgba(250, 250, 250, 0.8);
-  border-bottom: 8px solid rgba(250, 250, 250, 0.7);
-}
-
-#nav a:hover {
-  color: #FAFAFA;
-  border-color: #FAFAFA;
-}
-
-#content {
-  clear: both;
-  margin: 0 40px 30px 225px;
-  border-top: 0;
-  padding: 30px;
-  min-height: 1000px;
-  min-width: 675px;
-}
-
-.badge {
-  color: #FFF;
-  background-color: #505050;
-  border: 1px solid #333;
-  padding: 0px 6px 0px 3px;
-  display: inline-block;
-  text-decoration: none;
-  white-space: nowrap;
-  line-height: 24px;
-  -moz-border-radius: 6px;
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
-  margin: 0 3px 3px 0;
-  font-size: 13px;
-  font-style: italic;
-}
-
-.badge.required {
-  font-style: normal;
-  background-color: #333;
-}
-
-.badge:hover {
-  background-color: #555;
-}
-
-.medal {
-  background-color: red;
-  width: 6px;
-  height: 6px;
-  line-height: inherit;
-  display: inline-block;
-  margin: 0 5px 1px 3px;
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px;
-  border-radius: 3px;
-}
-
-.medal.grade-1 {
-  background-color: #CC9966;
-}
-
-.medal.grade-2 {
-  background-color: #C5C5C5;
-}
-
-.medal.grade-3 {
-  background-color: #FFCC00;
-}
-
-#wall-post-box {
-  float: left;
-  width: 400px;
-}
-
-#wall-post-textbox {
-  float: left;
-  margin: 0;
-  width: 100%;
-  height: 5em;
-}
-
-#wall-post-error {
-  float: left;
-  color: red;
-}
-
-#wall-post-button-box {
-  float: right;
-}
-
-#wall {
-  clear: left;
-  float: left;
-}
-
-.wall-post.private {
-  color: blue;
-}
-
-.wall-post .poster {
-  font-weight: bold;
-}
-
-.wall-post .poster:after {
-  content: ': ';
-}
-
-.wall-post .timestamp {
-  color: #888;
-}
-
-.wall-post .timestamp:before {
-  content: ' @';
-}
-
-#wall-load-previous-error {
-  clear: left;
-  float: left;
-  color: red;
-}
-
-#wall-load-previous-button {
-  clear: left;
-  float: left;
-}
-
-#training {
-  position: relative;
-  min-height: 150px;
-  max-height: 400px;
-  overflow: hidden;
-}
-
-#start-quest-mask {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 350px;
-  text-align: center;
-
-  background: -moz-linear-gradient(top,  rgba(255,255,255,0) 0%, #FFF 100%); /* FF3.6+ */
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0)), color-stop(100%,#FFF)); /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(top,  rgba(255,255,255,0) 0%,#FFF 100%); /* Chrome10+,Safari5.1+ */
-  background: -o-linear-gradient(top,  rgba(255,255,255,0) 0%,#FFF 100%); /* Opera 11.10+ */
-  background: -ms-linear-gradient(top,  rgba(255,255,255,0) 0%,#FFF 100%); /* IE10+ */
-  background: linear-gradient(to bottom,  rgba(255,255,255,0) 0%,#FFF 100%); /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#ffffff', GradientType=0); /* IE6-9 */
-}
-
-#start-quest-mask div {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  text-align: center;
-}
-
-#start-quest-button {
-  display: inline-block;
-  margin-bottom: 20px;
-  height: 40px;
-  min-width: 250px;
-  font-size: 14pt;
-}
-
-#start-quest-error {
-  color: red;
-}
-
-#join-track-button {
-  height: 40px;
-  min-width: 250px;
-  font-size: 14pt;
-}
-
-#join-track-error {
-  color: red;
+/*
+http://www.google.com/imgres?start=215&safe=off&sa=X&biw=1207&bih=835&tbm=isch&tbnid=T7FjcI_BoGoCaM:&imgrefurl=http://misakisaiki.deviantart.com/art/dAda-AnaRcHy-180248700&docid=RhOH_Y6Yc-s9nM&imgurl=http://th04.deviantart.net/fs70/PRE/i/2010/266/1/a/dada_anarchy_by_misakisaiki-d2zbcsc.jpg&w=894&h=894&ei=ZMDPUf77H4SuiQLBgoGoDQ&zoom=1&ved=1t:3588,r:17,s:200,i:55&iact=rc&page=8&tbnh=188&tbnw=188&ndsp=32&tx=151&ty=99
+http://www.dafont.com/zabatana-poster.font
+http://www.dafont.com/riotsquad.font
+http://img.dafont.com/dl/?f=quentincaps
+*/
+h1 {
+  font-family: 'Riot Squad';
 }
