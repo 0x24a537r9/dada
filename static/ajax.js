@@ -1,4 +1,4 @@
-/* AJAX helper functions to help with CSRF tokens.
+/* AJAX functions + functions to help with CSRF tokens.
  *
  * CSRF functions adapted from https://docs.djangoproject.com/en/dev/ref/contrib/csrf/#ajax.
  */   
@@ -31,3 +31,26 @@ $.ajaxSetup({
     }
   }
 });
+
+function loadQuestionAnswer(questionEl, answerEl, buttonEl, errorEl) {
+  buttonEl.attr('disabled', true);
+
+  var data = {};
+  $.ajax({
+    url: '/x/get-question-answer/',
+    data: data,
+    cache: false,
+    success: function (data) {
+      if (data.errors) {
+        errorEl.text(data.errors.join());
+        return;
+      }
+      questionEl.text(data.question.text);
+      answerEl.text(data.answer.text);
+    }
+  }).fail(function() {
+    errorEl.text('Server error!');
+  }).always(function() {
+    buttonEl.removeAttr('disabled');
+  });
+}

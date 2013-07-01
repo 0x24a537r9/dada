@@ -20,31 +20,12 @@
 {{ block.super }}
 <script>
   $(function () {
-    $('#load-poem-button').click(loadPoem);
-    loadPoem();
+    var questionEl = $('#question');
+    var answerEl = $('#answer');
+    var buttonEl = $('#load-poem-button');
+    var errorEl = $('#load-poem-error');
+    buttonEl.click(function() { loadQuestionAnswer(questionEl, answerEl, buttonEl, errorEl); });
+    buttonEl.click();
   });
-
-  function loadPoem() {
-    $('#load-poem-button').attr('disabled', true);
-
-    var data = {};
-    $.ajax({
-      url: '{% url 'ajax-get-question-answer' %}',
-      data: data,
-      cache: false,
-      success: function (data) {
-        if (data.errors) {
-          $('#load-poem-error').text(data.errors.join());
-          return;
-        }
-        $('#question').text(data.question.text);
-        $('#answer').text(data.answer.text);
-      }
-    }).fail(function() {
-      $('#load-poem-error').text('Server error!');
-    }).always(function() {
-      $('#load-poem-button').removeAttr('disabled');
-    });
-  }
 </script>
 {% endblock %}
