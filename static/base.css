@@ -38,12 +38,60 @@
   src: local('RiotSquad'), url('/static/riot_squad.ttf');
 }
 
-/*
-http://www.google.com/imgres?start=215&safe=off&sa=X&biw=1207&bih=835&tbm=isch&tbnid=T7FjcI_BoGoCaM:&imgrefurl=http://misakisaiki.deviantart.com/art/dAda-AnaRcHy-180248700&docid=RhOH_Y6Yc-s9nM&imgurl=http://th04.deviantart.net/fs70/PRE/i/2010/266/1/a/dada_anarchy_by_misakisaiki-d2zbcsc.jpg&w=894&h=894&ei=ZMDPUf77H4SuiQLBgoGoDQ&zoom=1&ved=1t:3588,r:17,s:200,i:55&iact=rc&page=8&tbnh=188&tbnw=188&ndsp=32&tx=151&ty=99
-http://www.dafont.com/zabatana-poster.font
-http://www.dafont.com/riotsquad.font
-http://img.dafont.com/dl/?f=quentincaps
-*/
+@font-face {
+  font-family: 'Zabatana Poster';
+  src: local('Zabatan Poster'), url('/static/zabatana_poster.otf');
+}
+
+@font-face {
+  font-family: 'Radley';
+  font-style: italic;
+  font-weight: 400;
+  src: local('Radley Italic'), local('Radley-Italic'), url('/static/radley.woff');
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
 h1 {
-  font-family: 'Riot Squad';
+  text-align: center;
+  font-weight: normal;
+  font-style: normal;
+}
+
+.poem-text {
+  text-align: left;
+  font-size: 32px;
+  font-family: 'Radley';
+  font-style: italic;
+}
+
+#content {
+  max-width: 600px;
+}
+
+#question-q {
+  float: left;
+  font-size: 48px;
+}
+
+#question {
+  float: left;
+}
+
+#answer-a {
+  clear: left;
+  float: left;
+  font-size: 48px;
+}
+
+#answer {
+  float: left;
+}
+
+#load-poem-button {
+  clear: left;
+  float: left;
 }

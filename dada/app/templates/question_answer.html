@@ -5,11 +5,15 @@
 {% block title %}Question &amp; Answer{% endblock %}
 
 {% block content %}
-<h1>Question &amp; Answer</h1>
-<div>Q: <span id="question"></span></div>
-<div>A: <span id="answer"></span></div>
+<h1>
+  <span style="font-family: Quentin Caps;">Question</span>
+  <span style="font-style: italic; color: #444;"> &amp; </span>
+  <span style="font-family: Romantiques; font-size: 33px;">Answer</span>
+</h1>
+<span id="question-q">Q:</span><span id="question" class="poem-text"></span>
+<span id="answer-a">A:</span><span id="answer" class="poem-text"></span>
 <button id="load-poem-button" disabled>Load poem</button>
-<div id="load-poem-error"></div>
+<span id="load-poem-error"></span>
 {% endblock %}
 
 {% block footer_script %}

@@ -45,10 +45,53 @@
 
 @font-face {
   font-family: 'Radley';
-  src: local('Radley'), url('/static/radley.woff');
+  font-style: italic;
+  font-weight: 400;
+  src: local('Radley Italic'), local('Radley-Italic'), url('/static/radley.woff');
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
 }
 
 h1 {
-  font-family: 'Radley';
+  text-align: center;
   font-weight: normal;
+  font-style: normal;
+}
+
+.poem-text {
+  text-align: left;
+  font-size: 32px;
+  font-family: 'Radley';
+  font-style: italic;
+}
+
+#content {
+  max-width: 600px;
+}
+
+#question-q {
+  float: left;
+  font-size: 48px;
+}
+
+#question {
+  float: left;
+}
+
+#answer-a {
+  clear: left;
+  float: left;
+  font-size: 48px;
+}
+
+#answer {
+  float: left;
+}
+
+#load-poem-button {
+  clear: left;
+  float: left;
 }
