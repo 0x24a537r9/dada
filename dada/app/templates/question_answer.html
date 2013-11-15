@@ -1,18 +1,15 @@
-{% extends "base_root.html" %}
+{% extends 'base_question_answer.html' %}
 
 {% load tags %}
 
 {% block title %}Question &amp; Answer{% endblock %}
 
 {% block content %}
-<h1>
-  <span style="font-family: Quentin Caps;">Question</span>
-  <span style="font-style: italic; color: #444;"> &amp; </span>
-  <span style="font-family: Romantiques; font-size: 33px;">Answer</span>
-</h1>
+{{ block.super }}
 <span id="question-q">Q:</span><span id="question" class="poem-text"></span>
 <span id="answer-a">A:</span><span id="answer" class="poem-text"></span>
 <button id="load-poem-button" disabled>Load poem</button>
+<a id="create-poem-button" href="{% url 'question-answer-create' %}">Create poem</a>
 <span id="load-poem-error"></span>
 {% endblock %}
 
@@ -20,12 +17,12 @@
 {{ block.super }}
 <script>
   $(function () {
-    var questionEl = $('#question');
-    var answerEl = $('#answer');
-    var buttonEl = $('#load-poem-button');
-    var errorEl = $('#load-poem-error');
-    buttonEl.click(function() { loadQuestionAnswer(questionEl, answerEl, buttonEl, errorEl); });
-    buttonEl.click();
+    var loadEl = $('#load-poem-button');
+    loadEl.click(function() {
+      loadQuestionAnswer($('#question'), $('#answer'), loadEl, $('#load-poem-error'),
+                         $('#create-poem-button'));
+    });
+    loadEl.click();
   });
 </script>
 {% endblock %}

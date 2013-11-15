@@ -1,7 +1,7 @@
 /* AJAX functions + functions to help with CSRF tokens.
  *
  * CSRF functions adapted from https://docs.djangoproject.com/en/dev/ref/contrib/csrf/#ajax.
- */   
+ */
 
 var csrftoken = $.cookie('csrftoken');
     
@@ -32,8 +32,8 @@ $.ajaxSetup({
   }
 });
 
-function loadQuestionAnswer(questionEl, answerEl, buttonEl, errorEl) {
-  buttonEl.attr('disabled', true);
+function loadQuestionAnswer(questionEl, answerEl, loadEl, errorEl, createEl) {
+  loadEl.attr('disabled', true);
 
   var data = {};
   $.ajax({
@@ -47,10 +47,37 @@ function loadQuestionAnswer(questionEl, answerEl, buttonEl, errorEl) {
       }
       questionEl.text(data.question.text);
       answerEl.text(data.answer.text);
+      if (incCounter('question-answer-poems-viewed') >= 5) {
+        createEl.show();
+      }
     }
   }).fail(function() {
-    errorEl.text('Server error!');
+    errorEl.text('Uh-oh, we done goofed!');
   }).always(function() {
-    buttonEl.removeAttr('disabled');
+    loadEl.removeAttr('disabled');
+  });
+}
+
+function createEntry(entryType, textEl, authorEl, errorEl, success) {
+  textEl.attr('disabled', true);
+  authorEl.attr('disabled', true);
+
+  var data = {};
+  data.entry_type = entryType;
+  data.text = textEl.val();
+  data.author = authorEl.val();
+  $.post('/x/create-entry/', data, function (data) {
+    if (data.errors) {
+      errorEl.text(data.errors.join());
+      return;
+    }
+    textEl.val('');
+    localStorage.setItem('author', authorEl.val());
+    success();
+  }).fail(function() {
+    errorEl.text('Uh-oh, we done goofed!');
+  }).always(function() {
+    textEl.removeAttr('disabled');
+    authorEl.removeAttr('disabled');
   });
 }

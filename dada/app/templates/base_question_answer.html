@@ -1,9 +1,14 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% load tags %}
 
 {% block title %}BASE_QUESTION_ANSWER{% endblock %}
 
 {% block content %}
-BASE_QUESTION_ANSWER
+{{ block.super }}
+<h1>
+  <span style="font-family: Quentin Caps;">Question</span>
+  <span style="font-style: italic; color: #444;"> &amp; </span>
+  <span style="font-family: Romantiques; font-size: 33px;">Answer</span>
+</h1>
 {% endblock %}

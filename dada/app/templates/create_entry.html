@@ -1,0 +1,42 @@
+{% extends 'base_question_answer.html' %}
+
+{% load tags %}
+
+{% block title %}Create Entry{% endblock %}
+
+{% block content %}
+{{ block.super }}
+<span id="q-directions" class="directions">Enter a question below:</span>
+<span id="a-directions" class="directions">Enter an answer below:</span>
+<br>
+<input id="text-textbox" type="text"></input>
+<br>
+By: <input id="author-textbox" type="text"></input>
+<span id="create-poem-error"></span>
+{% endblock %}
+
+{% block footer_script %}
+{{ block.super }}
+<script>
+  var entryType = randEntry();
+
+  $(function () {  
+    $('#author-textbox').val(localStorage.getItem('author') || '');
+    getDirectionsEl(entryType).show();
+    $(document).keydown(function(e) { if(e.which == 13) handleEnter(); });
+  });
+
+  function handleEnter() {
+    createEntry(entryType, $('#text-textbox'), $('#author-textbox'),
+                $('#create-poem-error'), function() {
+      $('.directions').hide();
+      entryType = randEntry();
+      getDirectionsEl(entryType).show();
+    });
+  }
+
+  function getDirectionsEl(entryType) {
+    return $('#' + entryType.toLowerCase() + '-directions');
+  }
+</script>
+{% endblock %}

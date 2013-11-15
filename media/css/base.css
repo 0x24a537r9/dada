@@ -95,3 +95,12 @@ h1 {
   clear: left;
   float: left;
 }
+
+#create-poem-button {
+  display: none;
+  float: left;
+}
+
+.directions {
+  display: none;
+}
