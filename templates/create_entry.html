@@ -1,13 +1,11 @@
 {% extends 'base_question_answer.html' %}
 
-{% load tags %}
-
 {% block title %}Create Entry{% endblock %}
 
 {% block content %}
-{{ block.super }}
-<span id="q-directions" class="directions">Enter a question below:</span>
-<span id="a-directions" class="directions">Enter an answer below:</span>
+{{ super() }}
+<span id="question-directions" class="directions" style="display: none;">Enter a question below:</span>
+<span id="answer-directions" class="directions" style="display: none;">Enter an answer below:</span>
 <br>
 <input id="text-textbox" type="text"></input>
 <br>
@@ -16,7 +14,7 @@ By: <input id="author-textbox" type="text"></input>
 {% endblock %}
 
 {% block footer_script %}
-{{ block.super }}
+{{ super() }}
 <script>
   var entryType = randEntry();
 

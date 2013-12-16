@@ -1,20 +1,22 @@
 {% extends 'base_question_answer.html' %}
 
-{% load tags %}
-
 {% block title %}Question &amp; Answer{% endblock %}
 
 {% block content %}
-{{ block.super }}
+{{ super() }}
 <span id="question-q">Q:</span><span id="question" class="poem-text"></span>
+<br>
 <span id="answer-a">A:</span><span id="answer" class="poem-text"></span>
+<br>
 <button id="load-poem-button" disabled>Load poem</button>
-<a id="create-poem-button" href="{% url 'question-answer-create' %}">Create poem</a>
+<br>
+<a id="create-poem-button" href="create">Create poem</a>
+<br>
 <span id="load-poem-error"></span>
 {% endblock %}
 
 {% block footer_script %}
-{{ block.super }}
+{{ super() }}
 <script>
   $(function () {
     var loadEl = $('#load-poem-button');

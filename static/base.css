@@ -73,25 +73,11 @@ h1 {
 }
 
 #question-q {
-  float: left;
   font-size: 48px;
-}
-
-#question {
-  float: left;
+  margin-right: 8px;
 }
 
 #answer-a {
-  clear: left;
-  float: left;
   font-size: 48px;
-}
-
-#answer {
-  float: left;
-}
-
-#load-poem-button {
-  clear: left;
-  float: left;
+  margin-right: 8px;
 }

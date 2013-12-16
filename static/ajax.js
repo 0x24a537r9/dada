@@ -54,3 +54,27 @@ function loadQuestionAnswer(questionEl, answerEl, buttonEl, errorEl) {
     buttonEl.removeAttr('disabled');
   });
 }
+
+function createEntry(entryType, textEl, authorEl, errorEl, success) {
+  textEl.attr('disabled', true);
+  authorEl.attr('disabled', true);
+
+  var data = {};
+  data.entry_type = entryType;
+  data.text = textEl.val();
+  data.author = authorEl.val();
+  $.post('/x/create-entry/', data, function (data) {
+    if (data.errors) {
+      errorEl.text(data.errors.join());
+      return;
+    }
+    textEl.val('');
+    localStorage.setItem('author', authorEl.val());
+    success();
+  }).fail(function() {
+    errorEl.text('Uh-oh, we done goofed!');
+  }).always(function() {
+    textEl.removeAttr('disabled');
+    authorEl.removeAttr('disabled');
+  });
+}

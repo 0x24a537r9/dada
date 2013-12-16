@@ -11,6 +11,6 @@ function incCounter(name) {
 }
 
 function randEntry() {
-  var entryTypes = ['Q', 'A'];
+  var entryTypes = ['Question', 'Answer'];
   return entryTypes[Math.floor(Math.random() * entryTypes.length)]
 }
