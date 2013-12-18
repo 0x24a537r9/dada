@@ -32,8 +32,8 @@ $.ajaxSetup({
   }
 });
 
-function loadQuestionAnswer(questionEl, answerEl, buttonEls, errorEl) {
-  buttonEls.attr('disabled', true);
+function loadQuestionAnswer($question, $answer, $buttons, $error) {
+  $buttons.attr('disabled', true);
 
   var data = {};
   $.ajax({
@@ -42,39 +42,39 @@ function loadQuestionAnswer(questionEl, answerEl, buttonEls, errorEl) {
     cache: false,
     success: function (data) {
       if (data.errors) {
-        errorEl.text(data.errors.join());
+        $error.text(data.errors.join());
         return;
       }
-      questionEl.text(data.question.text);
-      answerEl.text(data.answer.text);
+      $question.text(data.question.text);
+      $answer.text(data.answer.text);
     }
   }).fail(function() {
-    errorEl.text('Server error!');
+    $error.text('Server error!');
   }).always(function() {
-    buttonEls.removeAttr('disabled');
+    $buttons.removeAttr('disabled');
   });
 }
 
-function createEntry(entryType, textEl, authorEl, errorEl, success) {
-  textEl.attr('disabled', true);
-  authorEl.attr('disabled', true);
+function createEntry(entryType, $text, $author, $error, success) {
+  $text.attr('disabled', true);
+  $author.attr('disabled', true);
 
   var data = {};
   data.entry_type = entryType;
-  data.text = textEl.val();
-  data.author = authorEl.val();
+  data.text = $text.val();
+  data.author = $author.val();
   $.post('/x/create-entry/', data, function (data) {
     if (data.errors) {
-      errorEl.text(data.errors.join());
+      $error.text(data.errors.join());
       return;
     }
-    textEl.val('');
-    localStorage.setItem('author', authorEl.val());
+    $text.val('');
+    localStorage.setItem('author', $author.val());
     success();
   }).fail(function() {
-    errorEl.text('Uh-oh, we done goofed!');
+    $error.text('Uh-oh, we done goofed!');
   }).always(function() {
-    textEl.removeAttr('disabled');
-    authorEl.removeAttr('disabled');
+    $text.removeAttr('disabled');
+    $author.removeAttr('disabled');
   });
 }
