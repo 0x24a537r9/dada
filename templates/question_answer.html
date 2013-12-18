@@ -8,7 +8,8 @@
 <br>
 <span id="answer-a">A:</span><span id="answer" class="poem-text"></span>
 <br>
-<button id="load-poem-button" disabled>Load poem</button>
+<button id="upvote-button" href="create">Upvote</button>
+<button id="downvote-button" href="create">Downvote</button>
 <br>
 <a id="create-poem-button" href="create">Create poem</a>
 <br>
@@ -19,12 +20,18 @@
 {{ super() }}
 <script>
   $(function () {
-    var loadEl = $('#load-poem-button');
-    loadEl.click(function() {
-      loadQuestionAnswer($('#question'), $('#answer'), loadEl, $('#load-poem-error'),
-                         $('#create-poem-button'));
+    $('#upvote-button').click(function() {
+      loadNext();
     });
-    loadEl.click();
+    $('#downvote-button').click(function() {
+      loadNext();
+    });
+    loadNext();
   });
+
+  function loadNext() {
+    loadQuestionAnswer($('#question'), $('#answer'), $('#upvote-button, #downvote-button'),
+                       $('#load-poem-error'), $('#create-poem-button'));
+  }
 </script>
 {% endblock %}

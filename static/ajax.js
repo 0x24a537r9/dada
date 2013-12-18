@@ -32,8 +32,8 @@ $.ajaxSetup({
   }
 });
 
-function loadQuestionAnswer(questionEl, answerEl, buttonEl, errorEl) {
-  buttonEl.attr('disabled', true);
+function loadQuestionAnswer(questionEl, answerEl, buttonEls, errorEl) {
+  buttonEls.attr('disabled', true);
 
   var data = {};
   $.ajax({
@@ -51,7 +51,7 @@ function loadQuestionAnswer(questionEl, answerEl, buttonEl, errorEl) {
   }).fail(function() {
     errorEl.text('Server error!');
   }).always(function() {
-    buttonEl.removeAttr('disabled');
+    buttonEls.removeAttr('disabled');
   });
 }
 
