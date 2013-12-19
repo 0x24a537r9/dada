@@ -32,7 +32,7 @@ $.ajaxSetup({
   }
 });
 
-function loadQuestionAnswer($question, $answer, $buttons, $error) {
+function loadQuestionAnswer($question, $answer, $buttons, $error, success) {
   $buttons.attr('disabled', true);
 
   var data = {};
@@ -47,6 +47,7 @@ function loadQuestionAnswer($question, $answer, $buttons, $error) {
       }
       $question.text(data.question.text);
       $answer.text(data.answer.text);
+      success(data);
     }
   }).fail(function() {
     $error.text('Server error!');
@@ -76,5 +77,29 @@ function createEntry(entryType, $text, $author, $error, success) {
   }).always(function() {
     $text.removeAttr('disabled');
     $author.removeAttr('disabled');
+  });
+}
+
+function vote(entries, vote, $buttons, $error, success) {
+  $buttons.attr('disabled', true);
+
+  var entryKeys = [];
+  for (var entryType in entries) {
+    entryKeys.push(entries[entryType].key)
+  }
+
+  var data = {};
+  data.entryKeys = entryKeys.join();
+  data.vote = vote;
+  $.post('/x/vote/', data, function (data) {
+    if (data.errors) {
+      $error.text(data.errors.join());
+      return;
+    }
+    success();
+  }).fail(function() {
+    $error.text('Uh-oh, we done goofed!');
+  }).always(function() {
+    $buttons.removeAttr('disabled');
   });
 }

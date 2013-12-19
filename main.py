@@ -11,4 +11,5 @@ app = webapp2.WSGIApplication([
     # AJAX handlers.
     (r'^/x/get-question-answer/$', AjaxGetQuestionAnswerHandler),
     (r'^/x/create-entry/$', AjaxCreateEntryHandler),
+    (r'^/x/vote/$', AjaxVoteHandler),
 ], debug=True)

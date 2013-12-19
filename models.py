@@ -1,7 +1,6 @@
+import datetime
 import random
-import time
 
-from datetime import datetime
 from google.appengine.ext import ndb
 
 
@@ -10,11 +9,14 @@ def randint64():
   return random.getrandbits(64) - 2 ** 63
 
 
-def to_jsonable_timestamp(timestamp):
-  return int(time.mktime(timestamp.timetuple()))
+class Model(ndb.Model):
+  def to_dict(self):
+    ret = ndb.Model.to_dict(self)
+    ret['key'] = self.key.urlsafe()
+    return ret
 
 
-class Entry(ndb.Model):
+class Entry(Model):
   id = ndb.IntegerProperty(required=True, indexed=True)
 
   TYPES = QUESTION, ANSWER = 'Question', 'Answer'
@@ -28,7 +30,7 @@ class Entry(ndb.Model):
   score = ndb.FloatProperty(required=True, default=0.0, indexed=True)
   
   is_flagged = ndb.BooleanProperty(required=True, default=False, indexed=True)
-  created = ndb.DateTimeProperty(required=True, auto_now_add=datetime.now)
+  created = ndb.DateTimeProperty(required=True, auto_now_add=datetime.datetime.now)
 
   @classmethod
   def get_random(cls, type):
@@ -43,14 +45,3 @@ class Entry(ndb.Model):
   def __unicode__(self):
     return u'%s: %s \u2014 %s on %s' % (self.type, self.text, self.author,
                                         datetime.date(self.created).strftime('%b %d, \'%y'))
-
-  def to_dict(self):
-    return {
-        'key': str(self.key),
-        'text': self.text,
-        'author': self.author,
-        'upvotes': self.upvotes,
-        'downvotes': self.downvotes,
-        'score': self.score,
-        'created': to_jsonable_timestamp(self.created),
-    }

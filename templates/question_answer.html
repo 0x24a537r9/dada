@@ -13,25 +13,34 @@
 <br>
 <a id="create-poem-button" href="create">Create poem</a>
 <br>
-<span id="load-poem-error"></span>
+<span id="error"></span>
 {% endblock %}
 
 {% block footer_script %}
 {{ super() }}
 <script>
+  var entries = [],
+      $question = $('#question'),
+      $answer = $('#answer'),
+      $upvoteButton = $('#upvote-button'),
+      $downvoteButton = $('#downvote-button'),
+      $voteButtons = $('#upvote-button, #downvote-button'),
+      $error = $('#error');
+
   $(function () {
-    $('#upvote-button').click(function() {
-      loadNext();
+    $upvoteButton.click(function() {
+      vote(entries, 1, $voteButtons, $error, loadNext);
     });
-    $('#downvote-button').click(function() {
-      loadNext();
+    $downvoteButton.click(function() {
+      vote(entries, -1, $voteButtons, $error, loadNext);
     });
     loadNext();
   });
 
   function loadNext() {
-    loadQuestionAnswer($('#question'), $('#answer'), $('#upvote-button, #downvote-button'),
-                       $('#load-poem-error'), $('#create-poem-button'));
+    loadQuestionAnswer($question, $answer, $voteButtons, $error, function(data) {
+      entries = data;
+    });
   }
 </script>
 {% endblock %}

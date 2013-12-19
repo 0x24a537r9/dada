@@ -1,9 +1,11 @@
 import os
 import jinja2
 import json
+import math
 import webapp2
 
 from functools import wraps
+from google.appengine.ext import ndb
 from models import *
 
 
@@ -34,20 +36,20 @@ def render_to(template=''):
 
 
 def date_time_handler(obj):
-    if isinstance(obj, datetime.datetime):
-        return obj.isoformat()
-    else:
-        raise TypeError("%r is not JSON serializable" % obj)
+  if isinstance(obj, datetime.datetime):
+    return obj.isoformat()
+  else:
+    raise TypeError("%r is not JSON serializable" % obj)
 
 
 def ajax_request(function):
-    @wraps(function)
-    def wrapper(self, *args, **kwargs):
-      output = function(self, *args, **kwargs)
-      data = json.dumps(output, default=date_time_handler)
-      self.response.content_type = 'application/json'
-      self.response.write(data)
-    return wrapper
+  @wraps(function)
+  def wrapper(self, *args, **kwargs):
+    output = function(self, *args, **kwargs)
+    data = json.dumps(output, default=date_time_handler)
+    self.response.content_type = 'application/json'
+    self.response.write(data)
+  return wrapper
 
 
 class MainHandler(webapp2.RequestHandler):
@@ -58,9 +60,7 @@ class MainHandler(webapp2.RequestHandler):
 class QuestionAnswerHandler(webapp2.RequestHandler):
   @render_to('question_answer.html')
   def get(self):
-    return {
-      'testvalue': 'sldjfsdljf',
-    }
+    return {}
 
 
 class CreateEntryHandler(webapp2.RequestHandler):
@@ -105,5 +105,40 @@ class AjaxCreateEntryHandler(webapp2.RequestHandler):
     entry = Entry(id=randint64(), type=entry_type, text=text, author=author)
     entry.put()
     r.entry = entry.to_dict()
+
+    return r.__dict__
+
+
+class AjaxVoteHandler(webapp2.RequestHandler):
+  @ajax_request
+  def post(self):
+    r = Response()
+
+    entryKeys = self.request.POST['entryKeys']
+    if not entryKeys:
+      return Response.errors('What entries are you referring to?')
+    entryKeys = entryKeys.split(',')
+
+    vote = self.request.POST['vote']
+    if vote not in ('-1', '1'):
+      return Response.errors('Uh, you can\'t vote that many times.')
+    vote = int(vote)
+
+    entries = ndb.get_multi(ndb.Key(urlsafe=entryKey) for entryKey in entryKeys)
+    if None in entries:
+      return Response.errors('One or more entries is invalid.')
+    for entry in entries:
+      if vote > 0:
+        entry.upvotes += 1
+      else:
+        entry.downvotes += 1
+
+      z = 1.96
+      n = float(entry.upvotes + entry.downvotes)
+      phat = entry.upvotes / float(n)
+      entry.score = (
+        (phat + z * z / (2 * n) - z * math.sqrt((phat * (1 - phat) + z * z / (4 * n)) / n)) /
+        (1 + z * z / n))
+      entry.put()
 
     return r.__dict__
