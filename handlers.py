@@ -1,8 +1,4 @@
-import os
-import jinja2
-import json
-import math
-import webapp2
+import base64, os, jinja2, json, math, struct, webapp2
 
 from functools import wraps
 from google.appengine.ext import ndb
@@ -42,14 +38,27 @@ def date_time_handler(obj):
     raise TypeError("%r is not JSON serializable" % obj)
 
 
+def to_json(value):
+  return json.dumps(value, default=date_time_handler)
+JINJA_ENVIRONMENT.filters.update({'to_json': to_json})
+
+
 def ajax_request(function):
   @wraps(function)
   def wrapper(self, *args, **kwargs):
     output = function(self, *args, **kwargs)
-    data = json.dumps(output, default=date_time_handler)
+    data = to_json(output)
     self.response.content_type = 'application/json'
     self.response.write(data)
   return wrapper
+
+
+def encodeIds(ids):
+  return base64.urlsafe_b64encode(struct.pack('l' * len(ids), *ids))
+
+
+def decodeIds(idString):
+  return struct.unpack('l' * (len(idString) * 6 / 64), base64.urlsafe_b64decode(idString))
 
 
 class MainHandler(webapp2.RequestHandler):
@@ -59,24 +68,39 @@ class MainHandler(webapp2.RequestHandler):
 
 class QuestionAnswerHandler(webapp2.RequestHandler):
   @render_to('question_answer.html')
-  def get(self):
-    return {}
-
-
-class CreateEntryHandler(webapp2.RequestHandler):
-  @render_to('create_entry.html')
-  def get(self, entry_type):
-    return {
-      'entry_type': entry_type,
-    }
+  def get(self, encoded_ids):
+    r = Response()
+    if encoded_ids:
+      ids = decodeIds(encoded_ids)
+      r.question = Entry.query(Entry.id == ids[0]).fetch(1)[0].to_dict()
+      r.answer = Entry.query(Entry.id == ids[1]).fetch(1)[0].to_dict()
+      r.encoded_ids = encoded_ids
+    else:
+      r.question = Entry.get_random(Entry.QUESTION).to_dict()
+      r.answer = Entry.get_random(Entry.ANSWER).to_dict()
+      r.encoded_ids = encodeIds((r.question['id'], r.answer['id']))
+    return r.__dict__
 
 
 class AjaxGetQuestionAnswerHandler(webapp2.RequestHandler):
   @ajax_request
   def get(self):
     r = Response()
-    r.question = Entry.get_random(Entry.QUESTION).to_dict()
-    r.answer = Entry.get_random(Entry.ANSWER).to_dict()
+    r.poems = []
+    for i in xrange(0, 10):
+      poem = Response()
+      poem.question = Entry.get_random(Entry.QUESTION).to_dict()
+      poem.answer = Entry.get_random(Entry.ANSWER).to_dict()
+      poem.encoded_ids = encodeIds((poem.question['id'], poem.answer['id']))
+      r.poems.append(poem.__dict__)
+    return r.__dict__
+
+
+class CreateEntryHandler(webapp2.RequestHandler):
+  @render_to('create_entry.html')
+  def get(self, entry_type):
+    r = Response()
+    r.entry_type = entry_type
     return r.__dict__
 
 
@@ -137,8 +161,8 @@ class AjaxVoteHandler(webapp2.RequestHandler):
       n = float(entry.upvotes + entry.downvotes)
       phat = entry.upvotes / float(n)
       entry.score = (
-        (phat + z * z / (2 * n) - z * math.sqrt((phat * (1 - phat) + z * z / (4 * n)) / n)) /
-        (1 + z * z / n))
+          (phat + z * z / (2 * n) - z * math.sqrt((phat * (1 - phat) + z * z / (4 * n)) / n)) /
+          (1 + z * z / n))
       entry.put()
 
     return r.__dict__

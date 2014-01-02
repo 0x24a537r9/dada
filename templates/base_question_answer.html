@@ -2,6 +2,11 @@
 
 {% block title %}BASE_QUESTION_ANSWER{% endblock %}
 
+{% block head %}
+{{ super() }}
+<meta property="og:title" content="Question &amp; Answer"/>
+{% endblock %}
+
 {% block content %}
 {{ super() }}
 <h1>

@@ -32,33 +32,8 @@ $.ajaxSetup({
   }
 });
 
-function loadQuestionAnswer($question, $answer, $buttons, $error, success) {
-  $buttons.attr('disabled', true);
-
-  var data = {};
-  $.ajax({
-    url: '/x/get-question-answer/',
-    data: data,
-    cache: false,
-    success: function (data) {
-      if (data.errors) {
-        $error.text(data.errors.join());
-        return;
-      }
-      $question.text(data.question.text);
-      $answer.text(data.answer.text);
-      success(data);
-    }
-  }).fail(function() {
-    $error.text('Server error!');
-  }).always(function() {
-    $buttons.removeAttr('disabled');
-  });
-}
-
 function createEntry(entryType, $text, $author, $error, success) {
-  $text.attr('disabled', true);
-  $author.attr('disabled', true);
+  disable([$text, $author]);
 
   var data = {};
   data.entry_type = entryType;
@@ -75,31 +50,19 @@ function createEntry(entryType, $text, $author, $error, success) {
   }).fail(function() {
     $error.text('Uh-oh, we done goofed!');
   }).always(function() {
-    $text.removeAttr('disabled');
-    $author.removeAttr('disabled');
+    enable([$text, $author]);
   });
 }
 
-function vote(entries, vote, $buttons, $error, success) {
-  $buttons.attr('disabled', true);
-
-  var entryKeys = [];
-  for (var entryType in entries) {
-    entryKeys.push(entries[entryType].key)
-  }
-
+function sendVote(entryKeys, vote, success, fail, always) {
   var data = {};
   data.entryKeys = entryKeys.join();
   data.vote = vote;
   $.post('/x/vote/', data, function (data) {
     if (data.errors) {
-      $error.text(data.errors.join());
-      return;
+      fail(data.errors);
+    } else {
+      success();  
     }
-    success();
-  }).fail(function() {
-    $error.text('Uh-oh, we done goofed!');
-  }).always(function() {
-    $buttons.removeAttr('disabled');
-  });
+  }).fail(function() { fail(); }).always(function() { always(); });
 }
