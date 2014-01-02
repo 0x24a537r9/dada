@@ -1,4 +1,4 @@
-import base64, os, jinja2, json, math, struct, webapp2
+import base64, logging, os, jinja2, json, math, struct, webapp2
 
 from functools import wraps
 from google.appengine.ext import ndb
@@ -54,11 +54,11 @@ def ajax_request(function):
 
 
 def encodeIds(ids):
-  return base64.urlsafe_b64encode(struct.pack('l' * len(ids), *ids))
+  return base64.urlsafe_b64encode(struct.pack('q' * len(ids), *ids))
 
 
 def decodeIds(idString):
-  return struct.unpack('l' * (len(idString) * 6 / 64), base64.urlsafe_b64decode(idString))
+  return struct.unpack('q' * (len(idString) * 6 / 64), base64.urlsafe_b64decode(idString))
 
 
 class MainHandler(webapp2.RequestHandler):
