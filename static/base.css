@@ -1,83 +1,99 @@
 @font-face {
-  font-family: bodonika;
-  src: local(bodonika), url('/static/bodonika.otf');
-}
-
-@font-face {
-  font-family: Ecuyer;
-  src: local(EcuyerDAX), url('/static/ecuyer.ttf');
-}
-
-@font-face {
-  font-family: Andes;
-  src: local(Andes), url('/static/andes.ttf');
-}
-
-@font-face {
-  font-family: Romantiques;
-  src: local(Romantiques), url('/static/romantiques.otf');
-}
-
-@font-face {
-  font-family: 'Betty Noir';
-  src: local('Betty Noir'), url('/static/betty_noir.ttf');
-}
-
-@font-face {
-  font-family: 'Deathe Maach';
-  src: local('DEATHE MAACH NCV'), url('/static/deathe_maach.otf');
-}
-
-@font-face {
-  font-family: 'Quentin Caps';
-  src: local('QuentinCaps'), url('/static/quentin_caps.ttf');
-}
-
-@font-face {
-  font-family: 'Riot Squad';
-  src: local('RiotSquad'), url('/static/riot_squad.ttf');
-}
-
-@font-face {
-  font-family: 'Zabatana Poster';
-  src: local('Zabatan Poster'), url('/static/zabatana_poster.otf');
-}
-
-@font-face {
-  font-family: 'Radley';
-  font-style: italic;
-  font-weight: 400;
-  src: local('Radley Italic'), local('Radley-Italic'), url('/static/radley.woff');
+  font-family: 'Old Press';
+  src: local('Old Press'), url('/static/old-press.ttf');
 }
 
 html, body {
   height: 100%;
   margin: 0;
+  background: url('/static/paper.png');
 }
 
-h1 {
-  text-align: center;
-  font-weight: normal;
-  font-style: normal;
+div {
+  -moz-box-sizing: border-box;
+       box-sizing: border-box;
 }
 
-.poem-text {
-  text-align: left;
-  font-size: 32px;
-  font-family: 'Radley';
-  font-style: italic;
+#logo {
+  position: absolute;
+  top: 28px;
+  left: 28px;
+  width: 130px;
+  height: 361px;
+  background: url('/static/logo.svg');
 }
 
 #content {
-  max-width: 600px;
+  position: absolute;
+  top: 28px;
+  right: 32px;
+  left: 186px;
 }
 
-#question-q {
-  font-size: 48px;
-  margin-right: 8px;
+.poem-title {
+  color: #DE5547;
+  font: 48pt 'Old Press';
+  margin-right: 6px;
 }
 
-#answer-a {
-  font-size: 48px;
-  margin-right: 8px;
+.poem-text {
+  font: 48pt 'Old Press';
+}
+
+#answer-a,
+#answer {
+  font-style: italic;
+}
+
+#upvote-button {
+  width: 96px;
+  height: 109px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  background: url('/static/thumbs-up.svg');
+}
+
+#next-button {
+  width: 101px;
+  height: 52px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  background: url('/static/next.svg');
+}
+
+#downvote-button {
+  width: 52px;
+  height: 81px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  background: url('/static/thumbs-down.svg');
+}
+
+#footer {
+  position: absolute;
+  bottom: 16px;
+  right: 32px;
+  left: 186px;
+  text-align: right;
+}
+
+#fingerprint {
+  display: inline-block;
+  margin: 0 10px -16px 0;
+  width: 37px;
+  height: 49px;
+  background: url('/static/fingerprint.svg');
+}
+
+#create-poem-link {
+  color: #555;
+  font: 24pt 'Old Press';
+  text-decoration: none;
+}
+
+#create-poem-link:hover {
+  color: #000;
 }

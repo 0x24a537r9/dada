@@ -1,4 +1,4 @@
-import base64, logging, os, jinja2, json, math, struct, webapp2
+import base64, os, jinja2, json, struct, webapp2
 
 from functools import wraps
 from google.appengine.ext import ndb
@@ -53,11 +53,11 @@ def ajax_request(function):
   return wrapper
 
 
-def encodeIds(ids):
+def encode_ids(ids):
   return base64.urlsafe_b64encode(struct.pack('q' * len(ids), *ids))
 
 
-def decodeIds(idString):
+def decode_ids(idString):
   return struct.unpack('q' * (len(idString) * 6 / 64), base64.urlsafe_b64decode(idString))
 
 
@@ -71,14 +71,14 @@ class QuestionAnswerHandler(webapp2.RequestHandler):
   def get(self, encoded_ids):
     r = Response()
     if encoded_ids:
-      ids = decodeIds(encoded_ids)
+      ids = decode_ids(encoded_ids)
       r.question = Entry.query(Entry.id == ids[0]).fetch(1)[0].to_dict()
       r.answer = Entry.query(Entry.id == ids[1]).fetch(1)[0].to_dict()
       r.encoded_ids = encoded_ids
     else:
       r.question = Entry.get_random(Entry.QUESTION).to_dict()
       r.answer = Entry.get_random(Entry.ANSWER).to_dict()
-      r.encoded_ids = encodeIds((r.question['id'], r.answer['id']))
+      r.encoded_ids = encode_ids((r.question['id'], r.answer['id']))
     return r.__dict__
 
 
@@ -91,7 +91,7 @@ class AjaxGetQuestionAnswerHandler(webapp2.RequestHandler):
       poem = Response()
       poem.question = Entry.get_random(Entry.QUESTION).to_dict()
       poem.answer = Entry.get_random(Entry.ANSWER).to_dict()
-      poem.encoded_ids = encodeIds((poem.question['id'], poem.answer['id']))
+      poem.encoded_ids = encode_ids((poem.question['id'], poem.answer['id']))
       r.poems.append(poem.__dict__)
     return r.__dict__
 
@@ -138,31 +138,41 @@ class AjaxVoteHandler(webapp2.RequestHandler):
   def post(self):
     r = Response()
 
-    entryKeys = self.request.POST['entryKeys']
-    if not entryKeys:
-      return Response.errors('What entries are you referring to?')
-    entryKeys = entryKeys.split(',')
-
     vote = self.request.POST['vote']
-    if vote not in ('-1', '1'):
+    if vote not in ('-1', '0', '1'):
       return Response.errors('Uh, you can\'t vote that many times.')
     vote = int(vote)
 
-    entries = ndb.get_multi(ndb.Key(urlsafe=entryKey) for entryKey in entryKeys)
+    if vote == 0:
+      return r.__dict__
+
+    entryKeys = self.request.POST['entryKeys']
+    if not entryKeys:
+      return Response.errors('What entries are you referring to?')
+    entryKeys = [ndb.Key(urlsafe=entryKey) for entryKey in entryKeys.split(',')]
+
+    entries = ndb.get_multi(entryKeys)
     if None in entries:
       return Response.errors('One or more entries is invalid.')
+
+    entryIds = []
     for entry in entries:
+      entryIds += [entry.id]
       if vote > 0:
         entry.upvotes += 1
       else:
         entry.downvotes += 1
-
-      z = 1.96
-      n = float(entry.upvotes + entry.downvotes)
-      phat = entry.upvotes / float(n)
-      entry.score = (
-          (phat + z * z / (2 * n) - z * math.sqrt((phat * (1 - phat) + z * z / (4 * n)) / n)) /
-          (1 + z * z / n))
       entry.put()
+
+    # Note: There is a race-condition here, but it's ok if we lose a few votes here and there.
+    poem = Poem.get_or_insert(encode_ids(entryIds))
+    if not len(poem.entryKeys):
+      poem.entryKeys = entryKeys
+      poem.debug_text = ', '.join(entry.text for entry in entries)
+    if vote > 0:
+      poem.upvotes += 1
+    else:
+      poem.downvotes += 1
+    poem.put()
 
     return r.__dict__

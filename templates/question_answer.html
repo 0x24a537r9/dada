@@ -9,18 +9,23 @@
 
 {% block content %}
 {{ super() }}
-<span id="question-q">Q:</span>
+<span id="question-q" class="poem-title">Q:</span>
 <span id="question" class="poem-text">{{ question.text }}</span>
 <br>
-<span id="answer-a">A:</span>
+<span id="answer-a" class="poem-title">A:</span>
 <span id="answer" class="poem-text">{{ answer.text }}</span>
 <br>
-<button id="upvote-button" href="create">Upvote</button>
-<button id="downvote-button" href="create">Downvote</button>
-<br>
-<a id="create-poem-button" href="create">Create poem</a>
+<button id="upvote-button"></button>
+<button id="next-button"></button>
+<button id="downvote-button"></button>
 <br>
 <a id="page-link" href="/question-answer/{{ encoded_ids }}/">{{ encoded_ids }}</a>
+
+{% endblock %}
+
+{% block footer %}
+{{ super() }}
+<a id="create-poem-link" href="/question-answer/create"><div id="fingerprint"></div>Create your own</a>
 {% endblock %}
 
 {% block footer_script %}
@@ -37,12 +42,14 @@
   var $question = $('#question'),
       $answer = $('#answer'),
       $upvoteButton = $('#upvote-button'),
+      $nextButton = $('#next-button'),
       $downvoteButton = $('#downvote-button'),
-      $voteButtons = $('#upvote-button, #downvote-button'),
+      $voteButtons = $('#upvote-button, #next-button, #downvote-button'),
       $pageLink = $('#page-link');
 
   $(function () {
     $upvoteButton.click(function() { vote(1); });
+    $nextButton.click(function() { vote(0); });
     $downvoteButton.click(function() { vote(-1); });
     renderPoem();
   });

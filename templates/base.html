@@ -13,8 +13,12 @@
   {% endblock %}
 </head>
 <body>
+  <a href="/"><div id="logo"></div></a>
   <div id="content">
     {% block content %}{% endblock %}
+  </div>
+  <div id="footer">
+    {% block footer %}{% endblock %}
   </div>
   {% block footer_script %}{% endblock %}
 </body>

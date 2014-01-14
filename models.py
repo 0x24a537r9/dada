@@ -1,5 +1,4 @@
-import datetime
-import random
+import datetime, math, random
 
 from google.appengine.ext import ndb
 
@@ -7,6 +6,14 @@ from google.appengine.ext import ndb
 
 def randint64():
   return random.getrandbits(64) - 2 ** 63
+
+
+def compute_score(upvotes, downvotes):
+  z = 1.96
+  n = float(upvotes + downvotes)
+  phat = upvotes / float(n)
+  return ((phat + z * z / (2 * n) - z * math.sqrt((phat * (1 - phat) + z * z / (4 * n)) / n)) /
+          (1 + z * z / n))
 
 
 class Model(ndb.Model):
@@ -25,9 +32,10 @@ class Entry(Model):
   text = ndb.StringProperty(required=True)
   author = ndb.StringProperty(required=True, default='Anonymous')
   
-  upvotes = ndb.IntegerProperty(required=True, default=1)
-  downvotes = ndb.IntegerProperty(required=True, default=0)
-  score = ndb.FloatProperty(required=True, default=0.0, indexed=True)
+  upvotes = ndb.IntegerProperty(required=True, default=1, indexed=False)
+  downvotes = ndb.IntegerProperty(required=True, default=0, indexed=False)
+  score = ndb.ComputedProperty(lambda self: compute_score(self.upvotes, self.downvotes),
+                               indexed=True)
   
   is_flagged = ndb.BooleanProperty(required=True, default=False, indexed=True)
   created = ndb.DateTimeProperty(required=True, auto_now_add=datetime.datetime.now)
@@ -45,3 +53,14 @@ class Entry(Model):
   def __unicode__(self):
     return u'%s: %s \u2014 %s on %s' % (self.type, self.text, self.author,
                                         datetime.date(self.created).strftime('%b %d, \'%y'))
+
+
+class Poem(Model):
+  entryKeys = ndb.KeyProperty(kind=Entry, repeated=True, indexed=True)
+
+  upvotes = ndb.IntegerProperty(required=True, default=1, indexed=False)
+  downvotes = ndb.IntegerProperty(required=True, default=0, indexed=False)
+  score = ndb.ComputedProperty(lambda self: compute_score(self.upvotes, self.downvotes),
+                               indexed=True)
+
+  debug_text = ndb.StringProperty(indexed=False)
