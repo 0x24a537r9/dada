@@ -9,18 +9,24 @@
 
 {% block content %}
 {{ super() }}
-<span id="question-q" class="poem-title">Q:</span>
+<span id="question-q" class="poem-text poem-accent">Q: </span>
 <span id="question" class="poem-text">{{ question.text }}</span>
 <br>
-<span id="answer-a" class="poem-title">A:</span>
+<span id="answer-a" class="poem-text poem-accent">A: </span>
 <span id="answer" class="poem-text">{{ answer.text }}</span>
 <br>
-<button id="upvote-button"></button>
-<button id="next-button"></button>
-<button id="downvote-button"></button>
-<br>
-<a id="page-link" href="/question-answer/{{ encoded_ids }}/">{{ encoded_ids }}</a>
-
+<div id="authors-container">
+  <span id="question-author-dash" class="poem-author poem-accent">- </span>
+  <span id="question-author" class="poem-author">{{ question.author }}</span>
+  <br>
+  <span id="answer-author-dash" class="poem-author poem-accent">- </span>
+  <span id="answer-author" class="poem-author">{{ answer.author }}</span>
+</div>
+<div id="vote-buttons-container">
+  <button id="upvote-button"></button>
+  <button id="next-button"></button>
+  <button id="downvote-button"></button>
+</div>
 {% endblock %}
 
 {% block footer %}
@@ -41,11 +47,12 @@
 
   var $question = $('#question'),
       $answer = $('#answer'),
+      $questionAuthor = $('#question-author'),
+      $answerAuthor = $('#answer-author'),
       $upvoteButton = $('#upvote-button'),
       $nextButton = $('#next-button'),
       $downvoteButton = $('#downvote-button'),
-      $voteButtons = $('#upvote-button, #next-button, #downvote-button'),
-      $pageLink = $('#page-link');
+      $voteButtons = $('#vote-buttons-container button');
 
   $(function () {
     $upvoteButton.click(function() { vote(1); });
@@ -75,8 +82,8 @@
     
     $question.text(poems[0].question.text);
     $answer.text(poems[0].answer.text);
-    $pageLink.text(poems[0].encoded_ids);
-    $pageLink.attr('href', '/question-answer/' + poems[0].encoded_ids);
+    $questionAuthor.text(poems[0].question.author);
+    $answerAuthor.text(poems[0].answer.author);
 
     if (poems.length < 5) {
       loadPoems();

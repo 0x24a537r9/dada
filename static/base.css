@@ -28,12 +28,11 @@ div {
   top: 28px;
   right: 32px;
   left: 186px;
+  text-align: center;
 }
 
-.poem-title {
+.poem-accent {
   color: #DE5547;
-  font: 48pt 'Old Press';
-  margin-right: 6px;
 }
 
 .poem-text {
@@ -41,35 +40,88 @@ div {
 }
 
 #answer-a,
-#answer {
+#answer,
+#answer-author-dash,
+#answer-author {
   font-style: italic;
 }
 
-#upvote-button {
-  width: 96px;
-  height: 109px;
+
+#authors-container {
+  display: inline-block;
+  margin-left: 60%;
+  width: 100%;
+  text-align: left;
+  white-space: nowrap;
+  color: #555;
+  font: 22pt 'Old Press';
+}
+
+.poem-author {
+  white-space: nowrap; 
+}
+
+#vote-buttons-container {
+  margin-top: 20px;
+}
+
+#vote-buttons-container button {
   border: none;
   outline: none;
   cursor: pointer;
+  vertical-align: middle;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#upvote-button {
+  margin-left: -35px;
+  width: 96px;
+  height: 109px;
   background: url('/static/thumbs-up.svg');
 }
 
+#upvote-button:hover {
+  -webkit-transform: translateY(-4px);
+          transform: translateY(-4px);
+}
+
+#upvote-button:active {
+  -webkit-transform: translateY(-8px);
+          transform: translateY(-8px);
+}
+
 #next-button {
+  margin: 0 30px 0 37px;
   width: 101px;
   height: 52px;
-  border: none;
-  outline: none;
-  cursor: pointer;
   background: url('/static/next.svg');
 }
 
+#next-button:hover {
+  -webkit-transform: translateX(4px);
+          transform: translateX(4px);
+}
+
+#next-button:active {
+  -webkit-transform: translateX(8px);
+          transform: translateX(8px);
+}
+
 #downvote-button {
+  margin-top: 28px;
   width: 52px;
   height: 81px;
-  border: none;
-  outline: none;
-  cursor: pointer;
   background: url('/static/thumbs-down.svg');
+}
+
+#downvote-button:hover {
+  -webkit-transform: translateY(4px);
+          transform: translateY(4px);
+}
+
+#downvote-button:active {
+  -webkit-transform: translateY(8px);
+          transform: translateY(8px);
 }
 
 #footer {
