@@ -4,6 +4,7 @@
 
 {% block head %}
 {{ super() }}
+<meta property="og:title" content="Question &amp; Answer"/>
 <meta property="og:description" content="Q: {{ question.text }} A: {{ answer.text }}"/>
 {% endblock %}
 
