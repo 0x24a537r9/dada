@@ -90,6 +90,7 @@
       cache: false,
       success: function (data) {
         if (data.errors) {
+          console.error(data.errors);
           setTimeout(loadPoems, 2000);
           return;
         }
@@ -98,6 +99,7 @@
         }
       }
     }).fail(function() {
+      console.error('Server error!');
       setTimeout(loadPoems, 2000);
     });
   }
