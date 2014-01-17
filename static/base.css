@@ -39,7 +39,9 @@ div {
   width: 100%;
 }
 
-.poem-accent {
+#question:before,
+#answer:before,
+.poem-author:before {
   color: #DE5547;
 }
 
@@ -47,13 +49,20 @@ div {
   font: 48pt 'Old Press';
 }
 
-#answer-a,
-#answer,
-#answer-author-dash,
-#answer-author {
-  font-style: italic;
+#question:before {
+  content: "Q: ";
 }
 
+#answer:before {
+  content: "A: ";
+}
+
+#answer,
+#answer:before,
+#answer-author,
+#answer-author:before {
+  font-style: italic;
+}
 
 #authors-container {
   display: inline-block;
@@ -67,6 +76,10 @@ div {
 
 .poem-author {
   white-space: nowrap; 
+}
+
+.poem-author:before {
+  content: "- ";
 }
 
 #vote-buttons-container {

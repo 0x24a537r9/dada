@@ -9,18 +9,12 @@
 {% endblock %}
 
 {% block poem %}
-<span id="question-q" class="poem-text poem-accent">Q: </span>
-<span id="question" class="poem-text">{{ question.text }}</span>
-<br>
-<span id="answer-a" class="poem-text poem-accent">A: </span>
+<span id="question" class="poem-text">{{ question.text }}</span><br>
 <span id="answer" class="poem-text">{{ answer.text }}</span>
 {% endblock %}
 
 {% block authors %}
-<span id="question-author-dash" class="poem-author poem-accent">- </span>
-<span id="question-author" class="poem-author">{{ question.author }}</span>
-<br>
-<span id="answer-author-dash" class="poem-author poem-accent">- </span>
+<span id="question-author" class="poem-author">{{ question.author }}</span><br>
 <span id="answer-author" class="poem-author">{{ answer.author }}</span>
 {% endblock %}
 
