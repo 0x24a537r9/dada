@@ -26,9 +26,17 @@ div {
 #content {
   position: absolute;
   top: 28px;
-  right: 32px;
-  left: 186px;
+  right: 52px;
+  bottom: 90px;
+  left: 206px;
   text-align: center;
+}
+
+#content > div {
+  position: absolute;
+  top: 50%;
+  margin-top: -175px;
+  width: 100%;
 }
 
 .poem-accent {
@@ -49,7 +57,7 @@ div {
 
 #authors-container {
   display: inline-block;
-  margin-left: 60%;
+  padding-left: 60%;
   width: 100%;
   text-align: left;
   white-space: nowrap;
