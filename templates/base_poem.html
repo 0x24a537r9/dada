@@ -40,6 +40,7 @@
 
   var MIN_POEMS_TO_VIEW_BEFORE_SHOWING_CREATE_LINK = 5,
       LOAD_POEMS_RETRY_DELAY = 2000,
+      ALLOW_VOTE_DELAY = 1000,
       MIN_CACHED_POEMS = 5;
 
   $(function() {
@@ -57,10 +58,31 @@
   });
 
   function vote(vote) {
+    $voteButtons.css({
+      'opacity': 0,
+      '-webkit-transition': '',
+         '-moz-transition': '',
+          '-ms-transition': '',
+           '-o-transition': '',
+              'transition': ''
+    });
+
     sendVote(poems[0].entry_keys, vote);
     incCounter(poemType + '-poems-viewed')
     poems = poems.splice(1)
     refreshPoem();
+
+    // Only allow the user to vote again after he/she has had time to read it.
+    setTimeout(function() {
+      $voteButtons.css({
+        '-webkit-transition': 'opacity 1s',
+           '-moz-transition': 'opacity 1s',
+            '-ms-transition': 'opacity 1s',
+             '-o-transition': 'opacity 1s',
+                'transition': 'opacity 1s',
+        'opacity': 1
+      });
+    }, ALLOW_VOTE_DELAY);
   }
 
   function refreshPoem() {
