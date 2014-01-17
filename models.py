@@ -11,6 +11,8 @@ def randint64():
 def compute_score(upvotes, downvotes):
   z = 1.96
   n = float(upvotes + downvotes)
+  if n == 0:
+    return 0
   phat = upvotes / float(n)
   return ((phat + z * z / (2 * n) - z * math.sqrt((phat * (1 - phat) + z * z / (4 * n)) / n)) /
           (1 + z * z / n))
@@ -32,7 +34,7 @@ class Entry(Model):
   text = ndb.StringProperty(required=True)
   author = ndb.StringProperty(required=True, default='Anonymous')
   
-  upvotes = ndb.IntegerProperty(required=True, default=1, indexed=False)
+  upvotes = ndb.IntegerProperty(required=True, default=0, indexed=False)
   downvotes = ndb.IntegerProperty(required=True, default=0, indexed=False)
   score = ndb.ComputedProperty(lambda self: compute_score(self.upvotes, self.downvotes),
                                indexed=True)
@@ -58,7 +60,7 @@ class Entry(Model):
 class Poem(Model):
   entryKeys = ndb.KeyProperty(kind=Entry, repeated=True, indexed=True)
 
-  upvotes = ndb.IntegerProperty(required=True, default=1, indexed=False)
+  upvotes = ndb.IntegerProperty(required=True, default=0, indexed=False)
   downvotes = ndb.IntegerProperty(required=True, default=0, indexed=False)
   score = ndb.ComputedProperty(lambda self: compute_score(self.upvotes, self.downvotes),
                                indexed=True)
