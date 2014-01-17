@@ -8,112 +8,42 @@
 <meta property="og:description" content="Q: {{ question.text }} A: {{ answer.text }}"/>
 {% endblock %}
 
-{% block content %}
-{{ super() }}
+{% block poem %}
 <span id="question-q" class="poem-text poem-accent">Q: </span>
 <span id="question" class="poem-text">{{ question.text }}</span>
 <br>
 <span id="answer-a" class="poem-text poem-accent">A: </span>
 <span id="answer" class="poem-text">{{ answer.text }}</span>
-<br>
-<div id="authors-container">
-  <span id="question-author-dash" class="poem-author poem-accent">- </span>
-  <span id="question-author" class="poem-author">{{ question.author }}</span>
-  <br>
-  <span id="answer-author-dash" class="poem-author poem-accent">- </span>
-  <span id="answer-author" class="poem-author">{{ answer.author }}</span>
-</div>
-<div id="vote-buttons-container">
-  <button id="upvote-button"></button>
-  <button id="next-button"></button>
-  <button id="downvote-button"></button>
-</div>
 {% endblock %}
 
-{% block footer %}
-{{ super() }}
-<a id="create-poem-link" href="/question-answer/create"><div id="fingerprint"></div>Create your own</a>
+{% block authors %}
+<span id="question-author-dash" class="poem-author poem-accent">- </span>
+<span id="question-author" class="poem-author">{{ question.author }}</span>
+<br>
+<span id="answer-author-dash" class="poem-author poem-accent">- </span>
+<span id="answer-author" class="poem-author">{{ answer.author }}</span>
 {% endblock %}
 
 {% block footer_script %}
 {{ super() }}
 <script>
-  var poems = [
-    {
-      question: {{ question | to_json | safe }},
-      answer: {{ answer | to_json | safe }},
-      encoded_ids: '{{ encoded_ids }}'
-    }
-  ];
+  poems.push({
+    question: {{ question | to_json | safe }},
+    answer: {{ answer | to_json | safe }},
+    encoded_ids: '{{ encoded_ids }}',
+    entry_keys: '{{ entry_keys }}'
+  });
 
   var $question = $('#question'),
       $answer = $('#answer'),
       $questionAuthor = $('#question-author'),
-      $answerAuthor = $('#answer-author'),
-      $upvoteButton = $('#upvote-button'),
-      $nextButton = $('#next-button'),
-      $downvoteButton = $('#downvote-button'),
-      $voteButtons = $('#vote-buttons-container button'),
-      $createPoemLink = $('#create-poem-link');
+      $answerAuthor = $('#answer-author');
 
-  var POEMS_VIEWED_COUNTER = 'question-answer-poems-viewed',
-      MIN_POEMS_TO_VIEW_BEFORE_SHOWING_CREATE_LINK = 5,
-      LOAD_POEMS_RETRY_DELAY = 2000,
-      MIN_CACHED_POEMS = 5;
-
-  $(function () {
-    $upvoteButton.click(function() { vote(1); });
-    $nextButton.click(function() { vote(0); });
-    $downvoteButton.click(function() { vote(-1); });
-    renderPoem();
-  });
-
-  function vote(vote) {
-    sendVote([poems[0].question.key, poems[0].answer.key], vote);
-    incCounter(POEMS_VIEWED_COUNTER)
-    poems = poems.splice(1)
-    renderPoem();
-  }
-
-  function renderPoem() {
-    if (poems.length < 1) {
-      setTimeout(renderPoem, LOAD_POEMS_RETRY_DELAY);
-      return;
-    }
-    
-    $question.text(poems[0].question.text);
-    $answer.text(poems[0].answer.text);
-    $questionAuthor.text(poems[0].question.author);
-    $answerAuthor.text(poems[0].answer.author);
-
-    if (poems.length < MIN_CACHED_POEMS) {
-      loadPoems();
-    }
-
-    if (getCounter(POEMS_VIEWED_COUNTER) >= MIN_POEMS_TO_VIEW_BEFORE_SHOWING_CREATE_LINK) {
-      $createPoemLink.css('opacity', 1);
-    }
-  }
-
-  function loadPoems() {
-    $.ajax({
-      url: '/x/get-question-answer/',
-      data: {},
-      cache: false,
-      success: function (data) {
-        if (data.errors) {
-          console.error(data.errors);
-          setTimeout(loadPoems, LOAD_POEMS_RETRY_DELAY);
-          return;
-        }
-        for (var i = 0; i < data.poems.length; ++i) {
-          poems.push(data.poems[i]);
-        }
-      }
-    }).fail(function() {
-      console.error('Server error!');
-      setTimeout(loadPoems, LOAD_POEMS_RETRY_DELAY);
-    });
+  function renderPoem(poem) {
+    $question.text(poem.question.text);
+    $answer.text(poem.answer.text);
+    $questionAuthor.text(poem.question.author);
+    $answerAuthor.text(poem.answer.author);
   }
 </script>
 {% endblock %}

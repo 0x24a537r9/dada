@@ -66,19 +66,30 @@ class MainHandler(webapp2.RequestHandler):
     self.response.out.write('<html><body>Hello world!</body></html>')
 
 
-class QuestionAnswerHandler(webapp2.RequestHandler):
+class PoemHandler(webapp2.RequestHandler):
   @render_to('question_answer.html')
-  def get(self, encoded_ids):
+  def get(self, poem_type, encoded_ids):
     r = Response()
+    r.poem_type = poem_type
+    if poem_type == 'question-answer':
+      entry_types = {'question': Entry.QUESTION, 'answer': Entry.ANSWER}
+    entry_keys = []
+
     if encoded_ids:
       ids = decode_ids(encoded_ids)
-      r.question = Entry.query(Entry.id == ids[0]).fetch(1)[0].to_dict()
-      r.answer = Entry.query(Entry.id == ids[1]).fetch(1)[0].to_dict()
+      for i, name in enumerate(entry_types):
+        setattr(r, name, Entry.query(Entry.id == ids[i]).fetch(1)[0].to_dict())
+        entry_keys.append(getattr(r, name)['key'])
       r.encoded_ids = encoded_ids
     else:
-      r.question = Entry.get_random(Entry.QUESTION).to_dict()
-      r.answer = Entry.get_random(Entry.ANSWER).to_dict()
-      r.encoded_ids = encode_ids((r.question['id'], r.answer['id']))
+      ids = []
+      for name, type in entry_types.items():
+        setattr(r, name, Entry.get_random(type).to_dict())
+        ids.append(getattr(r, name)['id'])
+        entry_keys.append(getattr(r, name)['key'])
+      r.encoded_ids = encode_ids(ids)
+
+    r.entry_keys = ','.join(entry_keys)
     return r.__dict__
 
 
@@ -92,6 +103,7 @@ class AjaxGetQuestionAnswerHandler(webapp2.RequestHandler):
       poem.question = Entry.get_random(Entry.QUESTION).to_dict()
       poem.answer = Entry.get_random(Entry.ANSWER).to_dict()
       poem.encoded_ids = encode_ids((poem.question['id'], poem.answer['id']))
+      poem.entry_keys = ','.join((poem.question['key'], poem.answer['key']))
       r.poems.append(poem.__dict__)
     return r.__dict__
 

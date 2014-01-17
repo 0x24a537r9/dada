@@ -1,3 +1,97 @@
 {% extends 'base.html' %}
 
-{% block title %}BASE_QUESTION_ANSWER{% endblock %}
+{% block title %}BASE_POEM{% endblock %}
+
+{% block content %}
+{{ super() }}
+{% block poem %}POEM{% endblock %}
+<br>
+<div id="authors-container">
+  {% block authors %}AUTHORS{% endblock %}
+</div>
+<div id="vote-buttons-container">
+  <button id="upvote-button"></button>
+  <button id="next-button"></button>
+  <button id="downvote-button"></button>
+</div>
+{% endblock %}
+
+{% block footer %}
+{{ super() }}
+<a id="create-poem-link" href="/{{ poem_type }}/create">
+  <div id="fingerprint"></div>Create your own
+</a>
+{% endblock %}
+
+{% block footer_script %}
+{{ super() }}
+<script>
+  {# Derived templates must implement a renderPoem(poem) function and should preload the poems array
+     with server-side data for better load performance. #}
+
+  var poems = [];
+  var poemType = '{{ poem_type }}';
+
+  var $upvoteButton = $('#upvote-button'),
+      $nextButton = $('#next-button'),
+      $downvoteButton = $('#downvote-button'),
+      $voteButtons = $('#vote-buttons-container button'),
+      $createPoemLink = $('#create-poem-link');
+
+  var MIN_POEMS_TO_VIEW_BEFORE_SHOWING_CREATE_LINK = 5,
+      LOAD_POEMS_RETRY_DELAY = 2000,
+      MIN_CACHED_POEMS = 5;
+
+  $(function () {
+    $upvoteButton.click(function() { vote(1); });
+    $nextButton.click(function() { vote(0); });
+    $downvoteButton.click(function() { vote(-1); });
+    refreshPoem();
+  });
+
+  function vote(vote) {
+    sendVote(poems[0].entry_keys, vote);
+    incCounter(poemType + '-poems-viewed')
+    poems = poems.splice(1)
+    refreshPoem();
+  }
+
+  function refreshPoem() {
+    if (poems.length < 1) {
+      setTimeout(refreshPoem, LOAD_POEMS_RETRY_DELAY);
+      return;
+    }
+    
+    renderPoem(poems[0]);
+
+    if (poems.length < MIN_CACHED_POEMS) {
+      loadPoems();
+    }
+
+    if (getCounter(poemType + '-poems-viewed') >= MIN_POEMS_TO_VIEW_BEFORE_SHOWING_CREATE_LINK) {
+      $createPoemLink.css('opacity', 1);
+    }
+  }
+
+  function loadPoems() {
+    $.ajax({
+      url: '/x/get-' + poemType + '/',
+      data: {},
+      cache: false,
+      success: function (data) {
+        if (data.errors) {
+          console.error(data.errors);
+          setTimeout(loadPoems, LOAD_POEMS_RETRY_DELAY);
+          return;
+        }
+        for (var i = 0; i < data.poems.length; ++i) {
+          poems.push(data.poems[i]);
+        }
+      }
+    }).fail(function() {
+      console.error('Server error!');
+      setTimeout(loadPoems, LOAD_POEMS_RETRY_DELAY);
+    });
+  }
+</script>
+{% endblock %}

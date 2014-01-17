@@ -56,7 +56,7 @@ function createEntry(entryType, $text, $author, $error, success) {
 
 function sendVote(entryKeys, vote) {
   var data = {};
-  data.entryKeys = entryKeys.join();
+  data.entryKeys = entryKeys;
   data.vote = vote;
   $.post('/x/vote/', data, function (data) {
     if (data.errors) {
