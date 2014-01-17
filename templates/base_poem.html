@@ -42,10 +42,17 @@
       LOAD_POEMS_RETRY_DELAY = 2000,
       MIN_CACHED_POEMS = 5;
 
-  $(function () {
+  $(function() {
     $upvoteButton.click(function() { vote(1); });
     $nextButton.click(function() { vote(0); });
     $downvoteButton.click(function() { vote(-1); });
+    $(document).keydown(function(event) {
+      switch (event.which) {
+        case 38: vote(1); break;
+        case 39: vote(0); break;
+        case 40: vote(-1); break;
+      }
+    });
     refreshPoem();
   });
 
@@ -78,7 +85,7 @@
       url: '/x/get-' + poemType + '/',
       data: {},
       cache: false,
-      success: function (data) {
+      success: function(data) {
         if (data.errors) {
           console.error(data.errors);
           setTimeout(loadPoems, LOAD_POEMS_RETRY_DELAY);

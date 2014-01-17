@@ -18,7 +18,7 @@ By: <input id="author-textbox" type="text"></input>
 <script>
   var entryType = randEntry();
 
-  $(function () {  
+  $(function() {  
     $('#author-textbox').val(localStorage.getItem('author') || '');
     getDirectionsEl(entryType).show();
     $(document).keydown(function(e) { if(e.which == 13) handleEnter(); });
