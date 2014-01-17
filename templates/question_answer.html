@@ -52,7 +52,13 @@
       $upvoteButton = $('#upvote-button'),
       $nextButton = $('#next-button'),
       $downvoteButton = $('#downvote-button'),
-      $voteButtons = $('#vote-buttons-container button');
+      $voteButtons = $('#vote-buttons-container button'),
+      $createPoemLink = $('#create-poem-link');
+
+  var POEMS_VIEWED_COUNTER = 'question-answer-poems-viewed',
+      MIN_POEMS_TO_VIEW_BEFORE_SHOWING_CREATE_LINK = 5,
+      LOAD_POEMS_RETRY_DELAY = 2000,
+      MIN_CACHED_POEMS = 5;
 
   $(function () {
     $upvoteButton.click(function() { vote(1); });
@@ -63,13 +69,14 @@
 
   function vote(vote) {
     sendVote([poems[0].question.key, poems[0].answer.key], vote);
+    incCounter(POEMS_VIEWED_COUNTER)
     poems = poems.splice(1)
     renderPoem();
   }
 
   function renderPoem() {
     if (poems.length < 1) {
-      setTimeout(renderPoem, 2000);
+      setTimeout(renderPoem, LOAD_POEMS_RETRY_DELAY);
       return;
     }
     
@@ -78,8 +85,12 @@
     $questionAuthor.text(poems[0].question.author);
     $answerAuthor.text(poems[0].answer.author);
 
-    if (poems.length < 5) {
+    if (poems.length < MIN_CACHED_POEMS) {
       loadPoems();
+    }
+
+    if (getCounter(POEMS_VIEWED_COUNTER) >= MIN_POEMS_TO_VIEW_BEFORE_SHOWING_CREATE_LINK) {
+      $createPoemLink.css('opacity', 1);
     }
   }
 
@@ -91,7 +102,7 @@
       success: function (data) {
         if (data.errors) {
           console.error(data.errors);
-          setTimeout(loadPoems, 2000);
+          setTimeout(loadPoems, LOAD_POEMS_RETRY_DELAY);
           return;
         }
         for (var i = 0; i < data.poems.length; ++i) {
@@ -100,7 +111,7 @@
       }
     }).fail(function() {
       console.error('Server error!');
-      setTimeout(loadPoems, 2000);
+      setTimeout(loadPoems, LOAD_POEMS_RETRY_DELAY);
     });
   }
 </script>
