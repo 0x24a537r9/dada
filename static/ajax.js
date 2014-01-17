@@ -54,15 +54,13 @@ function createEntry(entryType, $text, $author, $error, success) {
   });
 }
 
-function sendVote(entryKeys, vote, success, fail, always) {
+function sendVote(entryKeys, vote) {
   var data = {};
   data.entryKeys = entryKeys.join();
   data.vote = vote;
   $.post('/x/vote/', data, function (data) {
     if (data.errors) {
-      fail(data.errors);
-    } else {
-      success();  
+      console.error(data.errors);
     }
-  }).fail(function() { fail(); }).always(function() { always(); });
+  }).fail(function() { console.error('Server error!'); });
 }

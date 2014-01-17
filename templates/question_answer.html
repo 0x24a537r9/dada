@@ -62,16 +62,9 @@
   });
 
   function vote(vote) {
-    disable($voteButtons);
-    sendVote([poems[0].question.key, poems[0].answer.key], vote, function() {
-      // Do nothing unique on success.
-    }, function(errors) {
-      throw Error((errors || ['Server error!']).join());
-    }, function() {
-      poems = poems.splice(1)
-      renderPoem();
-      enable($voteButtons);
-    });
+    sendVote([poems[0].question.key, poems[0].answer.key], vote);
+    poems = poems.splice(1)
+    renderPoem();
   }
 
   function renderPoem() {
