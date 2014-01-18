@@ -3,7 +3,6 @@ import datetime, math, random
 from google.appengine.ext import ndb
 
 
-
 def randint64():
   return random.getrandbits(64) - 2 ** 63
 
