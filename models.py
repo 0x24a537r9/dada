@@ -28,7 +28,7 @@ class Model(ndb.Model):
 class Entry(Model):
   id = ndb.IntegerProperty(required=True, indexed=True)
 
-  TYPES = QUESTION, ANSWER = 'Question', 'Answer'
+  TYPES = QUESTION, ANSWER = 'question', 'answer'
   type = ndb.StringProperty(required=True, choices=TYPES, indexed=True)
   
   text = ndb.StringProperty(required=True)
@@ -58,7 +58,7 @@ class Entry(Model):
 
 
 class Poem(Model):
-  entryKeys = ndb.KeyProperty(kind=Entry, repeated=True, indexed=True)
+  entry_keys = ndb.KeyProperty(kind=Entry, repeated=True, indexed=True)
 
   upvotes = ndb.IntegerProperty(required=True, default=0, indexed=False)
   downvotes = ndb.IntegerProperty(required=True, default=0, indexed=False)

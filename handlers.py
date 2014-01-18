@@ -11,12 +11,9 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     autoescape=True)
 
 
-# TODO: Change these to js-style camelCase.
 ERRORS_KEY = 'errors'
 POEM_TYPE_KEY = 'poem_type'
 POEMS_KEY = 'poems'
-QUESTION_KEY = 'question'
-ANSWER_KEY = 'answer'
 ENCODED_IDS_KEY = 'encoded_ids'
 ENTRY_KEYS_KEY = 'entry_keys'
 ENTRY_TYPE_KEY = 'entry_type'
@@ -74,21 +71,21 @@ class PoemHandler(webapp2.RequestHandler):
     r = {}
     r[POEM_TYPE_KEY] = poem_type
     if poem_type == 'question-answer':
-      entry_types = {QUESTION_KEY: Entry.QUESTION, ANSWER_KEY: Entry.ANSWER}
+      entry_types = (Entry.QUESTION, Entry.ANSWER)
     entry_keys = []
 
     if encoded_ids:
       ids = decode_ids(encoded_ids)
-      for i, name in enumerate(entry_types):
-        r[name] = Entry.query(Entry.id == ids[i]).fetch(1)[0].to_dict()
-        entry_keys.append(r[name]['key'])
+      for i, entry_type in enumerate(entry_types):
+        r[entry_type] = Entry.query(Entry.id == ids[i]).fetch(1)[0].to_dict()
+        entry_keys.append(r[entry_type]['key'])
       r[ENCODED_IDS_KEY] = encoded_ids
     else:
       ids = []
-      for name, type in entry_types.items():
-        r[name] = Entry.get_random(type).to_dict()
-        ids.append(r[name]['id'])
-        entry_keys.append(r[name]['key'])
+      for entry_type in entry_types:
+        r[entry_type] = Entry.get_random(entry_type).to_dict()
+        ids.append(r[entry_type]['id'])
+        entry_keys.append(r[entry_type]['key'])
       r[ENCODED_IDS_KEY] = encode_ids(ids)
 
     r[ENTRY_KEYS_KEY] = ','.join(entry_keys)
@@ -102,8 +99,8 @@ class AjaxGetQuestionAnswerHandler(webapp2.RequestHandler):
     for i in xrange(0, 10):
       question, answer = Entry.get_random(Entry.QUESTION), Entry.get_random(Entry.ANSWER)
       r[POEMS_KEY].append({
-          QUESTION_KEY: question.to_dict(),
-          ANSWER_KEY: answer.to_dict(),
+          Entry.QUESTION: question.to_dict(),
+          Entry.ANSWER: answer.to_dict(),
           ENCODED_IDS_KEY: encode_ids((question.id, answer.id)),
           ENTRY_KEYS_KEY: ','.join((question.key.urlsafe(), answer.key.urlsafe())),
       })
@@ -149,12 +146,12 @@ class AjaxVoteHandler(webapp2.RequestHandler):
       return {ERRORS_KEY: 'Uh, you can\'t vote that many times.'}
     vote = int(vote)
 
-    entryKeys = self.request.POST['entryKeys']
-    if not entryKeys:
+    entry_keys = self.request.POST['entry_keys']
+    if not entry_keys:
       return {ERRORS_KEY: 'What entries are you referring to?'}
-    entryKeys = [ndb.Key(urlsafe=entryKey) for entryKey in entryKeys.split(',')]
+    entry_keys = [ndb.Key(urlsafe=entry_key) for entry_key in entry_keys.split(',')]
 
-    entries = ndb.get_multi(entryKeys)
+    entries = ndb.get_multi(entry_keys)
     if None in entries:
       return {ERRORS_KEY: 'One or more entries is invalid.'}
 
@@ -169,8 +166,8 @@ class AjaxVoteHandler(webapp2.RequestHandler):
 
     # Note: There is a race-condition here, but it's ok if we lose a few votes here and there.
     poem = Poem.get_or_insert(encode_ids(entryIds))
-    if not len(poem.entryKeys):
-      poem.entryKeys = entryKeys
+    if not len(poem.entry_keys):
+      poem.entry_keys = entry_keys
       poem.debug_text = ', '.join(entry.text for entry in entries)
     if vote > 0:
       poem.upvotes += 1

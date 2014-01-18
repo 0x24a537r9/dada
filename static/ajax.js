@@ -60,7 +60,7 @@ function sendVote(entryKeys, vote) {
   }
   
   var data = {};
-  data.entryKeys = entryKeys;
+  data.entry_keys = entryKeys;
   data.vote = vote;
   $.post('/x/vote/', data, function (data) {
     if (data.errors) {
