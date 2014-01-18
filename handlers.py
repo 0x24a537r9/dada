@@ -11,14 +11,16 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     autoescape=True)
 
 
-# Attributes will be defined outside init pylint: disable=W0201
-class Response(object):
-  @classmethod
-  def errors(cls, *errors):
-    if len(errors) == 1 and hasattr(errors[0], '__iter__'):
-      return {'errors': errors[0]}
-    else:
-      return {'errors': errors}
+# TODO: Change these to js-style camelCase.
+ERRORS_KEY = 'errors'
+POEM_TYPE_KEY = 'poem_type'
+POEMS_KEY = 'poems'
+QUESTION_KEY = 'question'
+ANSWER_KEY = 'answer'
+ENCODED_IDS_KEY = 'encoded_ids'
+ENTRY_KEYS_KEY = 'entry_keys'
+ENTRY_TYPE_KEY = 'entry_type'
+ENTRY_KEY = 'entry'
 
 
 def render_to(template=''):
@@ -69,100 +71,92 @@ class MainHandler(webapp2.RequestHandler):
 class PoemHandler(webapp2.RequestHandler):
   @render_to('question_answer.html')
   def get(self, poem_type, encoded_ids):
-    r = Response()
-    r.poem_type = poem_type
+    r = {}
+    r[POEM_TYPE_KEY] = poem_type
     if poem_type == 'question-answer':
-      entry_types = {'question': Entry.QUESTION, 'answer': Entry.ANSWER}
+      entry_types = {QUESTION_KEY: Entry.QUESTION, ANSWER_KEY: Entry.ANSWER}
     entry_keys = []
 
     if encoded_ids:
       ids = decode_ids(encoded_ids)
       for i, name in enumerate(entry_types):
-        setattr(r, name, Entry.query(Entry.id == ids[i]).fetch(1)[0].to_dict())
-        entry_keys.append(getattr(r, name)['key'])
-      r.encoded_ids = encoded_ids
+        r[name] = Entry.query(Entry.id == ids[i]).fetch(1)[0].to_dict()
+        entry_keys.append(r[name]['key'])
+      r[ENCODED_IDS_KEY] = encoded_ids
     else:
       ids = []
       for name, type in entry_types.items():
-        setattr(r, name, Entry.get_random(type).to_dict())
-        ids.append(getattr(r, name)['id'])
-        entry_keys.append(getattr(r, name)['key'])
-      r.encoded_ids = encode_ids(ids)
+        r[name] = Entry.get_random(type).to_dict()
+        ids.append(r[name]['id'])
+        entry_keys.append(r[name]['key'])
+      r[ENCODED_IDS_KEY] = encode_ids(ids)
 
-    r.entry_keys = ','.join(entry_keys)
-    return r.__dict__
+    r[ENTRY_KEYS_KEY] = ','.join(entry_keys)
+    return r
 
 
 class AjaxGetQuestionAnswerHandler(webapp2.RequestHandler):
   @ajax_request
   def get(self):
-    r = Response()
-    r.poems = []
+    r = {POEMS_KEY: []}
     for i in xrange(0, 10):
-      poem = Response()
-      poem.question = Entry.get_random(Entry.QUESTION).to_dict()
-      poem.answer = Entry.get_random(Entry.ANSWER).to_dict()
-      poem.encoded_ids = encode_ids((poem.question['id'], poem.answer['id']))
-      poem.entry_keys = ','.join((poem.question['key'], poem.answer['key']))
-      r.poems.append(poem.__dict__)
-    return r.__dict__
+      question, answer = Entry.get_random(Entry.QUESTION), Entry.get_random(Entry.ANSWER)
+      r[POEMS_KEY].append({
+          QUESTION_KEY: question.to_dict(),
+          ANSWER_KEY: answer.to_dict(),
+          ENCODED_IDS_KEY: encode_ids((question.id, answer.id)),
+          ENTRY_KEYS_KEY: ','.join((question.key.urlsafe(), answer.key.urlsafe())),
+      })
+    return r
 
 
 class CreateEntryHandler(webapp2.RequestHandler):
   @render_to('create_entry.html')
   def get(self, entry_type):
-    r = Response()
-    r.entry_type = entry_type
-    return r.__dict__
+    return {ENTRY_TYPE_KEY: entry_type}
 
 
 class AjaxCreateEntryHandler(webapp2.RequestHandler):
   @ajax_request
   def post(self):
-    r = Response()
-
     entry_type = self.request.POST['entry_type']
     if entry_type not in Entry.TYPES:
-      return Response.errors('What kind of entry is that?')
+      return {ERRORS_KEY: 'What kind of entry is that?'}
 
     text = self.request.POST['text'].strip()
     if len(text) == 0:
-      return Response.errors('You forgot your entry!')
+      return {ERRORS_KEY: 'You forgot your entry!'}
     elif len(text) > 64:
-      return Response.errors('Your entry is too long!')
+      return {ERRORS_KEY: 'Your entry is too long!'}
 
     author = self.request.POST['author'].strip()
     if len(author) == 0:
-      return Response.errors('You forgot your name!')
+      return {ERRORS_KEY: 'You forgot your name!'}
     elif len(author) > 32:
-      return Response.errors('Your name is too long!')
+      return {ERRORS_KEY: 'Your name is too long!'}
 
     # TODO: Entry-type-specific length-check.
     entry = Entry(id=randint64(), type=entry_type, text=text, author=author)
     entry.put()
-    r.entry = entry.to_dict()
-
-    return r.__dict__
+    return {ENTRY_KEY: entry.to_dict()}
 
 
 class AjaxVoteHandler(webapp2.RequestHandler):
   @ajax_request
   def post(self):
-    r = Response()
-
     vote = self.request.POST['vote']
     if vote not in ('-1', '1'):
-      return Response.errors('Uh, you can\'t vote that many times.')
+      return {ERRORS_KEY: 'Uh, you can\'t vote that many times.'}
     vote = int(vote)
 
     entryKeys = self.request.POST['entryKeys']
     if not entryKeys:
-      return Response.errors('What entries are you referring to?')
+      return {ERRORS_KEY: 'What entries are you referring to?'}
     entryKeys = [ndb.Key(urlsafe=entryKey) for entryKey in entryKeys.split(',')]
 
     entries = ndb.get_multi(entryKeys)
     if None in entries:
-      return Response.errors('One or more entries is invalid.')
+      return {ERRORS_KEY: 'One or more entries is invalid.'}
 
     entryIds = []
     for entry in entries:
@@ -184,4 +178,4 @@ class AjaxVoteHandler(webapp2.RequestHandler):
       poem.downvotes += 1
     poem.put()
 
-    return r.__dict__
+    return {}
