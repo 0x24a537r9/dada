@@ -58,14 +58,7 @@
   });
 
   function vote(vote) {
-    $voteButtons.css({
-      'opacity': 0,
-      '-webkit-transition': '',
-         '-moz-transition': '',
-          '-ms-transition': '',
-           '-o-transition': '',
-              'transition': ''
-    });
+    $voteButtons.addClass('hidden');
 
     sendVote(poems[0].entry_keys, vote);
     incCounter(poemType + '-poems-viewed')
@@ -74,14 +67,7 @@
 
     // Only allow the user to vote again after he/she has had time to read it.
     setTimeout(function() {
-      $voteButtons.css({
-        '-webkit-transition': 'opacity 1s',
-           '-moz-transition': 'opacity 1s',
-            '-ms-transition': 'opacity 1s',
-             '-o-transition': 'opacity 1s',
-                'transition': 'opacity 1s',
-        'opacity': 1
-      });
+      $voteButtons.removeClass('hidden');
     }, ALLOW_VOTE_DELAY);
   }
 

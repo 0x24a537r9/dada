@@ -91,7 +91,21 @@ div {
   outline: none;
   cursor: pointer;
   vertical-align: middle;
+  -webkit-transition: opacity 1s;
+     -moz-transition: opacity 1s;
+      -ms-transition: opacity 1s;
+       -o-transition: opacity 1s;
+          transition: opacity 1s;
   -webkit-tap-highlight-color: transparent;
+}
+
+#vote-buttons-container button.hidden {
+  -webkit-transition: none;
+     -moz-transition: none;
+      -ms-transition: none;
+       -o-transition: none;
+          transition: none;
+  opacity: 0
 }
 
 #upvote-button {
