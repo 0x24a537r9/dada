@@ -55,6 +55,10 @@ function createEntry(entryType, $text, $author, $error, success) {
 }
 
 function sendVote(entryKeys, vote) {
+  if (vote != 1 && vote != -1) {
+    return;
+  }
+  
   var data = {};
   data.entryKeys = entryKeys;
   data.vote = vote;

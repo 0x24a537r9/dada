@@ -151,12 +151,9 @@ class AjaxVoteHandler(webapp2.RequestHandler):
     r = Response()
 
     vote = self.request.POST['vote']
-    if vote not in ('-1', '0', '1'):
+    if vote not in ('-1', '1'):
       return Response.errors('Uh, you can\'t vote that many times.')
     vote = int(vote)
-
-    if vote == 0:
-      return r.__dict__
 
     entryKeys = self.request.POST['entryKeys']
     if not entryKeys:
