@@ -51,7 +51,8 @@
 
   var poems = [],
       poemType = '{{ poem_type }}',
-      activePoemContainerIndex = 0;
+      activePoemContainerIndex = 0,
+      canVote = true;
 
   var $instructionsContainer = $('#instructions-container'),
       $instructionsNextButton = $('#instructions-container .next-button'),
@@ -78,6 +79,8 @@
           closeInstructions();
         }
         return;
+      } else if (!canVote) {
+        return;
       }
 
       switch (event.which) {
@@ -96,11 +99,13 @@
   }
 
   function hideVoteButtons() {
+    canVote = false;
     $voteButtons.addClass('hidden');
 
     // Only allow the user to vote again after he/she has had time to read the poem.
     setTimeout(function() {
       $voteButtons.removeClass('hidden');
+      canVote = true;
     }, ALLOW_VOTE_DELAY);
   }
 
