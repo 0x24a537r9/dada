@@ -45,8 +45,8 @@ div {
 }
 
 .accent,
-#question:before,
-#answer:before,
+.question:before,
+.answer:before,
 .poem-author:before {
   color: #DE5547;
 }
@@ -55,22 +55,22 @@ div {
   font-size: 48pt;
 }
 
-#question:before {
+.question:before {
   content: "Q: ";
 }
 
-#answer:before {
+.answer:before {
   content: "A: ";
 }
 
-#answer,
-#answer:before,
-#answer-author,
-#answer-author:before {
+.answer,
+.answer:before,
+.answer-author,
+.answer-author:before {
   font-style: italic;
 }
 
-#authors-container {
+.authors-container {
   display: inline-block;
   padding-left: 60%;
   width: 100%;
@@ -88,11 +88,13 @@ div {
   content: "- ";
 }
 
-#vote-buttons-container {
+#instructions-buttons-container,
+.vote-buttons-container {
   margin-top: 20px;
 }
 
-#vote-buttons-container button {
+#instructions-buttons-container button,
+.vote-buttons-container button {
   border: none;
   outline: none;
   cursor: pointer;
@@ -105,7 +107,8 @@ div {
   -webkit-tap-highlight-color: transparent;
 }
 
-#vote-buttons-container button.hidden {
+#instructions-buttons-container button.hidden,
+.vote-buttons-container button.hidden {
   /* Set the size to 0 because "display: none;" breaks the opacity transition. */
   height: 0;
   width: 0;

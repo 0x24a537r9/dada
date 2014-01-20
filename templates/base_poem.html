@@ -8,17 +8,29 @@
   Unrelated questions and answers are provided by poets and paired at random. Many are
   nonsense&mdash;some outright absurd&mdash;but a few: <span class="accent">fortuitously
   profound</span>.
-  <div id="vote-buttons-container">
+  <div id="instructions-buttons-container">
     <button class="next-button"></button>
   </div>
 </div>
-<div id="poem-container" {% if show_instructions %}style="display: none;"{% endif %}>
+<div class="poem-container" {% if show_instructions %}style="display: none;"{% endif %}>
   {% block poem %}POEM{% endblock %}
   <br>
-  <div id="authors-container">
+  <div class="authors-container">
     {% block authors %}AUTHORS{% endblock %}
   </div>
-  <div id="vote-buttons-container">
+  <div class="vote-buttons-container">
+    <button class="upvote-button"></button>
+    <button class="next-button"></button>
+    <button class="downvote-button"></button>
+  </div>
+</div>
+<div class="poem-container" style="display: none;">
+  {{ self.poem() }}
+  <br>
+  <div class="authors-container">
+    {{ self.authors() }}
+  </div>
+  <div class="vote-buttons-container">
     <button class="upvote-button"></button>
     <button class="next-button"></button>
     <button class="downvote-button"></button>
@@ -36,19 +48,20 @@
 {% block footer_script %}
 {{ super() }}
 <script>
-  {# Derived templates must implement a renderPoem(poem) function and should preload the poems array
-     with server-side data for better load performance. #}
+  {# Derived templates must implement a renderPoem(poem, container) function and should preload the
+     poems array with server-side data for better load performance. #}
 
-  var poems = [];
-  var poemType = '{{ poem_type }}';
+  var poems = [],
+      poemType = '{{ poem_type }}',
+      activePoemContainerIndex = 0;
 
   var $instructionsContainer = $('#instructions-container'),
       $instructionsNextButton = $('#instructions-container .next-button'),
-      $poemContainer = $('#poem-container'),
-      $upvoteButton = $('#vote-buttons-container .upvote-button'),
-      $nextPoemButton = $('#vote-buttons-container .next-button'),
-      $downvoteButton = $('#vote-buttons-container .downvote-button'),
-      $voteButtons = $('#vote-buttons-container button'),
+      $poemContainers = $('.poem-container'),
+      $upvoteButtons = $('.vote-buttons-container .upvote-button'),
+      $nextPoemButtons = $('.vote-buttons-container .next-button'),
+      $downvoteButtons = $('.vote-buttons-container .downvote-button'),
+      $voteButtons = $('.vote-buttons-container button'),
       $createPoemLink = $('#create-poem-link');
 
   var MIN_POEMS_TO_VIEW_BEFORE_SHOWING_CREATE_LINK = 5,
@@ -59,11 +72,11 @@
   $(function() {
     $instructionsNextButton.click(function() {
       $instructionsContainer.fadeOut();
-      $poemContainer.fadeIn();
+      $poemContainers.eq(activePoemContainerIndex).fadeIn();
     });
-    $upvoteButton.click(function() { vote(1); });
-    $nextPoemButton.click(function() { vote(0); });
-    $downvoteButton.click(function() { vote(-1); });
+    $upvoteButtons.click(function() { vote(1); });
+    $nextPoemButtons.click(function() { vote(0); });
+    $downvoteButtons.click(function() { vote(-1); });
     $(document).keydown(function(event) {
       switch (event.which) {
         case 38: vote(1); break;
@@ -80,7 +93,10 @@
     sendVote(poems[0].entry_keys, vote);
     incCounter(poemType + '-poems-viewed')
     poems = poems.splice(1)
+	$poemContainers.eq(activePoemContainerIndex).fadeOut();
+    activePoemContainerIndex = 1 - activePoemContainerIndex
     refreshPoem();
+	$poemContainers.eq(activePoemContainerIndex).fadeIn();
 
     // Only allow the user to vote again after he/she has had time to read it.
     setTimeout(function() {
@@ -94,7 +110,7 @@
       return;
     }
     
-    renderPoem(poems[0]);
+    renderPoem(poems[0], $poemContainers.eq(activePoemContainerIndex));
 
     if (poems.length < MIN_CACHED_POEMS) {
       loadPoems();
