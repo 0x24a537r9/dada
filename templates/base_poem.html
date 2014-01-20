@@ -70,14 +70,18 @@
       MIN_CACHED_POEMS = 5;
 
   $(function() {
-    $instructionsNextButton.click(function() {
-      $instructionsContainer.fadeOut();
-      $poemContainers.eq(activePoemContainerIndex).fadeIn();
-    });
+    $instructionsNextButton.click(closeInstructions);
     $upvoteButtons.click(function() { vote(1); });
     $nextPoemButtons.click(function() { vote(0); });
     $downvoteButtons.click(function() { vote(-1); });
     $(document).keydown(function(event) {
+      if ($instructionsContainer.is(':visible')) {
+        if (event.which == 13 || event.which == 32 || event.which == 39) {
+          closeInstructions();
+        }
+        return;
+      }
+
       switch (event.which) {
         case 38: vote(1); break;
         case 39: vote(0); break;
@@ -87,21 +91,31 @@
     refreshPoem();
   });
 
-  function vote(vote) {
+  function closeInstructions() {
+    $instructionsContainer.fadeOut();
+    hideVoteButtons();
+    $poemContainers.eq(activePoemContainerIndex).fadeIn();
+  }
+
+  function hideVoteButtons() {
     $voteButtons.addClass('hidden');
 
-    sendVote(poems[0].entry_keys, vote);
-    incCounter(poemType + '-poems-viewed')
-    poems = poems.splice(1)
-	$poemContainers.eq(activePoemContainerIndex).fadeOut();
-    activePoemContainerIndex = 1 - activePoemContainerIndex
-    refreshPoem();
-	$poemContainers.eq(activePoemContainerIndex).fadeIn();
-
-    // Only allow the user to vote again after he/she has had time to read it.
+    // Only allow the user to vote again after he/she has had time to read the poem.
     setTimeout(function() {
       $voteButtons.removeClass('hidden');
     }, ALLOW_VOTE_DELAY);
+  }
+
+  function vote(vote) {
+    hideVoteButtons();
+    sendVote(poems[0].entry_keys, vote);
+
+    incCounter(poemType + '-poems-viewed')
+    poems = poems.splice(1)
+	  $poemContainers.eq(activePoemContainerIndex).fadeOut();
+    activePoemContainerIndex = 1 - activePoemContainerIndex
+    refreshPoem();
+	  $poemContainers.eq(activePoemContainerIndex).fadeIn();
   }
 
   function refreshPoem() {
