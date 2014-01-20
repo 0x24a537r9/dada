@@ -5,9 +5,7 @@
 {% block content %}
 {{ super() }}
 <div id="instructions-container" {% if not show_instructions %}style="display: none;"{% endif %}>
-  Unrelated questions and answers are provided by poets and paired at random. Many are
-  nonsense&mdash;some outright absurd&mdash;but a few: <span class="accent">fortuitously
-  profound</span>.
+  {% block instructions %}INSTRUCTIONS{% endblock %}
   <div id="instructions-buttons-container">
     <button class="next-button"></button>
   </div>

@@ -8,6 +8,12 @@
 <meta property="og:description" content="Q: {{ question.text }} A: {{ answer.text }}"/>
 {% endblock %}
 
+{% block instructions %}
+Unrelated questions and answers are provided by poets and paired at random to create poems. Many are
+nonsensical&mdash;some outright absurd&mdash;but a few: <span class="accent">fortuitously
+profound</span>.
+{% endblock %}
+
 {% block poem %}
 <span class="question poem-text">{{ question.text }}</span><br>
 <span class="answer poem-text">{{ answer.text }}</span>
