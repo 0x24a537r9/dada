@@ -85,7 +85,7 @@
 
       switch (event.which) {
         case 38: vote(1); break;
-        case 39: vote(0); break;
+        case 13: case 32: case 39: vote(0); break;
         case 40: vote(-1); break;
       }
     });
