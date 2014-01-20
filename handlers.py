@@ -11,13 +11,14 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     autoescape=True)
 
 
+ENCODED_IDS_KEY = 'encoded_ids'
+ENTRY_KEY = 'entry'
+ENTRY_KEYS_KEY = 'entry_keys'
+ENTRY_TYPE_KEY = 'entry_type'
 ERRORS_KEY = 'errors'
 POEM_TYPE_KEY = 'poem_type'
 POEMS_KEY = 'poems'
-ENCODED_IDS_KEY = 'encoded_ids'
-ENTRY_KEYS_KEY = 'entry_keys'
-ENTRY_TYPE_KEY = 'entry_type'
-ENTRY_KEY = 'entry'
+SHOW_INSTRUCTIONS_KEY = 'show_instructions'
 
 
 def render_to(template=''):
@@ -82,6 +83,7 @@ class PoemHandler(webapp2.RequestHandler):
         r[entry_type] = Entry.query(Entry.id == ids[i]).fetch(1)[0]
         entry_keys.append(r[entry_type].key.urlsafe())
       r[ENCODED_IDS_KEY] = encoded_ids
+      r[SHOW_INSTRUCTIONS_KEY] = False
     else:
       ids = []
       for entry_type in entry_types:
@@ -89,6 +91,7 @@ class PoemHandler(webapp2.RequestHandler):
         ids.append(r[entry_type].id)
         entry_keys.append(r[entry_type].key.urlsafe())
       r[ENCODED_IDS_KEY] = encode_ids(ids)
+      r[SHOW_INSTRUCTIONS_KEY] = True
 
     r[ENTRY_KEYS_KEY] = ','.join(entry_keys)
     return r

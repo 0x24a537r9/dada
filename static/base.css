@@ -40,6 +40,11 @@ div {
   width: 100%;
 }
 
+#instructions-container {
+  font-size: 40pt;
+}
+
+.accent,
 #question:before,
 #answer:before,
 .poem-author:before {
@@ -112,53 +117,53 @@ div {
   opacity: 0;
 }
 
-#upvote-button {
+.upvote-button {
   margin-left: -35px;
   width: 96px;
   height: 109px;
   background: url('/static/thumbs-up.svg');
 }
 
-#upvote-button:hover {
+.upvote-button:hover {
   -webkit-transform: translateY(-4px);
           transform: translateY(-4px);
 }
 
-#upvote-button:active {
+.upvote-button:active {
   -webkit-transform: translateY(-8px);
           transform: translateY(-8px);
 }
 
-#next-button {
+.next-button {
   margin: 0 30px 0 37px;
   width: 101px;
   height: 52px;
   background: url('/static/next.svg');
 }
 
-#next-button:hover {
+.next-button:hover {
   -webkit-transform: translateX(4px);
           transform: translateX(4px);
 }
 
-#next-button:active {
+.next-button:active {
   -webkit-transform: translateX(8px);
           transform: translateX(8px);
 }
 
-#downvote-button {
+.downvote-button {
   margin-top: 28px;
   width: 52px;
   height: 81px;
   background: url('/static/thumbs-down.svg');
 }
 
-#downvote-button:hover {
+.downvote-button:hover {
   -webkit-transform: translateY(4px);
           transform: translateY(4px);
 }
 
-#downvote-button:active {
+.downvote-button:active {
   -webkit-transform: translateY(8px);
           transform: translateY(8px);
 }
@@ -181,7 +186,7 @@ div {
 
 #create-poem-link {
   color: #555;
-  font: 24pt;
+  font-size: 24pt;
   text-decoration: none;
   opacity: 0;
   -webkit-transition: opacity 500ms;

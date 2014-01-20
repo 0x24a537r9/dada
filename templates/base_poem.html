@@ -4,15 +4,25 @@
 
 {% block content %}
 {{ super() }}
-{% block poem %}POEM{% endblock %}
-<br>
-<div id="authors-container">
-  {% block authors %}AUTHORS{% endblock %}
+<div id="instructions-container" {% if not show_instructions %}style="display: none;"{% endif %}>
+  Unrelated questions and answers are provided by poets and paired at random. Many are
+  nonsense&mdash;some outright absurd&mdash;but a few: <span class="accent">fortuitously
+  profound</span>.
+  <div id="vote-buttons-container">
+    <button class="next-button"></button>
+  </div>
 </div>
-<div id="vote-buttons-container">
-  <button id="upvote-button"></button>
-  <button id="next-button"></button>
-  <button id="downvote-button"></button>
+<div id="poem-container" {% if show_instructions %}style="display: none;"{% endif %}>
+  {% block poem %}POEM{% endblock %}
+  <br>
+  <div id="authors-container">
+    {% block authors %}AUTHORS{% endblock %}
+  </div>
+  <div id="vote-buttons-container">
+    <button class="upvote-button"></button>
+    <button class="next-button"></button>
+    <button class="downvote-button"></button>
+  </div>
 </div>
 {% endblock %}
 
@@ -32,9 +42,12 @@
   var poems = [];
   var poemType = '{{ poem_type }}';
 
-  var $upvoteButton = $('#upvote-button'),
-      $nextButton = $('#next-button'),
-      $downvoteButton = $('#downvote-button'),
+  var $instructionsContainer = $('#instructions-container'),
+      $instructionsNextButton = $('#instructions-container .next-button'),
+      $poemContainer = $('#poem-container'),
+      $upvoteButton = $('#vote-buttons-container .upvote-button'),
+      $nextPoemButton = $('#vote-buttons-container .next-button'),
+      $downvoteButton = $('#vote-buttons-container .downvote-button'),
       $voteButtons = $('#vote-buttons-container button'),
       $createPoemLink = $('#create-poem-link');
 
@@ -44,8 +57,12 @@
       MIN_CACHED_POEMS = 5;
 
   $(function() {
+    $instructionsNextButton.click(function() {
+      $instructionsContainer.fadeOut();
+      $poemContainer.fadeIn();
+    });
     $upvoteButton.click(function() { vote(1); });
-    $nextButton.click(function() { vote(0); });
+    $nextPoemButton.click(function() { vote(0); });
     $downvoteButton.click(function() { vote(-1); });
     $(document).keydown(function(event) {
       switch (event.which) {
