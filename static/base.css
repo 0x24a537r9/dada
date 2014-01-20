@@ -7,6 +7,7 @@ html, body {
   height: 100%;
   margin: 0;
   background: url('/static/paper.png');
+  font-family: 'Old Press';
 }
 
 div {
@@ -46,7 +47,7 @@ div {
 }
 
 .poem-text {
-  font: 48pt 'Old Press';
+  font-size: 48pt;
 }
 
 #question:before {
@@ -71,7 +72,7 @@ div {
   text-align: left;
   white-space: nowrap;
   color: #555;
-  font: 22pt 'Old Press';
+  font-size: 22pt;
 }
 
 .poem-author {
@@ -180,7 +181,7 @@ div {
 
 #create-poem-link {
   color: #555;
-  font: 24pt 'Old Press';
+  font: 24pt;
   text-decoration: none;
   opacity: 0;
   -webkit-transition: opacity 500ms;
