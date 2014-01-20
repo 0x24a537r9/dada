@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'Old Press';
-  src: local('Old Press'), url('/static/old-press.ttf');
+  src: local('Old Press'), url('/static/old-press.woff');
 }
 
 html, body {
