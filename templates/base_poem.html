@@ -40,7 +40,7 @@
 
 {% block footer %}
 {{ super() }}
-<a id="create-poem-link" href="/{{ poem_type }}/create/">
+<a id="create-poem-link" class="hidden" href="/{{ poem_type }}/create/">
   <div id="fingerprint"></div>Create your own
 </a>
 {% endblock %}
@@ -130,8 +130,9 @@
       loadPoems();
     }
 
-    if (getCounter(poemType + '-poems-viewed') >= MIN_POEMS_TO_VIEW_BEFORE_SHOWING_CREATE_LINK) {
-      $createPoemLink.css('opacity', 1);
+    if (getCounter(poemType + '-poems-viewed') >= MIN_POEMS_TO_VIEW_BEFORE_SHOWING_CREATE_LINK &&
+        $createPoemLink.hasClass('hidden')) {
+      $createPoemLink.removeClass('hidden');
     }
   }
 
