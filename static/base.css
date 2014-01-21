@@ -32,6 +32,10 @@ blockquote:after {
   content: close-quote;
 }
 
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
 a:focus { 
   outline: none; 
 }
@@ -99,10 +103,16 @@ button::-moz-focus-inner {
   color: #222;
 }
 
-#question-answer-link {
+#question-answer-link,
+#conditionals-link,
+#the-exquisite-corpse-link {
   display: inline-block;
-  margin: 30px 30px 0 30px;
+  position: relative;
   vertical-align: top;
+}
+
+#question-answer-link {
+  margin: 30px 30px 0 30px;
 }
 
 #question-answer-link:hover {
@@ -122,18 +132,12 @@ button::-moz-focus-inner {
 }
 
 #conditionals-link {
-  display: inline-block;
-  position: relative;
   margin: 30px 30px 7px 30px;
-  vertical-align: top;
 }
 
 #the-exquisite-corpse-link {
-  display: inline-block;
-  position: relative;
   margin: 27px 30px 0 30px;
   padding-bottom: 50px;
-  vertical-align: top;
 }
 
 #conditionals-link:after,
