@@ -90,6 +90,53 @@ blockquote:after {
   color: #222;
 }
 
+#question-answer-link {
+  display: inline-block;
+  margin: 30px 30px 0 30px;
+  vertical-align: top;
+}
+
+#question-answer-link:hover {
+  -webkit-transform: translateY(-4px);
+          transform: translateY(-4px);
+}
+
+#question-answer-link:active {
+  -webkit-transform: translateY(-2px);
+          transform: translateY(-2px);
+}
+
+#conditionals-link {
+  display: inline-block;
+  position: relative;
+  margin: 30px 30px 7px 30px;
+  vertical-align: top;
+}
+
+#the-exquisite-corpse-link {
+  display: inline-block;
+  position: relative;
+  margin: 27px 30px 0 30px;
+  padding-bottom: 50px;
+  vertical-align: top;
+}
+
+#conditionals-link:after,
+#the-exquisite-corpse-link:after {
+  content: "Coming Soon!";
+  position: absolute;
+  top: 13px;
+  right: -21px;
+  padding: 0 2px 0 3px;
+  font-size: 20px;
+  color: #DE5547;
+  background: #F8F8F8;
+  border: 1px solid #999;
+  box-shadow: -1px 1px 4px rgba(0, 0, 0, 0.4);
+  -webkit-transform: rotate(-15deg);
+          transform: rotate(-15deg);
+}
+
 #instructions-container,
 .poem-container {
   position: absolute;
