@@ -53,8 +53,34 @@ blockquote:after {
   text-align: center;
 }
 
-#project-quote {
+#project-quotes-container {
+  position: relative;
   margin-top: 30px;
+}
+
+#project-quotes-container blockquote {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  opacity: 0;
+  -webkit-transition: opacity 1s;
+     -moz-transition: opacity 1s;
+      -ms-transition: opacity 1s;
+       -o-transition: opacity 1s;
+          transition: opacity 1s;
+}
+
+#project-quotes-container.translated blockquote {
+  opacity: 1;
+}
+
+#project-quotes-container blockquote:lang(fr) {
+  position: initial;
+  opacity: 1;
+}
+
+#project-quotes-container.translated blockquote:lang(fr) {
+  opacity: 0;
 }
 
 .project-description {

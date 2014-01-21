@@ -10,7 +10,10 @@
 
 {% block content %}
 <div>
-  <blockquote id="project-quote" cite="http://www.gutenberg.org/files/16989/16989-h/16989-h.htm" lang="fr">La poésie doit être faite par tous. Non par un.</blockquote>
+  <div id="project-quotes-container">
+    <blockquote cite="http://www.gutenberg.org/files/16989/16989-h/16989-h.htm" lang="fr">La poésie doit être faite par tous. Non par un.</blockquote>
+    <blockquote cite="http://www.gutenberg.org/files/16989/16989-h/16989-h.htm">Poetry must be made by all. Not by one.</blockquote>
+  </div>
   <div class="authors-container">
     <span class="poem-author">Lautréamont</span>
   </div>
@@ -22,4 +25,21 @@
   </p>
   </div>
 </div>
+{% endblock %}
+
+{% block footer_script %}
+{{ super() }}
+<script>
+  var $projectQuotesContainer = $('#project-quotes-container');
+
+  $(function() {
+    setInterval(function() {
+      if ($projectQuotesContainer.hasClass('translated')) {
+        $projectQuotesContainer.removeClass('translated');
+      } else {
+        $projectQuotesContainer.addClass('translated');
+      }
+    }, 4000);
+  });
+</script>
 {% endblock %}
