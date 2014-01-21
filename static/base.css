@@ -74,6 +74,7 @@ button::-moz-focus-inner {
 #project-quotes-container blockquote {
   position: absolute;
   top: 0;
+  margin: 0;
   width: 100%;
   opacity: 0;
   -webkit-transition: opacity 1s;
