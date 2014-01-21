@@ -64,8 +64,9 @@ def decode_ids(idString):
 
 
 class MainHandler(webapp2.RequestHandler):
+  @render_to('home.html')
   def get(self):
-    self.response.out.write('<html><body>Hello world!</body></html>')
+    return {}
 
 
 class PoemHandler(webapp2.RequestHandler):

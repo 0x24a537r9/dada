@@ -15,6 +15,26 @@ div {
        box-sizing: border-box;
 }
 
+blockquote {
+  -webkit-margin-before: 0;
+  -webkit-margin-after: 0;
+  -webkit-margin-start: 0;
+  -webkit-margin-end: 0;
+  font-size: 30pt;
+}
+
+blockquote:before {
+  content: open-quote;
+}
+
+blockquote:after {
+  content: close-quote;
+}
+
+:lang(fr) {
+  font-style: italic;
+}
+
 #logo {
   position: absolute;
   top: 28px;
@@ -33,7 +53,19 @@ div {
   text-align: center;
 }
 
-#content > div {
+#project-quote {
+  margin-top: 30px;
+}
+
+.project-description {
+  text-align: left;
+  text-indent: 2em;
+  font-size: 22pt;
+  color: #222;
+}
+
+#instructions-container,
+.poem-container {
   position: absolute;
   top: 50%;
   margin-top: -150px;
@@ -76,12 +108,12 @@ div {
   width: 100%;
   text-align: left;
   white-space: nowrap;
-  color: #555;
   font-size: 22pt;
 }
 
 .poem-author {
-  white-space: nowrap; 
+  white-space: nowrap;
+  color: #555;
 }
 
 .poem-author:before {
