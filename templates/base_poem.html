@@ -7,7 +7,7 @@
 <div id="instructions-container" {% if not show_instructions %}style="display: none;"{% endif %}>
   {% block instructions %}INSTRUCTIONS{% endblock %}
   <div id="instructions-buttons-container">
-    <button class="next-button"></button>
+    <button class="next-button"><img src="/static/next.svg" alt="Next"/></button>
   </div>
 </div>
 <div class="poem-container" {% if show_instructions %}style="display: none;"{% endif %}>
@@ -17,9 +17,9 @@
     {% block authors %}AUTHORS{% endblock %}
   </div>
   <div class="vote-buttons-container">
-    <button class="upvote-button"></button>
-    <button class="next-button"></button>
-    <button class="downvote-button"></button>
+    <button class="upvote-button"><img src="/static/thumbs-up.svg" alt="Upvote"/></button>
+    <button class="next-button"><img src="/static/next.svg" alt="Next"/></button>
+    <button class="downvote-button"><img src="/static/thumbs-down.svg" alt="Downvote"/></button>
   </div>
 </div>
 <div class="poem-container" style="display: none;">
@@ -29,9 +29,9 @@
     {{ self.authors() }}
   </div>
   <div class="vote-buttons-container">
-    <button class="upvote-button"></button>
-    <button class="next-button"></button>
-    <button class="downvote-button"></button>
+    <button class="upvote-button"><img src="/static/thumbs-up.svg" alt="Upvote"/></button>
+    <button class="next-button"><img src="/static/next.svg" alt="Next"/></button>
+    <button class="downvote-button"><img src="/static/thumbs-down.svg" alt="Downvote"/></button>
   </div>
 </div>
 {% endblock %}
@@ -39,7 +39,7 @@
 {% block footer %}
 {{ super() }}
 <a id="create-poem-link" class="hidden" href="/{{ poem_type }}/create/">
-  <div id="fingerprint"></div>Create your own
+  <img id="fingerprint" src="/static/fingerprint.svg" alt="Fingerprint"/>Create your own
 </a>
 {% endblock %}
 
