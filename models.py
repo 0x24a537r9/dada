@@ -30,8 +30,8 @@ class Entry(Model):
   TYPES = QUESTION, ANSWER = 'question', 'answer'
   type = ndb.StringProperty(required=True, choices=TYPES, indexed=True)
   
-  text = ndb.StringProperty(required=True)
-  author = ndb.StringProperty(required=True, default='Anonymous')
+  text = ndb.StringProperty(required=True, indexed=False)
+  author = ndb.StringProperty(required=True, default='Anonymous', indexed=False)
   
   upvotes = ndb.IntegerProperty(required=True, default=0, indexed=False)
   downvotes = ndb.IntegerProperty(required=True, default=0, indexed=False)
