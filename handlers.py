@@ -170,32 +170,43 @@ class AjaxVoteHandler(webapp2.RequestHandler):
       return {ERRORS_KEY: 'What entries are you referring to?'}
     entry_keys = [ndb.Key(urlsafe=entry_key) for entry_key in entry_keys.split(',')]
 
+    try:
+      self.update_poem(entry_keys, poem_type, vote)
+    except Exception as e:
+      return {ERRORS_KEY: e.message}
+
+    return {}
+
+  @staticmethod
+  @ndb.transactional(xg=True)
+  def update_poem(entry_keys, poem_type, vote):
     entries = ndb.get_multi(entry_keys)
     if None in entries:
-      return {ERRORS_KEY: 'One or more entries is invalid.'}
+      raise Exception('One or more entries is invalid.')
 
     for i, entry_type in enumerate(POEM_TYPE_ENTRY_TYPES[poem_type]):
       if entry_type != entries[i].type:
-        return {ERRORS_KEY: 'Unexpected entry type: %s.' % entries[i].type}        
+        raise Exception('Unexpected entry type: %s.' % entries[i].type)
 
-    entryIds = []
+    entry_ids = []
     for entry in entries:
-      entryIds += [entry.id]
+      entry_ids += [entry.id]
       if vote > 0:
         entry.upvotes += 1
       else:
         entry.downvotes += 1
       entry.put()
 
-    # Note: There is a race-condition here, but it's ok if we lose a few votes here and there.
-    poem = Poem.get_or_insert(encode_ids(entryIds), type=poem_type)
-    if not len(poem.entry_keys):
-      poem.entry_keys = entry_keys
-      poem.debug_text = ', '.join(entry.text for entry in entries)
+    key = ndb.Key(Poem, encode_ids(entry_ids))
+    poem = key.get()
+    if poem is None:
+      poem = Poem(key=key, type=poem_type, entry_keys=entry_keys,
+                  debug_text=', '.join(entry.text for entry in entries))
     if vote > 0:
       poem.upvotes += 1
     else:
       poem.downvotes += 1
-    #poem.put()
+    poem.put()
 
-    return {}
+    return poem
+
