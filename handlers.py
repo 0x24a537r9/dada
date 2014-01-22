@@ -22,7 +22,7 @@ SHOW_INSTRUCTIONS_KEY = 'show_instructions'
 TEMPLATE_KEY = 'template'
 
 POEM_TYPE_ENTRY_TYPES = {
-  'question-answer': (Entry.QUESTION, Entry.ANSWER),
+  Poem.QUESTION_ANSWER: (Entry.QUESTION, Entry.ANSWER),
 }
 
 
@@ -156,6 +156,10 @@ class AjaxCreateEntryHandler(webapp2.RequestHandler):
 class AjaxVoteHandler(webapp2.RequestHandler):
   @ajax_request
   def post(self):
+    poem_type = self.request.POST['poem_type']
+    if poem_type not in Poem.TYPES:
+      return {ERRORS_KEY: 'What kind of poem is that?'}
+
     vote = self.request.POST['vote']
     if vote not in ('-1', '1'):
       return {ERRORS_KEY: 'Uh, you can\'t vote that many times.'}
@@ -170,6 +174,10 @@ class AjaxVoteHandler(webapp2.RequestHandler):
     if None in entries:
       return {ERRORS_KEY: 'One or more entries is invalid.'}
 
+    for i, entry_type in enumerate(POEM_TYPE_ENTRY_TYPES[poem_type]):
+      if entry_type != entries[i].type:
+        return {ERRORS_KEY: 'Unexpected entry type: %s.' % entries[i].type}        
+
     entryIds = []
     for entry in entries:
       entryIds += [entry.id]
@@ -180,7 +188,7 @@ class AjaxVoteHandler(webapp2.RequestHandler):
       entry.put()
 
     # Note: There is a race-condition here, but it's ok if we lose a few votes here and there.
-    poem = Poem.get_or_insert(encode_ids(entryIds))
+    poem = Poem.get_or_insert(encode_ids(entryIds), type=poem_type)
     if not len(poem.entry_keys):
       poem.entry_keys = entry_keys
       poem.debug_text = ', '.join(entry.text for entry in entries)
@@ -188,6 +196,6 @@ class AjaxVoteHandler(webapp2.RequestHandler):
       poem.upvotes += 1
     else:
       poem.downvotes += 1
-    poem.put()
+    #poem.put()
 
     return {}

@@ -57,6 +57,10 @@ class Entry(Model):
 
 
 class Poem(Model):
+  TYPES = QUESTION_ANSWER, CONDITIONALS, THE_EXQUISITE_CORPSE = ('question-answer', 'conditionals',
+                                                                 'the-exquisite-corpse')
+  type = ndb.StringProperty(required=True, choices=TYPES, indexed=True)
+
   entry_keys = ndb.KeyProperty(kind=Entry, repeated=True, indexed=True)
 
   upvotes = ndb.IntegerProperty(required=True, default=0, indexed=False)

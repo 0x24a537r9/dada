@@ -54,12 +54,13 @@ function createEntry(entryType, $text, $author, $error, success) {
   });
 }
 
-function sendVote(entryKeys, vote) {
+function sendVote(poemType, entryKeys, vote) {
   if (vote != 1 && vote != -1) {
     return;
   }
   
   var data = {};
+  data.poem_type = poemType
   data.entry_keys = entryKeys;
   data.vote = vote;
   $.post('/x/vote/', data, function (data) {
