@@ -116,7 +116,7 @@ class AjaxGetPoemHandler(webapp2.RequestHandler):
       entries = (Entry.get_random(entry_type) for entry_type in POEM_TYPE_ENTRY_TYPES[poem_type])
       for entry in entries:
         poem[entry.type] = entry
-      poem[ENCODED_IDS_KEY] = encode_ids(entry.id for entry in entries)
+      poem[ENCODED_IDS_KEY] = encode_ids(tuple(entry.id for entry in entries))
       poem[ENTRY_KEYS_KEY] = ','.join(entry.key.urlsafe() for entry in entries)
       r[POEMS_KEY].append(poem)
 
