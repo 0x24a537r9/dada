@@ -19,6 +19,11 @@ ERRORS_KEY = 'errors'
 POEM_TYPE_KEY = 'poem_type'
 POEMS_KEY = 'poems'
 SHOW_INSTRUCTIONS_KEY = 'show_instructions'
+TEMPLATE_KEY = 'template'
+
+POEM_TYPE_ENTRY_TYPES = {
+  'question-answer': (Entry.QUESTION, Entry.ANSWER),
+}
 
 
 def render_to(template=''):
@@ -26,7 +31,10 @@ def render_to(template=''):
     @wraps(function)
     def wrapper(self, *args, **kwargs):
       output = function(self, *args, **kwargs)
-      self.response.write(JINJA_ENVIRONMENT.get_template(template).render(output))
+      if not isinstance(output, dict):
+        return output
+      tmpl = output.pop(TEMPLATE_KEY, template)
+      self.response.write(JINJA_ENVIRONMENT.get_template(tmpl).render(output))
     return wrapper
   return renderer
 
@@ -70,12 +78,13 @@ class MainHandler(webapp2.RequestHandler):
 
 
 class PoemHandler(webapp2.RequestHandler):
-  @render_to('question_answer.html')
+  @render_to()
   def get(self, poem_type, encoded_ids):
     r = {}
     r[POEM_TYPE_KEY] = poem_type
-    if poem_type == 'question-answer':
-      entry_types = (Entry.QUESTION, Entry.ANSWER)
+    r[TEMPLATE_KEY] = '%s.html' % poem_type.replace('-', '_')
+
+    entry_types = POEM_TYPE_ENTRY_TYPES[poem_type]
     entry_keys = []
 
     if encoded_ids:
