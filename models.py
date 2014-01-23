@@ -57,11 +57,13 @@ class Entry(Model):
 
 
 class Poem(Model):
+  order = ndb.ComputedProperty(lambda self: randint64(), indexed=True)
+
   TYPES = QUESTION_ANSWER, CONDITIONALS, THE_EXQUISITE_CORPSE = ('question-answer', 'conditionals',
                                                                  'the-exquisite-corpse')
   type = ndb.StringProperty(required=True, choices=TYPES, indexed=True)
 
-  entry_keys = ndb.KeyProperty(kind=Entry, repeated=True, indexed=True)
+  entry_keys = ndb.KeyProperty(kind=Entry, repeated=True, indexed=False)
 
   upvotes = ndb.IntegerProperty(required=True, default=0, indexed=False)
   downvotes = ndb.IntegerProperty(required=True, default=0, indexed=False)
