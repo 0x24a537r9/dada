@@ -1,4 +1,4 @@
-import base64, os, jinja2, json, struct, webapp2
+import base64, os, jinja2, json, logging, struct, webapp2
 
 from functools import wraps
 from google.appengine.ext import ndb
@@ -88,14 +88,29 @@ class PoemHandler(webapp2.RequestHandler):
     entry_keys = []
 
     if encoded_ids:
-      entries = ndb.get_multi(ndb.Key(Entry, id) for id in decode_ids(encoded_ids))
+      try:
+        ids = decode_ids(encoded_ids)
+      except Exception:
+        logging.error('Poem id "%s" could not be decoded!', encoded_ids)
+        self.abort(404)
+
+      try:
+        entries = ndb.get_multi(ndb.Key(Entry, id) for id in ids)
+      except ValueError as e:
+        logging.error('Could not fetch Entry ids %s: %s', ids, e.message)
+        self.abort(404)
+
       for i, entry_type in enumerate(entry_types):
         if not entries[i]:
-          return {ERRORS_KEY: 'Which entry is that?'}
+          logging.error('Entry id "%s" was not found!', ids[i])
+          self.abort(404)
         elif entry_type != entries[i].type:
-          return {ERRORS_KEY: 'Unexpected entry type: %s.' % entries[i].type}
+          logging.error('Entry %d in poem id "%s" was type "%s"; expected "%s"!', i, encoded_ids,
+                        entries[i].type, entry_type)
+          self.abort(404)
         r[entry_type] = entries[i]
         entry_keys.append(r[entry_type].key.urlsafe())
+
       r[ENCODED_IDS_KEY] = encoded_ids
       r[SHOW_INSTRUCTIONS_KEY] = False
     else:
@@ -104,6 +119,7 @@ class PoemHandler(webapp2.RequestHandler):
         r[entry_type] = Entry.get_random(entry_type)
         ids.append(r[entry_type].key.id())
         entry_keys.append(r[entry_type].key.urlsafe())
+
       r[ENCODED_IDS_KEY] = encode_ids(ids)
       r[SHOW_INSTRUCTIONS_KEY] = True
 
