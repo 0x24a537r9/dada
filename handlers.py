@@ -184,11 +184,10 @@ class AjaxVoteHandler(webapp2.RequestHandler):
   @ndb.transactional(xg=True)
   def update_poem(entry_keys, poem_type, vote):
     entries = ndb.get_multi(entry_keys)
-    if None in entries:
-      raise Exception('One or more entries is invalid.')
-
     for i, entry_type in enumerate(POEM_TYPE_ENTRY_TYPES[poem_type]):
-      if entry_type != entries[i].type:
+      if not entry_type:
+        raise Exception('One or more entries is invalid.')
+      elif entry_type != entries[i].type:
         raise Exception('Unexpected entry type: %s.' % entries[i].type)
 
     entry_ids = []
@@ -198,7 +197,6 @@ class AjaxVoteHandler(webapp2.RequestHandler):
         entry.upvotes += 1
       else:
         entry.downvotes += 1
-      entry.put()
 
     key = ndb.Key(Poem, encode_ids(entry_ids))
     poem = key.get()
@@ -209,7 +207,8 @@ class AjaxVoteHandler(webapp2.RequestHandler):
       poem.upvotes += 1
     else:
       poem.downvotes += 1
-    poem.put()
+
+    ndb.put_multi_async(entries + [poem])
 
     return poem
 
