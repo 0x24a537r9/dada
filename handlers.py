@@ -88,9 +88,13 @@ class PoemHandler(webapp2.RequestHandler):
     entry_keys = []
 
     if encoded_ids:
-      ids = decode_ids(encoded_ids)
+      entries = ndb.get_multi(ndb.Key(Entry, id) for id in decode_ids(encoded_ids))
       for i, entry_type in enumerate(entry_types):
-        r[entry_type] = Entry.query(Entry.id == ids[i]).fetch(1)[0]
+        if not entries[i]:
+          return {ERRORS_KEY: 'Which entry is that?'}
+        elif entry_type != entries[i].type:
+          return {ERRORS_KEY: 'Unexpected entry type: %s.' % entries[i].type}
+        r[entry_type] = entries[i]
         entry_keys.append(r[entry_type].key.urlsafe())
       r[ENCODED_IDS_KEY] = encoded_ids
       r[SHOW_INSTRUCTIONS_KEY] = False
@@ -98,7 +102,7 @@ class PoemHandler(webapp2.RequestHandler):
       ids = []
       for entry_type in entry_types:
         r[entry_type] = Entry.get_random(entry_type)
-        ids.append(r[entry_type].id)
+        ids.append(r[entry_type].key.id())
         entry_keys.append(r[entry_type].key.urlsafe())
       r[ENCODED_IDS_KEY] = encode_ids(ids)
       r[SHOW_INSTRUCTIONS_KEY] = True
@@ -116,7 +120,7 @@ class AjaxGetPoemHandler(webapp2.RequestHandler):
       entries = (Entry.get_random(entry_type) for entry_type in POEM_TYPE_ENTRY_TYPES[poem_type])
       for entry in entries:
         poem[entry.type] = entry
-        ids.append(entry.id)
+        ids.append(entry.key.id())
         keys.append(entry.key.urlsafe())
       poem[ENCODED_IDS_KEY] = encode_ids(ids)
       poem[ENTRY_KEYS_KEY] = ','.join(keys)
@@ -151,7 +155,7 @@ class AjaxCreateEntryHandler(webapp2.RequestHandler):
       return {ERRORS_KEY: 'Your name is too long!'}
 
     # TODO: Entry-type-specific length-check.
-    entry = Entry(id=randint64(), type=entry_type, text=text, author=author)
+    entry = Entry(type=entry_type, text=text, author=author)
     entry.put()
     return {ENTRY_KEY: entry}
 
@@ -190,15 +194,15 @@ class AjaxVoteHandler(webapp2.RequestHandler):
       elif entry_type != entries[i].type:
         raise Exception('Unexpected entry type: %s.' % entries[i].type)
 
-    entry_ids = []
+    ids = []
     for entry in entries:
-      entry_ids += [entry.id]
+      ids += [entry.key.id()]
       if vote > 0:
         entry.upvotes += 1
       else:
         entry.downvotes += 1
 
-    key = ndb.Key(Poem, encode_ids(entry_ids))
+    key = ndb.Key(Poem, encode_ids(ids))
     poem = key.get()
     if poem is None:
       poem = Poem(key=key, type=poem_type, entry_keys=entry_keys,

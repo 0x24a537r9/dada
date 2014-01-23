@@ -25,11 +25,6 @@ indexes:
 
 - kind: Entry
   properties:
+  - name: is_flagged
   - name: type
-  - name: id
-
-- kind: Entry
-  properties:
-  - name: type
-  - name: id
-    direction: desc
+  - name: order

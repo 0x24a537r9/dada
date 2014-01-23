@@ -25,7 +25,7 @@ class Model(ndb.Model):
 
 
 class Entry(Model):
-  id = ndb.IntegerProperty(required=True, indexed=True)
+  order = ndb.ComputedProperty(lambda self: randint64(), indexed=True)
 
   TYPES = QUESTION, ANSWER = 'question', 'answer'
   type = ndb.StringProperty(required=True, choices=TYPES, indexed=True)
@@ -43,12 +43,12 @@ class Entry(Model):
 
   @classmethod
   def get_random(cls, type):
-    result = (cls.query(cls.type == type, cls.id >= randint64(), cls.is_flagged == False)
-                 .order(cls.id)
+    result = (cls.query(cls.type == type, cls.order >= randint64(), cls.is_flagged == False)
+                 .order(cls.order)
                  .fetch(1))
-    # If we shot too high, just get the lowest id entry.
+    # If we shot too high, just get the lowest order entry.
     if len(result) == 0:
-      result = cls.query(cls.type == type, cls.is_flagged == False).order(-cls.id).fetch(1)
+      result = cls.query(cls.type == type, cls.is_flagged == False).order(cls.order).fetch(1)
     return result[0]
 
   def __unicode__(self):
