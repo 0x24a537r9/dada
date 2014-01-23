@@ -112,12 +112,14 @@ class AjaxGetPoemHandler(webapp2.RequestHandler):
   def get(self, poem_type):
     r = {POEMS_KEY: []}
     for i in xrange(0, 10):
-      poem = {}
+      poem, ids, keys = {}, [], []
       entries = (Entry.get_random(entry_type) for entry_type in POEM_TYPE_ENTRY_TYPES[poem_type])
       for entry in entries:
         poem[entry.type] = entry
-      poem[ENCODED_IDS_KEY] = encode_ids(tuple(entry.id for entry in entries))
-      poem[ENTRY_KEYS_KEY] = ','.join(entry.key.urlsafe() for entry in entries)
+        ids.append(entry.id)
+        keys.append(entry.key.urlsafe())
+      poem[ENCODED_IDS_KEY] = encode_ids(ids)
+      poem[ENTRY_KEYS_KEY] = ','.join(keys)
       r[POEMS_KEY].append(poem)
 
     return r
