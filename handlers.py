@@ -13,7 +13,6 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 
 ENCODED_IDS_KEY = 'encoded_ids'
 ENTRY_KEY = 'entry'
-ENTRY_KEYS_KEY = 'entry_keys'
 ENTRY_TYPE_KEY = 'entry_type'
 ERRORS_KEY = 'errors'
 POEM_TYPE_KEY = 'poem_type'
@@ -68,7 +67,8 @@ def encode_ids(ids):
 
 
 def decode_ids(idString):
-  return struct.unpack('q' * (len(idString) * 6 / 64), base64.urlsafe_b64decode(idString))
+  idAsciiString = idString.encode('ascii')
+  return struct.unpack('q' * (len(idAsciiString) * 6 / 64), base64.urlsafe_b64decode(idAsciiString))
 
 
 class MainHandler(webapp2.RequestHandler):
@@ -85,13 +85,12 @@ class PoemHandler(webapp2.RequestHandler):
     r[TEMPLATE_KEY] = '%s.html' % poem_type.replace('-', '_')
 
     entry_types = POEM_TYPE_ENTRY_TYPES[poem_type]
-    entry_keys = []
 
     if encoded_ids:
       try:
         ids = decode_ids(encoded_ids)
-      except Exception:
-        logging.error('Poem id "%s" could not be decoded!', encoded_ids)
+      except Exception as e:
+        logging.error('Poem id "%s" could not be decoded: %s.', encoded_ids, e)
         self.abort(404)
 
       try:
@@ -109,7 +108,6 @@ class PoemHandler(webapp2.RequestHandler):
                         entries[i].type, entry_type)
           self.abort(404)
         r[entry_type] = entries[i]
-        entry_keys.append(r[entry_type].key.urlsafe())
 
       r[ENCODED_IDS_KEY] = encoded_ids
       r[SHOW_INSTRUCTIONS_KEY] = False
@@ -118,12 +116,10 @@ class PoemHandler(webapp2.RequestHandler):
       for entry_type in entry_types:
         r[entry_type] = Entry.get_random(entry_type)
         ids.append(r[entry_type].key.id())
-        entry_keys.append(r[entry_type].key.urlsafe())
 
       r[ENCODED_IDS_KEY] = encode_ids(ids)
       r[SHOW_INSTRUCTIONS_KEY] = True
 
-    r[ENTRY_KEYS_KEY] = ','.join(entry_keys)
     return r
 
 
@@ -132,14 +128,13 @@ class AjaxGetPoemHandler(webapp2.RequestHandler):
   def get(self, poem_type):
     r = {POEMS_KEY: []}
     for i in xrange(0, 10):
-      poem, ids, keys = {}, [], []
+      poem, ids = {}, []
       entries = (Entry.get_random(entry_type) for entry_type in POEM_TYPE_ENTRY_TYPES[poem_type])
       for entry in entries:
         poem[entry.type] = entry
         ids.append(entry.key.id())
-        keys.append(entry.key.urlsafe())
+
       poem[ENCODED_IDS_KEY] = encode_ids(ids)
-      poem[ENTRY_KEYS_KEY] = ','.join(keys)
       r[POEMS_KEY].append(poem)
 
     return r
@@ -188,10 +183,13 @@ class AjaxVoteHandler(webapp2.RequestHandler):
       return {ERRORS_KEY: 'Uh, you can\'t vote that many times.'}
     vote = int(vote)
 
-    entry_keys = self.request.POST['entry_keys']
-    if not entry_keys:
+    encoded_ids = self.request.POST['encoded_ids']
+    if not encoded_ids:
       return {ERRORS_KEY: 'What entries are you referring to?'}
-    entry_keys = [ndb.Key(urlsafe=entry_key) for entry_key in entry_keys.split(',')]
+    try:
+      entry_keys = [ndb.Key(Entry, id) for id in decode_ids(encoded_ids)]
+    except Exception as e:
+      return {ERRORS_KEY: 'Could not decode ids "%s": %s.' % (encoded_ids, e)}
 
     try:
       self.update_poem(entry_keys, poem_type, vote)

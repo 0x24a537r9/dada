@@ -111,7 +111,7 @@
 
   function vote(vote) {
     hideVoteButtons();
-    sendVote(poemType, poems[0].entry_keys, vote);
+    sendVote(poemType, poems[0].encoded_ids, vote);
 
     incCounter(poemType + '-poems-viewed')
     poems = poems.splice(1)

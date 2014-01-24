@@ -30,8 +30,7 @@ profound</span>.
   poems.push({
     question: {{ question | to_json | safe }},
     answer: {{ answer | to_json | safe }},
-    encoded_ids: '{{ encoded_ids }}',
-    entry_keys: '{{ entry_keys }}'
+    encoded_ids: '{{ encoded_ids }}'
   });
 
   function renderPoem(poem, container) {
