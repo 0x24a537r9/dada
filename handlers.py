@@ -55,7 +55,10 @@ JINJA_ENVIRONMENT.filters.update({'to_json': to_json})
 def ajax_request(function):
   @wraps(function)
   def wrapper(self, *args, **kwargs):
-    output = function(self, *args, **kwargs)
+    try:
+      output = function(self, *args, **kwargs)
+    except Exception as e:
+      output = {ERRORS_KEY: 'Unexpected exception: %s.' % e}
     data = to_json(output)
     self.response.content_type = 'application/json'
     self.response.write(data)
