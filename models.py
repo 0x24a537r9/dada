@@ -1,6 +1,19 @@
-import datetime, math, random
+import base64, datetime, math, random, struct
 
 from google.appengine.ext import ndb
+
+
+AUTHOR_KEY = 'author'
+ENCODED_IDS_KEY = 'encoded_ids'
+ENTRY_KEY = 'entry'
+ENTRY_TYPE_KEY = 'entry_type'
+ERRORS_KEY = 'errors'
+POEM_TYPE_KEY = 'poem_type'
+POEMS_KEY = 'poems'
+SHOW_INSTRUCTIONS_KEY = 'show_instructions'
+TEMPLATE_KEY = 'template'
+TEXT_KEY = 'text'
+TYPE_KEY = 'type'
 
 
 def randint64():
@@ -17,14 +30,16 @@ def compute_score(upvotes, downvotes):
           (1 + z * z / n))
 
 
-class Model(ndb.Model):
-  def to_dict(self):
-    ret = ndb.Model.to_dict(self)
-    ret['key'] = self.key.urlsafe()
-    return ret
+def encode_ids(ids):
+  return base64.urlsafe_b64encode(struct.pack('q' * len(ids), *ids))
 
 
-class Entry(Model):
+def decode_ids(idString):
+  idAsciiString = idString.encode('ascii')
+  return struct.unpack('q' * (len(idAsciiString) * 6 / 64), base64.urlsafe_b64decode(idAsciiString))
+
+
+class Entry(ndb.Model):
   order = ndb.ComputedProperty(lambda self: randint64(), indexed=True)
 
   TYPES = QUESTION, ANSWER = 'question', 'answer'
@@ -39,7 +54,7 @@ class Entry(Model):
                                indexed=True)
   
   is_flagged = ndb.BooleanProperty(required=True, default=False, indexed=True)
-  created = ndb.DateTimeProperty(required=True, auto_now_add=datetime.datetime.now)
+  created = ndb.DateTimeProperty(required=True, indexed=False, auto_now_add=datetime.datetime.now)
 
   @classmethod
   def get_random(cls, type):
@@ -51,12 +66,14 @@ class Entry(Model):
       result = cls.query(cls.type == type, cls.is_flagged == False).order(cls.order).fetch(1)
     return result[0]
 
-  def __unicode__(self):
-    return u'%s: %s \u2014 %s on %s' % (self.type, self.text, self.author,
-                                        datetime.date(self.created).strftime('%b %d, \'%y'))
+  def to_dict(self):
+    return {
+        TEXT_KEY: self.text,
+        AUTHOR_KEY: self.author,
+    }
 
 
-class Poem(Model):
+class Poem(ndb.Model):
   order = ndb.ComputedProperty(lambda self: randint64(), indexed=True)
 
   TYPES = QUESTION_ANSWER, CONDITIONALS, THE_EXQUISITE_CORPSE = ('question-answer', 'conditionals',
@@ -71,3 +88,20 @@ class Poem(Model):
                                indexed=True)
 
   debug_text = ndb.StringProperty(indexed=False)
+
+  @classmethod
+  def get_random(cls, type, n):
+    return cls.query(cls.type == type, cls.order >= randint64()).order(cls.order).fetch(n)
+
+  def to_dict(self):
+    d = {TYPE_KEY: self.type}
+    entries = ndb.get_multi(self.entry_keys)
+    for i, entry_type in enumerate(POEM_TYPE_ENTRY_TYPES[self.type]):
+      d[entry_type] = entries[i]
+    d[ENCODED_IDS_KEY] = encode_ids(tuple(entry.key.id() for entry in entries))
+    return d
+
+
+POEM_TYPE_ENTRY_TYPES = {
+  Poem.QUESTION_ANSWER: (Entry.QUESTION, Entry.ANSWER),
+}

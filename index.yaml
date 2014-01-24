@@ -15,3 +15,8 @@ indexes:
   - name: is_flagged
   - name: type
   - name: order
+
+- kind: Poem
+  properties:
+  - name: type
+  - name: order

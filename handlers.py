@@ -1,4 +1,4 @@
-import base64, os, jinja2, json, logging, struct, webapp2
+import os, jinja2, json, logging, webapp2
 
 from functools import wraps
 from google.appengine.ext import ndb
@@ -9,20 +9,6 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__) + '/templates'),
     extensions=['jinja2.ext.autoescape'],
     autoescape=True)
-
-
-ENCODED_IDS_KEY = 'encoded_ids'
-ENTRY_KEY = 'entry'
-ENTRY_TYPE_KEY = 'entry_type'
-ERRORS_KEY = 'errors'
-POEM_TYPE_KEY = 'poem_type'
-POEMS_KEY = 'poems'
-SHOW_INSTRUCTIONS_KEY = 'show_instructions'
-TEMPLATE_KEY = 'template'
-
-POEM_TYPE_ENTRY_TYPES = {
-  Poem.QUESTION_ANSWER: (Entry.QUESTION, Entry.ANSWER),
-}
 
 
 def render_to(template=''):
@@ -41,7 +27,7 @@ def render_to(template=''):
 def json_handler(obj):
   if isinstance(obj, datetime.datetime):
     return obj.isoformat()
-  elif isinstance(obj, Model):
+  elif isinstance(obj, ndb.Model):
     return obj.to_dict()
   else:
     raise TypeError("%r is not JSON serializable" % obj)
@@ -63,15 +49,6 @@ def ajax_request(function):
     self.response.content_type = 'application/json'
     self.response.write(data)
   return wrapper
-
-
-def encode_ids(ids):
-  return base64.urlsafe_b64encode(struct.pack('q' * len(ids), *ids))
-
-
-def decode_ids(idString):
-  idAsciiString = idString.encode('ascii')
-  return struct.unpack('q' * (len(idAsciiString) * 6 / 64), base64.urlsafe_b64decode(idAsciiString))
 
 
 class MainHandler(webapp2.RequestHandler):
@@ -130,6 +107,8 @@ class AjaxGetPoemHandler(webapp2.RequestHandler):
   @ajax_request
   def get(self, poem_type):
     r = {POEMS_KEY: []}
+
+    # Create three (potentially) new poems.
     for i in xrange(0, 10):
       poem, ids = {}, []
       entries = (Entry.get_random(entry_type) for entry_type in POEM_TYPE_ENTRY_TYPES[poem_type])
@@ -139,6 +118,9 @@ class AjaxGetPoemHandler(webapp2.RequestHandler):
 
       poem[ENCODED_IDS_KEY] = encode_ids(ids)
       r[POEMS_KEY].append(poem)
+
+    # Return seven existing poems.
+    r[POEMS_KEY] += Poem.get_random(poem_type, 7)
 
     return r
 
