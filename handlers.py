@@ -5,6 +5,10 @@ from google.appengine.ext import ndb
 from models import *
 
 
+POEMS_TO_FETCH = 10
+NEW_POEMS_TO_FETCH = int(round(0.3 * POEMS_TO_FETCH))
+
+
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__) + '/templates'),
     extensions=['jinja2.ext.autoescape'],
@@ -51,6 +55,28 @@ def ajax_request(function):
   return wrapper
 
 
+def get_poems(poem_type, encoded_ids=None, rank=None):
+  poems = []
+
+  if encoded_ids:
+    poem = ndb.Key(Poem, encoded_ids).get()
+    if poem != None:
+      poems.append(poem)
+
+  if not poems and rank != None:
+    poems += Poem.get_ranked(poem_type, rank, POEMS_TO_FETCH)
+
+  if len(poems) < POEMS_TO_FETCH:
+    for i in xrange(NEW_POEMS_TO_FETCH):
+      poems.append(Poem.create_random(poem_type))
+
+    poems += Poem.get_random(poem_type, POEMS_TO_FETCH - NEW_POEMS_TO_FETCH)
+
+  for poem in poems:
+    poem.fetch_entries()
+  return poems
+
+
 class MainHandler(webapp2.RequestHandler):
   @render_to('home.html')
   def get(self):
@@ -64,40 +90,14 @@ class PoemHandler(webapp2.RequestHandler):
     r[POEM_TYPE_KEY] = poem_type
     r[TEMPLATE_KEY] = '%s.html' % poem_type.replace('-', '_')
 
-    entry_types = POEM_TYPE_ENTRY_TYPES[poem_type]
-
     if encoded_ids:
-      try:
-        ids = decode_ids(encoded_ids)
-      except Exception as e:
-        logging.error('Poem id "%s" could not be decoded: %s.', encoded_ids, e)
-        self.abort(404)
-
-      try:
-        entries = ndb.get_multi(ndb.Key(Entry, id) for id in ids)
-      except ValueError as e:
-        logging.error('Could not fetch Entry ids %s: %s', ids, e.message)
-        self.abort(404)
-
-      for i, entry_type in enumerate(entry_types):
-        if not entries[i]:
-          logging.error('Entry id "%s" was not found!', ids[i])
-          self.abort(404)
-        elif entry_type != entries[i].type:
-          logging.error('Entry %d in poem id "%s" was type "%s"; expected "%s"!', i, encoded_ids,
-                        entries[i].type, entry_type)
-          self.abort(404)
-        r[entry_type] = entries[i]
-
-      r[ENCODED_IDS_KEY] = encoded_ids
+      if encoded_ids == 'top':
+        r[POEMS_KEY] = get_poems(poem_type, rank=0)
+      else:
+        r[POEMS_KEY] = get_poems(poem_type, encoded_ids=encoded_ids)
       r[SHOW_INSTRUCTIONS_KEY] = False
     else:
-      ids = []
-      for entry_type in entry_types:
-        r[entry_type] = Entry.get_random(entry_type)
-        ids.append(r[entry_type].key.id())
-
-      r[ENCODED_IDS_KEY] = encode_ids(ids)
+      r[POEMS_KEY] = get_poems(poem_type)
       r[SHOW_INSTRUCTIONS_KEY] = True
 
     return r
@@ -106,23 +106,14 @@ class PoemHandler(webapp2.RequestHandler):
 class AjaxGetPoemHandler(webapp2.RequestHandler):
   @ajax_request
   def get(self, poem_type):
-    r = {POEMS_KEY: []}
+    rank = self.request.GET['rank']
+    if rank != None:
+      try:
+        rank = int(rank)
+      except:
+        return {ERRORS_KEY: 'That\'s not a valid rank.'}
 
-    # Create three (potentially) new poems.
-    for i in xrange(0, 10):
-      poem, ids = {}, []
-      entries = (Entry.get_random(entry_type) for entry_type in POEM_TYPE_ENTRY_TYPES[poem_type])
-      for entry in entries:
-        poem[entry.type] = entry
-        ids.append(entry.key.id())
-
-      poem[ENCODED_IDS_KEY] = encode_ids(ids)
-      r[POEMS_KEY].append(poem)
-
-    # Return seven existing poems.
-    r[POEMS_KEY] += Poem.get_random(poem_type, 7)
-
-    return r
+    return {POEMS_KEY: get_poems(poem_type, rank=rank)}
 
 
 class CreateEntryHandler(webapp2.RequestHandler):

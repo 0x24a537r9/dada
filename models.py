@@ -10,6 +10,7 @@ ENTRY_TYPE_KEY = 'entry_type'
 ERRORS_KEY = 'errors'
 POEM_TYPE_KEY = 'poem_type'
 POEMS_KEY = 'poems'
+RANK_KEY = 'rank'
 SHOW_INSTRUCTIONS_KEY = 'show_instructions'
 TEMPLATE_KEY = 'template'
 TEXT_KEY = 'text'
@@ -81,6 +82,7 @@ class Poem(ndb.Model):
   type = ndb.StringProperty(required=True, choices=TYPES, indexed=True)
 
   entry_keys = ndb.KeyProperty(kind=Entry, repeated=True, indexed=False)
+  entries = []
 
   upvotes = ndb.IntegerProperty(required=True, default=0, indexed=False)
   downvotes = ndb.IntegerProperty(required=True, default=0, indexed=False)
@@ -89,16 +91,37 @@ class Poem(ndb.Model):
 
   debug_text = ndb.StringProperty(indexed=False)
 
+  rank = None
+
+  @classmethod
+  def create_random(cls, type):
+    poem = cls(type=type)
+    poem.entries = [Entry.get_random(entry_type) for entry_type in POEM_TYPE_ENTRY_TYPES[type]]
+    poem.entry_keys = [entry.key for entry in poem.entries]
+    poem.debug_text = ', '.join(entry.text for entry in poem.entries)
+    return poem
+
   @classmethod
   def get_random(cls, type, n):
     return cls.query(cls.type == type, cls.order >= randint64()).order(cls.order).fetch(n)
 
+  @classmethod
+  def get_ranked(cls, type, rank, n):
+    poems = cls.query(cls.type == type).order(-cls.score).fetch(n, offset=rank)
+    for i, poem in enumerate(poems, start=rank):
+      poem.rank = i
+    return poems
+
+  def fetch_entries(self):
+    self.entries = self.entries or ndb.get_multi(self.entry_keys)
+
   def to_dict(self):
     d = {TYPE_KEY: self.type}
-    entries = ndb.get_multi(self.entry_keys)
+    self.fetch_entries()
     for i, entry_type in enumerate(POEM_TYPE_ENTRY_TYPES[self.type]):
-      d[entry_type] = entries[i]
-    d[ENCODED_IDS_KEY] = encode_ids(tuple(entry.key.id() for entry in entries))
+      d[entry_type] = self.entries[i]
+    d[ENCODED_IDS_KEY] = encode_ids(tuple(entry.key.id() for entry in self.entries))
+    d[RANK_KEY] = self.rank
     return d
 
 

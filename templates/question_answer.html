@@ -5,7 +5,7 @@
 {% block head %}
 {{ super() }}
 <meta property="og:title" content="Question &amp; Answer"/>
-<meta property="og:description" content="Q: {{ question.text }} A: {{ answer.text }}"/>
+<meta property="og:description" content="Q: {{ poems[0].entries[0].text }} A: {{ poems[0].entries[1].text }}"/>
 {% endblock %}
 
 {% block instructions %}
@@ -15,24 +15,18 @@ profound</span>.
 {% endblock %}
 
 {% block poem %}
-<span class="question poem-text">{{ question.text }}</span><br>
-<span class="answer poem-text">{{ answer.text }}</span>
+<span class="question poem-text">{{ poems[0].entries[0].text }}</span><br>
+<span class="answer poem-text">{{ poems[0].entries[1].text }}</span>
 {% endblock %}
 
 {% block authors %}
-<span class="question-author poem-author">{{ question.author }}</span><br>
-<span class="answer-author poem-author">{{ answer.author }}</span>
+<span class="question-author poem-author">{{ poems[0].entries[0].author }}</span><br>
+<span class="answer-author poem-author">{{ poems[0].entries[1].author }}</span>
 {% endblock %}
 
 {% block footer_script %}
 {{ super() }}
 <script>
-  poems.push({
-    question: {{ question | to_json | safe }},
-    answer: {{ answer | to_json | safe }},
-    encoded_ids: '{{ encoded_ids }}'
-  });
-
   function renderPoem(poem, container) {
     container.find('.question').text(poem.question.text);
     container.find('.answer').text(poem.answer.text);

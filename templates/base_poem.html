@@ -46,11 +46,15 @@
 {% block footer_script %}
 {{ super() }}
 <script>
-  {# Derived templates must implement a renderPoem(poem, container) function and should preload the
-     poems array with server-side data for better load performance. #}
+  {# Derived templates must implement a renderPoem(poem, container) function. #}
 
-  var poems = [],
-      poemType = '{{ poem_type }}',
+  var poems = [
+    {% for poem in poems %}
+      {{ poem | to_json | safe }}{{ ',' if not loop.last }}
+    {% endfor %}
+  ];
+
+  var poemType = '{{ poem_type }}',
       activePoemContainerIndex = 0,
       canVote = true;
 
@@ -142,7 +146,7 @@
   function loadPoems() {
     $.ajax({
       url: '/x/get-' + poemType + '/',
-      data: {},
+      data: {'rank': poems[poems.length - 1].rank + 1},
       cache: false,
       success: function(data) {
         if (data.errors) {
