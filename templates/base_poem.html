@@ -126,6 +126,8 @@
     activePoemContainerIndex = 1 - activePoemContainerIndex
     refreshPoem();
 	  $poemContainers.eq(activePoemContainerIndex).fadeIn();
+
+    if (ga != null) ga('send', 'event', poemType, 'vote', vote.toString());
   }
 
   function refreshPoem() {
