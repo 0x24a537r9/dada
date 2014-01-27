@@ -60,6 +60,16 @@ def get_poems(poem_type, encoded_ids=None, rank=None):
 
   if encoded_ids:
     poem = ndb.Key(Poem, encoded_ids).get()
+    if poem == None:
+      try:
+        ids = decode_ids(encoded_ids)
+        poem = Poem(type=poem_type, entry_keys=[ndb.Key(Entry, id) for id in ids])
+        # Ensure the entries are valid here before adding them to the list.
+        poem.fetch_entries()
+      except Exception as e:
+        logging.error('Could not fetch poem "%s": %s', encoded_ids, e.message)
+        poem = None
+
     if poem != None:
       poems.append(poem)
 
