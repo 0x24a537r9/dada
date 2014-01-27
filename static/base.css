@@ -149,7 +149,9 @@ button::-moz-focus-inner {
   color: #DE5547;
   background: #F8F8F8;
   border: 1px solid #999;
-  box-shadow: -1px 1px 4px rgba(0, 0, 0, 0.4);
+  -webkit-box-shadow: -1px 1px 4px rgba(0, 0, 0, 0.4);
+     -moz-box-shadow: -1px 1px 4px rgba(0, 0, 0, 0.4);
+          box-shadow: -1px 1px 4px rgba(0, 0, 0, 0.4);
   -webkit-transform: rotate(-15deg);
      -moz-transform: rotate(-15deg);
       -ms-transform: rotate(-15deg);
@@ -161,7 +163,7 @@ button::-moz-focus-inner {
 .poem-container {
   position: absolute;
   top: 50%;
-  margin-top: -150px;
+  margin-top: -180px;
   width: 100%;
 }
 
@@ -236,7 +238,6 @@ button::-moz-focus-inner {
 #instructions-buttons-container button.hidden,
 .vote-buttons-container button.hidden {
   /* Set the size to 0 because "display: none;" breaks the opacity transition. */
-  height: 0;
   width: 0;
   -webkit-transition: none;
      -moz-transition: none;
@@ -306,6 +307,27 @@ button::-moz-focus-inner {
           transform: translateY(8px);
 }
 
+.poem-rank {
+  position: absolute;
+  top: -20px;
+  right: -6px;
+  color: #888;
+  font-size: 28pt;
+  padding: 0 5px 0 1px;
+  background: rgba(255, 255, 255, 0.8);
+  -webkit-border-radius: 15px;
+     -moz-border-radius: 15px;
+          border-radius: 15px;
+  -webkit-box-shadow: 0 0 7px 4px rgba(255, 255, 255, 0.8);
+     -moz-box-shadow: 0 0 7px 4px rgba(255, 255, 255, 0.8);
+          box-shadow: 0 0 7px 4px rgba(255, 255, 255, 0.8);
+  -webkit-transform: rotate(15deg);
+     -moz-transform: rotate(15deg);
+      -ms-transform: rotate(15deg);
+       -o-transform: rotate(15deg);
+          transform: rotate(15deg);
+}
+
 #footer {
   position: absolute;
   bottom: 16px;
@@ -317,7 +339,13 @@ button::-moz-focus-inner {
   margin: 0 10px -16px 0;
 }
 
-#create-poem-link {
+#top-hat {
+  margin: 0 8px -11px 0;
+}
+
+#create-poem-link,
+#top-poems-link {
+  margin-left: 17px;
   color: #555;
   font-size: 24pt;
   text-decoration: none;
@@ -328,10 +356,12 @@ button::-moz-focus-inner {
           transition: opacity 500ms;
 }
 
-#create-poem-link.hidden {
+#create-poem-link.hidden,
+#top-poems-link.hidden {
   opacity: 0;
 }
 
-#create-poem-link:hover {
+#create-poem-link:hover,
+#top-poems-link:hover {
   color: #000;
 }
