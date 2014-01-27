@@ -1,4 +1,4 @@
-import os, jinja2, json, logging, webapp2
+import os, jinja2, json, logging, traceback, webapp2
 
 from functools import wraps
 from google.appengine.ext import ndb
@@ -48,7 +48,8 @@ def ajax_request(function):
     try:
       output = function(self, *args, **kwargs)
     except Exception as e:
-      output = {ERRORS_KEY: 'Unexpected exception: %s.' % e}
+      logging.error(traceback.format_exc())
+      output = {ERRORS_KEY: 'Unexpected exception! %s: %s' % (e.__class__.__name__, e)}
     data = to_json(output)
     self.response.content_type = 'application/json'
     self.response.write(data)
@@ -116,7 +117,7 @@ class PoemHandler(webapp2.RequestHandler):
 class AjaxGetPoemHandler(webapp2.RequestHandler):
   @ajax_request
   def get(self, poem_type):
-    rank = self.request.GET['rank']
+    rank = self.request.GET.get('rank')
     if rank != None:
       try:
         rank = int(rank)

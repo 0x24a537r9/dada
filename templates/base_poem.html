@@ -155,9 +155,13 @@
   }
 
   function loadPoems() {
+    var data = {};
+    if (poems[poems.length - 1].rank != null) {
+      data.rank = poems[poems.length - 1].rank + 1;
+    }
     $.ajax({
       url: '/x/get-' + poemType + '/',
-      data: {'rank': poems[poems.length - 1].rank + 1},
+      data: data,
       cache: false,
       success: function(data) {
         if (data.errors) {
