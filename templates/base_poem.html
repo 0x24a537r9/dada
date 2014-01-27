@@ -162,16 +162,15 @@
     $.ajax({
       url: '/x/get-' + poemType + '/',
       data: data,
-      cache: false,
-      success: function(data) {
-        if (data.errors) {
-          console.error(data.errors);
-          setTimeout(loadPoems, LOAD_POEMS_RETRY_DELAY);
-          return;
-        }
-        for (var i = 0; i < data.poems.length; ++i) {
-          poems.push(data.poems[i]);
-        }
+      cache: false
+    }).done(function(data) {
+      if (data.errors) {
+        console.error(data.errors);
+        setTimeout(loadPoems, LOAD_POEMS_RETRY_DELAY);
+        return;
+      }
+      for (var i = 0; i < data.poems.length; ++i) {
+        poems.push(data.poems[i]);
       }
     }).fail(function() {
       console.error('Server error!');
