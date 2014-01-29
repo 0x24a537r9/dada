@@ -2,6 +2,15 @@
 
 {% block title %}Create Question &amp; Answer{% endblock %}
 
+{% block head %}
+{{ super() }}
+<style>
+  #content {
+    min-height: 500px;
+  }
+</style>
+{% endblock %}
+
 {% block content %}
 {{ super() }}
 <div id="instructions-container">
