@@ -1,6 +1,7 @@
 import os, jinja2, json, logging, traceback, webapp2
 
 from functools import wraps
+from google.appengine.api import memcache
 from google.appengine.ext import ndb
 from models import *
 
@@ -13,6 +14,21 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__) + '/templates'),
     extensions=['jinja2.ext.autoescape'],
     autoescape=True)
+
+
+def rate_limit(seconds_per_request=1):
+  def rate_limiter(function):
+    @wraps(function)
+    def wrapper(self, *args, **kwargs):
+      added = memcache.add('%s:%s' % (self.__class__.__name__, self.request.remote_addr or ''), 1,
+                           time=seconds_per_request, namespace='rate_limiting')
+      if not added:
+        self.response.write('Rate limit exceeded.')
+        self.response.set_status(403)
+        return
+      return function(self, *args, **kwargs)
+    return wrapper
+  return rate_limiter
 
 
 def render_to(template=''):
@@ -89,12 +105,14 @@ def get_poems(poem_type, encoded_ids=None, rank=None):
 
 
 class MainHandler(webapp2.RequestHandler):
+  @rate_limit(seconds_per_request=1)
   @render_to('home.html')
   def get(self):
     return {}
 
 
 class PoemHandler(webapp2.RequestHandler):
+  @rate_limit(seconds_per_request=1)
   @render_to()
   def get(self, poem_type, encoded_ids):
     r = {}
@@ -115,6 +133,7 @@ class PoemHandler(webapp2.RequestHandler):
 
 
 class AjaxGetPoemHandler(webapp2.RequestHandler):
+  @rate_limit(seconds_per_request=5)
   @ajax_request
   def get(self, poem_type):
     rank = self.request.GET.get('rank')
@@ -128,6 +147,7 @@ class AjaxGetPoemHandler(webapp2.RequestHandler):
 
 
 class CreatePoemHandler(webapp2.RequestHandler):
+  @rate_limit(seconds_per_request=1)
   @render_to()
   def get(self, poem_type):
     r = {}
@@ -138,6 +158,7 @@ class CreatePoemHandler(webapp2.RequestHandler):
 
 
 class AjaxCreateEntriesHandler(webapp2.RequestHandler):
+  @rate_limit(seconds_per_request=2)
   @ajax_request
   def post(self):
     entry_types = self.request.POST.getall('entry_types[]')
@@ -169,6 +190,7 @@ class AjaxCreateEntriesHandler(webapp2.RequestHandler):
 
 
 class AjaxVoteHandler(webapp2.RequestHandler):
+  @rate_limit(seconds_per_request=1)
   @ajax_request
   def post(self):
     poem_type = self.request.POST['poem_type']
