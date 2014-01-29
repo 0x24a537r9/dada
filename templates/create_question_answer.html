@@ -5,18 +5,21 @@
 {% block content %}
 {{ super() }}
 <div id="instructions-container">
-  Submit your own <span class="accent">profound</span> question and/or
-  <span class="accent">unrelated</span> answer. The more poignant and specific, the better.<br><br>
-  <label for="question-textbox">Q:</label>
-  <input id="question-textbox" type="text" maxlength="64" placeholder="What is life?"></input>
-  <br>
-  <label for="answer-textbox">A:</label>
-  <input id="answer-textbox" type="text" maxlength="64" placeholder="Scrambled eggs nailed to a wall."></input>
-  <br>
-  <label for="author-textbox">By:</label>
-  <input id="author-textbox" type="text" maxlength="32" placeholder="Your name..."></input>
-  <div id="instructions-buttons-container">
-    <button class="submit-button"><img src="/static/envelope.svg" alt="Submit"/></button>
+  <div>
+    Submit your own <span class="accent">profound</span> question and/or
+    <span class="accent">unrelated</span> answer. The more poignant and specific, the better.<br>
+    <br>
+    <label for="question-textbox">Q:</label>
+    <input id="question-textbox" type="text" maxlength="64" placeholder="What is life?"></input>
+    <br>
+    <label for="answer-textbox">A:</label>
+    <input id="answer-textbox" type="text" maxlength="64" placeholder="Scrambled eggs nailed to a wall."></input>
+    <br>
+    <label for="author-textbox">By:</label>
+    <input id="author-textbox" type="text" maxlength="32" placeholder="Your name..."></input>
+    <div id="instructions-buttons-container">
+      <button class="submit-button"><img src="/static/envelope.svg" alt="Submit"/></button>
+    </div>
   </div>
 </div>
 {% endblock %}

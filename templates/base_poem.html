@@ -5,34 +5,40 @@
 {% block content %}
 {{ super() }}
 <div id="instructions-container" {% if not show_instructions %}style="display: none;"{% endif %}>
-  {% block instructions %}INSTRUCTIONS{% endblock %}
-  <div id="instructions-buttons-container">
-    <button class="next-button"><img src="/static/next.svg" alt="Next"/></button>
+  <div>
+    {% block instructions %}INSTRUCTIONS{% endblock %}
+    <div id="instructions-buttons-container">
+      <button class="next-button"><img src="/static/next.svg" alt="Next"/></button>
+    </div>
   </div>
 </div>
 <div class="poem-container" {% if show_instructions %}style="display: none;"{% endif %}>
-  {% block poem %}POEM{% endblock %}<br>
-  <div class="authors-container">
-    {% block authors %}AUTHORS{% endblock %}
+  <div>
+    {% block poem %}POEM{% endblock %}<br>
+    <div class="authors-container">
+      {% block authors %}AUTHORS{% endblock %}
+    </div>
+    <div class="vote-buttons-container">
+      <button class="upvote-button"><img src="/static/thumbs-up.svg" alt="Upvote"/></button>
+      <button class="next-button"><img src="/static/next.svg" alt="Next"/></button>
+      <button class="downvote-button"><img src="/static/thumbs-down.svg" alt="Downvote"/></button>
+    </div>
+    <div class="poem-rank"></div>
   </div>
-  <div class="vote-buttons-container">
-    <button class="upvote-button"><img src="/static/thumbs-up.svg" alt="Upvote"/></button>
-    <button class="next-button"><img src="/static/next.svg" alt="Next"/></button>
-    <button class="downvote-button"><img src="/static/thumbs-down.svg" alt="Downvote"/></button>
-  </div>
-  <div class="poem-rank"></div>
 </div>
 <div class="poem-container" style="display: none;">
-  {{ self.poem() }}<br>
-  <div class="authors-container">
-    {{ self.authors() }}
+  <div>
+    {{ self.poem() }}<br>
+    <div class="authors-container">
+      {{ self.authors() }}
+    </div>
+    <div class="vote-buttons-container">
+      <button class="upvote-button"><img src="/static/thumbs-up.svg" alt="Upvote"/></button>
+      <button class="next-button"><img src="/static/next.svg" alt="Next"/></button>
+      <button class="downvote-button"><img src="/static/thumbs-down.svg" alt="Downvote"/></button>
+    </div>
+    <div class="poem-rank"></div>
   </div>
-  <div class="vote-buttons-container">
-    <button class="upvote-button"><img src="/static/thumbs-up.svg" alt="Upvote"/></button>
-    <button class="next-button"><img src="/static/next.svg" alt="Next"/></button>
-    <button class="downvote-button"><img src="/static/thumbs-down.svg" alt="Downvote"/></button>
-  </div>
-  <div class="poem-rank"></div>
 </div>
 {% endblock %}
 
