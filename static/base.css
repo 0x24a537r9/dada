@@ -10,10 +10,15 @@ html, body {
   font-family: 'Old Press';
 }
 
-div {
+div, input {
   -webkit-box-sizing: border-box;
      -moz-box-sizing: border-box;
           box-sizing: border-box;
+}
+
+input[type="text"]:disabled {
+  background: #FFF;
+  color: #777;
 }
 
 blockquote {
@@ -174,7 +179,8 @@ button::-moz-focus-inner {
 .accent,
 .question:before,
 .answer:before,
-.poem-author:before {
+.poem-author:before,
+label {
   color: #DE5547;
 }
 
@@ -213,6 +219,22 @@ button::-moz-focus-inner {
 
 .poem-author:before {
   content: "- ";
+}
+
+
+#question-textbox,
+#answer-textbox,
+#author-textbox {
+  width: 80%;
+  outline: none;
+  border: 0;
+  border-bottom: 3px solid #CCC;
+  padding: 0 8px;
+  font: 40pt 'Old Press';
+}
+
+#author-textbox {
+  width: 300px;
 }
 
 #instructions-buttons-container,
@@ -307,6 +329,26 @@ button::-moz-focus-inner {
           transform: translateY(8px);
 }
 
+.submit-button {
+  
+}
+
+.submit-button:hover {
+  -webkit-transform: rotate(-8deg);
+     -moz-transform: rotate(-8deg);
+      -ms-transform: rotate(-8deg);
+       -o-transform: rotate(-8deg);
+          transform: rotate(-8deg);
+}
+
+.submit-button:active {
+  -webkit-transform: rotate(-4deg);
+     -moz-transform: rotate(-4deg);
+      -ms-transform: rotate(-4deg);
+       -o-transform: rotate(-4deg);
+          transform: rotate(-4deg);
+}
+
 .poem-rank {
   position: absolute;
   top: -20px;
@@ -364,4 +406,27 @@ button::-moz-focus-inner {
 #create-poem-link:hover,
 #top-poems-link:hover {
   color: #000;
+}
+
+.banner {
+  position: fixed;
+  top: 50%;
+  height: 300px;
+  margin-top: -150px;
+  width: 100%;
+  opacity: 1;
+  box-shadow: #000 2px 2px 13px;
+  display: none;
+}
+
+.banner-text {
+  width: 100%;
+  height: 300px;
+  padding: 50px 75px;
+  box-sizing: border-box;
+  background-color: rgba(0, 0, 0, 0.9);
+  color: white;
+  text-align: center;
+  position: relative;
+  text-shadow: #000 0px 3px 10px, rgba(0, 0, 0, 0.3) 0px 0px 30px;
 }

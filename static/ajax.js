@@ -32,25 +32,39 @@ $.ajaxSetup({
   }
 });
 
-function createEntry(entryType, $text, $author, $error, success) {
-  disable([$text, $author]);
+function createEntries(entryTypes, $entries, $author) {
+  var hasEntryText = false;
+  $entries.each(function(i, entry) {
+    if ($(entry).val().trim()) {
+      hasEntryText = true;
+      return false;
+    }
+  });
+  if (!hasEntryText) {
+    return;
+  }
+
+  disable([$entries, $author]);
 
   var data = {};
-  data.entry_type = entryType;
-  data.text = $text.val();
+  data.entry_types = entryTypes;
+  data.entry_texts = [];
+  $entries.each(function(i, entry) {
+    data.entry_texts.push($(entry).val().trim());
+  });
   data.author = $author.val();
-  $.post('/x/create-entry/', data, function (data) {
+  $.post('/x/create-entries/', data, function (data) {
     if (data.errors) {
-      $error.text(data.errors.join());
+      showBannerMessage(data.errors);
       return;
     }
-    $text.val('');
+    $entries.val('');
     localStorage.setItem('author', $author.val());
-    success();
+    showBannerMessage('Thanks for contributing!');
   }).fail(function() {
-    $error.text('Uh-oh, we done goofed!');
+    showBannerMessage('Uh-oh, we done goofed!');
   }).always(function() {
-    enable([$text, $author]);
+    enable([$entries, $author]);
   });
 }
 

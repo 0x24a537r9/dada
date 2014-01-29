@@ -127,24 +127,23 @@ class AjaxGetPoemHandler(webapp2.RequestHandler):
     return {POEMS_KEY: get_poems(poem_type, rank=rank)}
 
 
-class CreateEntryHandler(webapp2.RequestHandler):
-  @render_to('create_entry.html')
-  def get(self, entry_type):
-    return {ENTRY_TYPE_KEY: entry_type}
+class CreatePoemHandler(webapp2.RequestHandler):
+  @render_to()
+  def get(self, poem_type):
+    r = {}
+    r[POEM_TYPE_KEY] = poem_type
+    r[TEMPLATE_KEY] = 'create_%s.html' % poem_type.replace('-', '_')
+
+    return r
 
 
-class AjaxCreateEntryHandler(webapp2.RequestHandler):
+class AjaxCreateEntriesHandler(webapp2.RequestHandler):
   @ajax_request
   def post(self):
-    entry_type = self.request.POST['entry_type']
-    if entry_type not in Entry.TYPES:
-      return {ERRORS_KEY: 'What kind of entry is that?'}
-
-    text = self.request.POST['text'].strip()
-    if len(text) == 0:
-      return {ERRORS_KEY: 'You forgot your entry!'}
-    elif len(text) > 64:
-      return {ERRORS_KEY: 'Your entry is too long!'}
+    entry_types = self.request.POST.getall('entry_types[]')
+    for entry_type in entry_types:
+      if entry_type not in Entry.TYPES:
+        return {ERRORS_KEY: 'What kind of entry is that?'}
 
     author = self.request.POST['author'].strip()
     if len(author) == 0:
@@ -152,10 +151,21 @@ class AjaxCreateEntryHandler(webapp2.RequestHandler):
     elif len(author) > 32:
       return {ERRORS_KEY: 'Your name is too long!'}
 
-    # TODO: Entry-type-specific length-check.
-    entry = Entry(type=entry_type, text=text, author=author)
-    entry.put()
-    return {ENTRY_KEY: entry}
+    entries = []
+    entry_texts = [entry.strip() for entry in self.request.POST.getall('entry_texts[]')]
+    if len(entry_types) != len(entry_texts):
+      return {ERRORS_KEY: 'The number of entry texts doesn\'t match the number of entry types...'}
+
+    for entry_type, entry_text in zip(entry_types, entry_texts):
+      # TODO: Entry-type-specific length-check. 
+      if len(entry_text) == 0:
+        continue
+      elif len(entry_text) > 64:
+        return {ERRORS_KEY: 'Your entry is too long!'}
+      entries.append(Entry(type=entry_type, text=entry_text, author=author))
+
+    ndb.put_multi(entries)
+    return {}
 
 
 class AjaxVoteHandler(webapp2.RequestHandler):
