@@ -195,6 +195,11 @@ button::-moz-focus-inner {
           justify-content: center;
 }
 
+#instructions-container > div,
+.poem-container > div {
+  position: relative;
+}
+
 #instructions-container {
   font-size: 40pt;
 }
