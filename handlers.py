@@ -7,7 +7,7 @@ from models import *
 
 
 POEMS_TO_FETCH = 10
-NEW_POEMS_TO_FETCH = int(round(0.3 * POEMS_TO_FETCH))
+NEW_POEMS_TO_FETCH = int(round(0.7 * POEMS_TO_FETCH))
 
 
 JINJA_ENVIRONMENT = jinja2.Environment(
