@@ -287,8 +287,7 @@ label {
 
 #instructions-buttons-container button.hidden,
 .vote-buttons-container button.hidden {
-  /* Set the size to 0 because "display: none;" breaks the opacity transition. */
-  width: 0;
+  cursor: default;
   -webkit-transition: none;
      -moz-transition: none;
       -ms-transition: none;
