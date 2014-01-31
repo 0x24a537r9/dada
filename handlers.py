@@ -119,15 +119,16 @@ class PoemHandler(webapp2.RequestHandler):
     r[POEM_TYPE_KEY] = poem_type
     r[TEMPLATE_KEY] = '%s.html' % poem_type.replace('-', '_')
 
+    r[ENCODED_IDS_KEY] = encoded_ids
+    r[SHOW_INSTRUCTIONS_KEY] = True
     if encoded_ids:
       if encoded_ids == 'top':
         r[POEMS_KEY] = get_poems(poem_type, rank=0)
+        r[SHOW_INSTRUCTIONS_KEY] = False
       else:
         r[POEMS_KEY] = get_poems(poem_type, encoded_ids=encoded_ids)
-      r[SHOW_INSTRUCTIONS_KEY] = False
     else:
       r[POEMS_KEY] = get_poems(poem_type)
-      r[SHOW_INSTRUCTIONS_KEY] = True
 
     return r
 

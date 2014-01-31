@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% block url %}http://www.open-dada.com/{{ poem_type }}/{{ encoded_ids + '/' if encoded_ids }}{% endblock %}
+
 {% block title %}BASE_POEM{% endblock %}
 
 {% block content %}
@@ -74,7 +76,9 @@
       $nextPoemButtons = $('.vote-buttons-container .next-button'),
       $downvoteButtons = $('.vote-buttons-container .downvote-button'),
       $voteButtons = $('.vote-buttons-container button'),
-      $createPoemLink = $('#create-poem-link');
+      $createPoemLink = $('#create-poem-link'),
+      $socialFooter = $('#social-footer'),
+      $shareButton = $('.fb-share-button');
 
   var MIN_POEMS_TO_VIEW_BEFORE_SHOWING_CREATE_LINK = 5,
       LOAD_POEMS_RETRY_DELAY = 2000,
@@ -150,6 +154,12 @@
       $poemRank.text('#' + (poems[0].rank + 1));
     } else {
       $poemRank.hide();
+    }
+
+    $shareButton.attr('data-href', 'http://www.open-dada.com/{{ poem_type }}/' +
+                                   poems[0].encoded_ids + '/');
+    if (window.FB != null) {
+      FB.XFBML.parse($socialFooter[0]);
     }
 
     if (poems.length < MIN_CACHED_POEMS) {

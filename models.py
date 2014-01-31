@@ -114,6 +114,8 @@ class Poem(ndb.Model):
 
   def fetch_entries(self):
     self.entries = self.entries or ndb.get_multi(self.entry_keys)
+    if None in self.entries:
+      raise Exception('Invalid entry key.')
 
   def to_dict(self):
     d = {TYPE_KEY: self.type}

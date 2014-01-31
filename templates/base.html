@@ -12,12 +12,28 @@
   {% block head %}
     <meta property="og:site_name" content="The Open Dada Project"/>
     <meta property="og:type" content="website"/>
+    <meta property="og:image" content="http://www.open-dada.com/static/open-graph-logo.png"/>
+    <meta property="og:url" content="{% block url %}http://www.open-dada.com/{% endblock %}"/>
   {% endblock %}
 </head>
 <body>
+  <div id="fb-root"></div>
+  <script>
+    // Facebook API.
+    (function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=1404334723149304";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+  </script>
   <a href="/"><img id="logo" src="/static/logo.svg" alt="The Open Dada Project"></img></a>
   <div id="content">
     {% block content %}{% endblock %}
+  </div>
+  <div id="social-footer">
+    <div class="fb-share-button" data-href="{{ self.url() }}" data-type="button"></div>
   </div>
   <div id="footer">
     {% block footer %}{% endblock %}

@@ -4,8 +4,8 @@
 
 {% block head %}
 {{ super() }}
-<meta property="og:title" content="Question &amp; Answer"/>
-<meta property="og:description" content="Q: {{ poems[0].entries[0].text }} A: {{ poems[0].entries[1].text }}"/>
+<meta property="og:title" content="&quot;Q: {{ poems[0].entries[0].text }} A: {{ poems[0].entries[1].text }}&quot;"/>
+<meta property="og:description" content="A collaborative poem randomly assembled from phrases submitted by {{ poems[0].entries[0].author }} and {{ poems[0].entries[1].author }}. Join the global literary experiment!"/>
 {% endblock %}
 
 {% block instructions %}

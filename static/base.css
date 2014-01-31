@@ -53,6 +53,12 @@ button::-moz-focus-inner {
   font-style: italic;
 }
 
+#fb-root,
+#fb-root div {
+  -webkit-box-sizing: initial;
+          box-sizing: initial;
+}
+
 #logo {
   position: absolute;
   top: 28px;
@@ -385,6 +391,12 @@ label {
       -ms-transform: rotate(15deg);
        -o-transform: rotate(15deg);
           transform: rotate(15deg);
+}
+
+#social-footer {
+  position: fixed;
+  bottom: 16px;
+  left: 32px;
 }
 
 #footer {

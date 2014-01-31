@@ -1,9 +1,13 @@
 {% extends 'base.html' %}
 
+{% block url %}http://www.open-dada.com/question-answer/create/{% endblock %}
+
 {% block title %}Create Question &amp; Answer{% endblock %}
 
 {% block head %}
 {{ super() }}
+<meta property="og:title" content="Create a &quot;Question &amp; Answer&quot; Poem!"/>
+<meta property="og:description" content="Submit your own profound question or answer to be randomly paired with questions/answers from others in an exercise of global collaborative poetry!"/>
 <style>
   #content {
     min-height: 500px;
