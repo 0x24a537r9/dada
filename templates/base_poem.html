@@ -49,9 +49,15 @@
 <a id="create-poem-link" class="hidden" href="/{{ poem_type }}/create/">
   <img id="fingerprint" src="/static/fingerprint.svg" alt="Fingerprint"/>Create your own
 </a>
-<a id="top-poems-link" href="/{{ poem_type }}/top/">
-  <img id="top-hat" src="/static/top-hat.svg" alt="Top hat"/>Top poems
-</a>
+{% if encoded_ids == 'top' %}
+  <a id="random-poems-link" href="/{{ poem_type }}/">
+    <img id="die" src="/static/die.svg" alt="Die"/>Random poems
+  </a>
+{% else %}
+  <a id="top-poems-link" href="/{{ poem_type }}/top/">
+    <img id="top-hat" src="/static/top-hat.svg" alt="Top hat"/>Top poems
+  </a>
+{% endif %}
 {% endblock %}
 
 {% block footer_script %}

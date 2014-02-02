@@ -420,11 +420,16 @@ label {
   margin: 0 10px -16px 0;
 }
 
+#die {
+  margin: 0 10px -8px 0;
+}
+
 #top-hat {
   margin: 0 8px -11px 0;
 }
 
 #create-poem-link,
+#random-poems-link,
 #top-poems-link {
   margin-left: 17px;
   color: #555;
@@ -438,11 +443,13 @@ label {
 }
 
 #create-poem-link.hidden,
+#random-poems-link.hidden,
 #top-poems-link.hidden {
   opacity: 0;
 }
 
 #create-poem-link:hover,
+#random-poems-link:hover,
 #top-poems-link:hover {
   color: #000;
 }
