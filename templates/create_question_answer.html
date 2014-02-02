@@ -37,6 +37,13 @@
 </div>
 {% endblock %}
 
+{% block footer %}
+{{ super() }}
+<a id="top-poems-link" href="/{{ poem_type }}/top/">
+  <img id="top-hat" src="/static/top-hat.svg" alt="Top hat"/>Top poems
+</a>
+{% endblock %}
+
 {% block footer_script %}
 {{ super() }}
 <script>
