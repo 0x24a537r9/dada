@@ -4,6 +4,7 @@ from functools import wraps
 from google.appengine.api import memcache
 from google.appengine.ext import ndb
 from models import *
+from urllib import urlencode
 
 
 POEMS_TO_FETCH = 10
@@ -14,6 +15,7 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__) + '/templates'),
     extensions=['jinja2.ext.autoescape'],
     autoescape=True)
+JINJA_ENVIRONMENT.filters.update({'urlencode': lambda s: urlencode({'': s})[1:]})
 
 
 def rate_limit(seconds_per_request=1):

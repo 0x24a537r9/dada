@@ -17,23 +17,15 @@
   {% endblock %}
 </head>
 <body>
-  <div id="fb-root"></div>
-  <script>
-    // Facebook API.
-    (function(d, s, id) {
-      var js, fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) return;
-      js = d.createElement(s); js.id = id;
-      js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=1404334723149304";
-      fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
-  </script>
   <a href="/"><img id="logo" src="/static/logo.svg" alt="The Open Dada Project"></img></a>
   <div id="content">
     {% block content %}{% endblock %}
   </div>
   <div id="social-footer">
-    <div class="fb-share-button" data-href="{{ self.url() }}" data-type="button"></div>
+    <a id="fb-share-link" target="_blank"
+       href="https://www.facebook.com/sharer/sharer.php?u={{ self.url() | urlencode }}">
+      <img src="/static/facebook.svg" alt="Share to Facebook"/>
+    </a>
   </div>
   <div id="footer">
     {% block footer %}{% endblock %}

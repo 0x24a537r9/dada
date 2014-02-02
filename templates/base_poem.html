@@ -77,8 +77,7 @@
       $downvoteButtons = $('.vote-buttons-container .downvote-button'),
       $voteButtons = $('.vote-buttons-container button'),
       $createPoemLink = $('#create-poem-link'),
-      $socialFooter = $('#social-footer'),
-      $shareButton = $('.fb-share-button');
+      $fbShareLink = $('#fb-share-link');
 
   var MIN_POEMS_TO_VIEW_BEFORE_SHOWING_CREATE_LINK = 5,
       LOAD_POEMS_RETRY_DELAY = 2000,
@@ -158,11 +157,10 @@
       $poemRank.hide();
     }
 
-    $shareButton.attr('data-href', 'http://www.open-dada.com/{{ poem_type }}/' +
-                                   poems[0].encoded_ids + '/');
-    if (window.FB != null) {
-      FB.XFBML.parse($socialFooter[0]);
-    }
+    $fbShareLink.attr('href',
+        'https://www.facebook.com/sharer/sharer.php?u=' +
+            encodeURIComponent('http://www.open-dada.com/{{ poem_type }}/' + poems[0].encoded_ids +
+                                   '/'));
 
     if (poems.length < MIN_CACHED_POEMS) {
       loadPoems();

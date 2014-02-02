@@ -53,12 +53,6 @@ button::-moz-focus-inner {
   font-style: italic;
 }
 
-#fb-root,
-#fb-root div {
-  -webkit-box-sizing: initial;
-          box-sizing: initial;
-}
-
 #logo {
   position: absolute;
   top: 28px;
@@ -356,10 +350,6 @@ label {
           transform: translateY(8px);
 }
 
-.submit-button {
-  
-}
-
 .submit-button:hover {
   -webkit-transform: rotate(-8deg);
      -moz-transform: rotate(-8deg);
@@ -399,8 +389,24 @@ label {
 
 #social-footer {
   position: fixed;
-  bottom: 16px;
+  bottom: 12px;
   left: 32px;
+}
+
+#fb-share-link:hover img {
+  -webkit-transform: rotate(4deg);
+     -moz-transform: rotate(4deg);
+      -ms-transform: rotate(4deg);
+       -o-transform: rotate(4deg);
+          transform: rotate(4deg);
+}
+
+#fb-share-link:active img {
+  -webkit-transform: rotate(8deg);
+     -moz-transform: rotate(8deg);
+      -ms-transform: rotate(8deg);
+       -o-transform: rotate(8deg);
+          transform: rotate(8deg);
 }
 
 #footer {
