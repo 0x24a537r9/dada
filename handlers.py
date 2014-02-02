@@ -106,8 +106,8 @@ def get_poems(poem_type, encoded_ids=None, rank=None):
   return poems
 
 
-class MainHandler(webapp2.RequestHandler):
-  @rate_limit(seconds_per_request=1)
+class HomeHandler(webapp2.RequestHandler):
+  @rate_limit(seconds_per_request=10)
   @render_to('home.html')
   def get(self):
     return {}

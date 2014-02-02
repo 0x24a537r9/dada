@@ -6,7 +6,7 @@ from models import *
 
 app = webapp2.WSGIApplication([
     # FE handlers.
-    (r'^/$', MainHandler),
+    (r'^/home/$', HomeHandler),
     (r'^(?i)/(%s)/create/$' % '|'.join(Poem.TYPES), CreatePoemHandler),
     (r'^(?i)/(%s)/(?:([a-zA-Z0-9_=-]+)/)?$' % '|'.join(Poem.TYPES), PoemHandler),
     # AJAX handlers.

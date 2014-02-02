@@ -1,14 +1,29 @@
-{% extends 'base_root.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>The Open Dada Project</title>
+  <link rel="shortcut icon" href="/static/favicon.ico"/>
+  <link href="/static/base.css" rel="stylesheet" type="text/css">
+  <script src="/static/jquery.min.js"></script>
+  <script src="/static/jquery.cookie.js"></script>
+  <script src="/static/jquery.textFit.min.js"></script>
+  <script src="/static/base.js"></script>
+  <script src="/static/ajax.js"></script>
+  
 
-{% block title %}The Open Dada Project{% endblock %}
-
-{% block head %}
-{{ super() }}
+    <meta property="og:site_name" content="The Open Dada Project"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:image" content="http://www.open-dada.com/static/open-graph-logo.png"/>
+    <meta property="og:url" content="http://www.open-dada.com/"/>
+  
 <meta property="og:title" content="The Open Dada Project"/>
 <meta property="og:description" content="Explore a infinite library of never-before-written, collaborative poems randomly assembled from phrases submitted by poets like you. Join the global literary experiment by submitting your own phrases!"/>
-{% endblock %}
 
-{% block content %}
+</head>
+<body>
+  <a href="/"><img id="logo" src="/static/logo.svg" alt="The Open Dada Project"></img></a>
+  <div id="content">
+    
 <div>
   <div id="project-quotes-container">
     <blockquote cite="http://www.gutenberg.org/files/16989/16989-h/16989-h.htm" lang="fr">La
@@ -47,10 +62,22 @@
     </a>
   </nav>
 </div>
-{% endblock %}
 
-{% block footer_script %}
-{{ super() }}
+  </div>
+  <div id="social-footer">
+    <a id="fb-share-link" target="_blank"
+       href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fwww.open-dada.com%2F">
+      <img src="/static/facebook.svg" alt="Share to Facebook"/>
+    </a>
+  </div>
+  <div id="footer">
+    
+  </div>
+  <!-- Use two banners for smooth cross-fading. -->
+  <div class="banner"><div class="banner-text"></div></div>
+  <div class="banner"><div class="banner-text"></div></div>
+  
+
 <script>
   var $projectQuotesContainer = $('#project-quotes-container');
 
@@ -64,4 +91,16 @@
     }, 4000);
   });
 </script>
-{% endblock %}
+
+  <script>
+    // Google Analytics tracking tag.
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-47488889-1', 'open-dada.com');
+    ga('send', 'pageview');
+  </script>
+</body>
+</html>
