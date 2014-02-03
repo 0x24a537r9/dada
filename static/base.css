@@ -219,6 +219,7 @@ button::-moz-focus-inner {
 .accent,
 .question:before,
 .answer:before,
+.condition:before,
 .condition:after,
 .consequence:before,
 .poem-author:before,
@@ -236,6 +237,10 @@ label {
 
 .answer:before {
   content: "A: ";
+}
+
+.condition:before {
+  content: "If ";
 }
 
 .condition:after {
