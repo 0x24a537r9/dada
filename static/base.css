@@ -95,7 +95,7 @@ button::-moz-focus-inner {
 }
 
 #project-quotes-container blockquote:lang(fr) {
-  position: initial;
+  position: static;
   opacity: 1;
 }
 
