@@ -1,0 +1,37 @@
+{% extends 'base_poem.html' %}
+
+{% block title %}Conditional{% endblock %}
+
+{% block head %}
+{{ super() }}
+<meta property="og:title" content="&quot;{{ poems[0].entries[0].text }}&hellip; {{ poems[0].entries[1].text }}&quot;"/>
+<meta property="og:description" content="A collaborative poem randomly assembled from phrases submitted by {{ poems[0].entries[0].author }} and {{ poems[0].entries[1].author }}. Join the global literary experiment!"/>
+{% endblock %}
+
+{% block instructions %}
+Unrelated conditions and consequences are submitted by poets and paired at random to create poems.
+Many are nonsensical&mdash;some outright absurd&mdash;but a few: <span class="accent">fortuitously
+profound</span>.
+{% endblock %}
+
+{% block poem %}
+<span class="condition poem-text">{{ poems[0].entries[0].text }}</span><br>
+<span class="consequence poem-text">{{ poems[0].entries[1].text }}</span>
+{% endblock %}
+
+{% block authors %}
+<span class="condition-author poem-author">{{ poems[0].entries[0].author }}</span><br>
+<span class="consequence-author poem-author">{{ poems[0].entries[1].author }}</span>
+{% endblock %}
+
+{% block footer_script %}
+{{ super() }}
+<script>
+  function renderPoem(poem, container) {
+    container.find('.condition').text(poem.condition.text);
+    container.find('.consequence').text(poem.consequence.text);
+    container.find('.condition-author').text(poem.condition.author);
+    container.find('.consequence-author').text(poem.consequence.author);
+  }
+</script>
+{% endblock %}

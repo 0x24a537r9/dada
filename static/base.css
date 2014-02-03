@@ -108,7 +108,7 @@ button::-moz-focus-inner {
 }
 
 #question-answer-link,
-#conditionals-link,
+#conditional-link,
 #the-exquisite-corpse-link {
   display: inline-block;
   position: relative;
@@ -135,8 +135,24 @@ button::-moz-focus-inner {
           transform: translateY(-2px);
 }
 
-#conditionals-link {
+#conditional-link {
   margin: 30px 30px 7px 30px;
+}
+
+#conditional-link:hover {
+  -webkit-transform: translateX(4px);
+     -moz-transform: translateX(4px);
+      -ms-transform: translateX(4px);
+       -o-transform: translateX(4px);
+          transform: translateX(4px);
+}
+
+#conditional-link:active {
+  -webkit-transform: translateX(2px);
+     -moz-transform: translateX(2px);
+      -ms-transform: translateX(2px);
+       -o-transform: translateX(2px);
+          transform: translateX(2px);
 }
 
 #the-exquisite-corpse-link {
@@ -144,7 +160,6 @@ button::-moz-focus-inner {
   padding-bottom: 50px;
 }
 
-#conditionals-link:after,
 #the-exquisite-corpse-link:after {
   content: "Coming Soon!";
   position: absolute;
@@ -201,6 +216,8 @@ button::-moz-focus-inner {
 .accent,
 .question:before,
 .answer:before,
+.condition:after,
+.consequence:before,
 .poem-author:before,
 label {
   color: #DE5547;
@@ -218,10 +235,22 @@ label {
   content: "A: ";
 }
 
+.condition:after {
+  content: "\00A0\2026";
+}
+
+.consequence:before {
+  content: "\2026\00A0";
+}
+
 .answer,
 .answer:before,
 .answer-author,
-.answer-author:before {
+.answer-author:before,
+.consequence,
+.consequence:before,
+.consequence-author,
+.consequence-author:before {
   font-style: italic;
 }
 
@@ -243,9 +272,10 @@ label {
   content: "- ";
 }
 
-
 #question-textbox,
 #answer-textbox,
+#condition-textbox,
+#consequence-textbox,
 #author-textbox {
   width: 80%;
   outline: none;

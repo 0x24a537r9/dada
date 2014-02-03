@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block url %}http://www.open-dada.com/conditional/create/{% endblock %}
+
+{% block title %}Create Conditional{% endblock %}
+
+{% block head %}
+{{ super() }}
+<meta property="og:title" content="Create a &quot;Conditional&quot; Poem!"/>
+<meta property="og:description" content="Submit your own profound condition or consequence to be randomly paired with conditions/consequences from others in an exercise of global collaborative poetry!"/>
+<style>
+  #content {
+    min-height: 500px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+{{ super() }}
+<div id="instructions-container">
+  <div>
+    Submit your own <span class="accent">profound</span> condition and/or
+    <span class="accent">unrelated</span> consequence. The more poignant and specific, the better.
+    <br>
+    <br>
+    <input id="condition-textbox" type="text" maxlength="64" placeholder="If there were no guillotine"></input>
+    <label for="condition-textbox">&hellip;</label>
+    <br>
+    <label for="consequence-textbox">&hellip;</label>
+    <input id="consequence-textbox" type="text" maxlength="64" placeholder="Wasps would take off their corsets."></input>
+    <br>
+    <label for="author-textbox">By:</label>
+    <input id="author-textbox" type="text" maxlength="32" placeholder="Your name..."></input>
+    <div id="instructions-buttons-container">
+      <button class="submit-button"><img src="/static/envelope.svg" alt="Submit"/></button>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+{{ super() }}
+<a id="top-poems-link" href="/{{ poem_type }}/top/">
+  <img id="top-hat" src="/static/top-hat.svg" alt="Top hat"/>Top poems
+</a>
+{% endblock %}
+
+{% block footer_script %}
+{{ super() }}
+<script>
+  $(function() {  
+    $('#author-textbox').val(localStorage.getItem('author') || '');
+    $(document).keydown(function(e) { if(e.which == 13) submit(); });
+    $('.submit-button').click(submit);
+  });
+
+  function submit() {
+    var hasUncreativeEntry = false;
+    $('input[type="text"]').each(function(i, entry) {
+      var $entry = $(entry);
+      if ($entry.val().replace(/[^a-zA-Z]/g, '').toLowerCase() ==
+          $entry.attr('placeholder').replace(/[^a-zA-Z]/g, '').toLowerCase()) {
+        hasUncreativeEntry = true;
+        return false;
+      }
+    });
+    if (hasUncreativeEntry) {
+      showBannerMessage('Really?');
+      showBannerMessage('C\'mon. Be creative.');
+      return;
+    }
+
+    createEntries(['condition', 'consequence'], $('#condition-textbox, #consequence-textbox'),
+                  $('#author-textbox'));
+  }
+</script>
+{% endblock %}

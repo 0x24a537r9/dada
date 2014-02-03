@@ -43,7 +43,9 @@ def decode_ids(idString):
 class Entry(ndb.Model):
   order = ndb.ComputedProperty(lambda self: randint64(), indexed=True)
 
-  TYPES = QUESTION, ANSWER = 'question', 'answer'
+  TYPES = QUESTION, ANSWER, CONDITION, CONSEQUENCE = (
+      'question', 'answer', 'condition', 'consequence'
+  )
   type = ndb.StringProperty(required=True, choices=TYPES, indexed=True)
   
   text = ndb.StringProperty(required=True, indexed=False)
@@ -77,7 +79,7 @@ class Entry(ndb.Model):
 class Poem(ndb.Model):
   order = ndb.ComputedProperty(lambda self: randint64(), indexed=True)
 
-  TYPES = QUESTION_ANSWER, CONDITIONALS, THE_EXQUISITE_CORPSE = ('question-answer', 'conditionals',
+  TYPES = QUESTION_ANSWER, CONDITIONAL, THE_EXQUISITE_CORPSE = ('question-answer', 'conditional',
                                                                  'the-exquisite-corpse')
   type = ndb.StringProperty(required=True, choices=TYPES, indexed=True)
 
@@ -129,4 +131,5 @@ class Poem(ndb.Model):
 
 POEM_TYPE_ENTRY_TYPES = {
   Poem.QUESTION_ANSWER: (Entry.QUESTION, Entry.ANSWER),
+  Poem.CONDITIONAL: (Entry.CONDITION, Entry.CONSEQUENCE),
 }
