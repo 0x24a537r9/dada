@@ -16,8 +16,11 @@ div, input {
           box-sizing: border-box;
 }
 
+input[type="text"] {
+  background: transparent;
+}
+
 input[type="text"]:disabled {
-  background: #FFF;
   color: #777;
 }
 
