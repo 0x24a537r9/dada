@@ -4,9 +4,11 @@
 
 {% block head %}
 {{ super() }}
-<meta property="og:title" content="&quot;{{ poems[0].entries[0].text }}&hellip; {{ poems[0].entries[1].text }}&quot;"/>
+<meta property="og:title" content="&quot;If {{ poems[0].entries[0].text }}&hellip; {{ poems[0].entries[1].text }}&quot;"/>
 <meta property="og:description" content="A collaborative poem randomly assembled from phrases submitted by {{ poems[0].entries[0].author }} and {{ poems[0].entries[1].author }}. Join the global literary experiment!"/>
 {% endblock %}
+
+{% block twitter_text %}"If {{ poems[0].entries[0].text }}… {{ poems[0].entries[1].text }}"{% endblock %}
 
 {% block instructions %}
 Unrelated conditions and consequences are submitted by poets and paired at random to create poems.
@@ -32,6 +34,10 @@ profound</span>.
     container.find('.consequence').text(poem.consequence.text);
     container.find('.condition-author').text(poem.condition.author);
     container.find('.consequence-author').text(poem.consequence.author);
+  }
+
+  function getPoemText(poem) {
+    return 'If ' + poem.condition.text + '\u2026 ' + poem.consequence.text;
   }
 </script>
 {% endblock %}

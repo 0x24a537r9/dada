@@ -15,7 +15,7 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__) + '/templates'),
     extensions=['jinja2.ext.autoescape'],
     autoescape=True)
-JINJA_ENVIRONMENT.filters.update({'urlencode': lambda s: urlencode({'': s})[1:]})
+JINJA_ENVIRONMENT.filters.update({'urlencode': lambda s: urlencode({'': s.encode('utf8')})[1:]})
 
 
 def rate_limit(seconds_per_request=1):

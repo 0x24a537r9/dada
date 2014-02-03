@@ -8,6 +8,8 @@
 <meta property="og:description" content="A collaborative poem randomly assembled from phrases submitted by {{ poems[0].entries[0].author }} and {{ poems[0].entries[1].author }}. Join the global literary experiment!"/>
 {% endblock %}
 
+{% block twitter_text %}"Q: {{ poems[0].entries[0].text }} A: {{ poems[0].entries[1].text }}"{% endblock %}
+
 {% block instructions %}
 Unrelated questions and answers are submitted by poets and paired at random to create poems. Many
 are nonsensical&mdash;some outright absurd&mdash;but a few: <span class="accent">fortuitously
@@ -32,6 +34,10 @@ profound</span>.
     container.find('.answer').text(poem.answer.text);
     container.find('.question-author').text(poem.question.author);
     container.find('.answer-author').text(poem.answer.author);
+  }
+
+  function getPoemText(poem) {
+    return 'Q: ' + poem.question.text + ' A: ' + poem.answer.text;
   }
 </script>
 {% endblock %}

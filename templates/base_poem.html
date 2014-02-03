@@ -63,7 +63,8 @@
 {% block footer_script %}
 {{ super() }}
 <script>
-  {# Derived templates must implement a renderPoem(poem, container) function. #}
+  {# Derived templates must implement the renderPoem(poem, container) and getPoemText(poem)
+     functions. #}
 
   var poems = [
     {% for poem in poems %}
@@ -83,7 +84,8 @@
       $downvoteButtons = $('.vote-buttons-container .downvote-button'),
       $voteButtons = $('.vote-buttons-container button'),
       $createPoemLink = $('#create-poem-link'),
-      $fbShareLink = $('#fb-share-link');
+      $fbShareLink = $('#fb-share-link'),
+      $twitterShareLink = $('#twitter-share-link');
 
   var MIN_POEMS_TO_VIEW_BEFORE_SHOWING_CREATE_LINK = 5,
       LOAD_POEMS_RETRY_DELAY = 2000,
@@ -163,10 +165,12 @@
       $poemRank.hide();
     }
 
-    $fbShareLink.attr('href',
-        'https://www.facebook.com/sharer/sharer.php?u=' +
-            encodeURIComponent('http://www.open-dada.com/{{ poem_type }}/' + poems[0].encoded_ids +
-                                   '/'));
+    var encodedUrl = encodeURIComponent('http://www.open-dada.com/{{ poem_type }}/' +
+                                        poems[0].encoded_ids + '/');
+    $fbShareLink.attr('href', 'https://www.facebook.com/sharer/sharer.php?u=' + encodedUrl);
+    $twitterShareLink.attr('href',
+        'https://twitter.com/share?url=' + encodedUrl + '&text=%22' +
+            encodeURIComponent(getPoemText(poems[0])) + '%22&via=OpenDadaProject');
 
     if (poems.length < MIN_CACHED_POEMS) {
       loadPoems();

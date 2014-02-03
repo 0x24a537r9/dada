@@ -26,6 +26,10 @@
        href="https://www.facebook.com/sharer/sharer.php?u={{ self.url() | urlencode }}">
       <img src="/static/facebook.svg" alt="Share to Facebook"/>
     </a>
+    <a id="twitter-share-link" target="_blank"
+       href="https://twitter.com/share?url={{ self.url() | urlencode }}&amp;text={% filter urlencode %}{% block twitter_text %}Check out The Open Dada Project:{% endblock %}{% endfilter %}&amp;via=OpenDadaProject">
+      <img src="/static/twitter.svg" alt="Share to Twitter"/>
+    </a>
   </div>
   <div id="footer">
     {% block footer %}{% endblock %}

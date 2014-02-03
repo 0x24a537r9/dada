@@ -431,7 +431,13 @@ label {
   left: 32px;
 }
 
-#fb-share-link:hover img {
+#fb-share-link,
+#twitter-share-link {
+  text-decoration: none;
+}
+
+#fb-share-link:hover img,
+#twitter-share-link:hover img {
   -webkit-transform: rotate(4deg);
      -moz-transform: rotate(4deg);
       -ms-transform: rotate(4deg);
@@ -439,7 +445,8 @@ label {
           transform: rotate(4deg);
 }
 
-#fb-share-link:active img {
+#fb-share-link:active img,
+#twitter-share-link:active img {
   -webkit-transform: rotate(8deg);
      -moz-transform: rotate(8deg);
       -ms-transform: rotate(8deg);
