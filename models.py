@@ -70,9 +70,24 @@ class Entry(ndb.Model):
       result = cls.query(cls.type == type, cls.is_flagged == False).order(cls.order).fetch(1)
     return result[0]
 
+  def canonicalized_text(self):
+    if self.type == Entry.QUESTION:
+      return self.text.capitalize() + ('?' if self.text[-1] not in '?.!,;' else '')
+    elif self.type == Entry.ANSWER:
+      return self.text.capitalize() + ('.' if self.text[-1] not in '.!?,;' else '')
+    elif self.type == Entry.CONDITION:
+      text = self.text
+      if text.lower().startswith('if'):
+        text = text[2:]
+      return text.strip(' .!?,;')
+    elif self.type == Entry.CONSEQUENCE:
+      return self.text + ('.' if self.text[-1] not in '.!?,;' else '')
+    else:
+      return self.text
+
   def to_dict(self):
     return {
-        TEXT_KEY: self.text,
+        TEXT_KEY: self.canonicalized_text(),
         AUTHOR_KEY: self.author,
     }
 
