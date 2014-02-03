@@ -155,6 +155,7 @@ class CreatePoemHandler(webapp2.RequestHandler):
   def get(self, poem_type):
     r = {}
     r[POEM_TYPE_KEY] = poem_type
+    r[ENTRY_TYPES_KEY] = POEM_TYPE_ENTRY_TYPES[poem_type]
     r[TEMPLATE_KEY] = 'create_%s.html' % poem_type.replace('-', '_')
 
     return r

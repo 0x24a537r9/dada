@@ -1,13 +1,12 @@
 {% extends 'base.html' %}
 
-{% block url %}http://www.open-dada.com/question-answer/create/{% endblock %}
+{% block url %}http://www.open-dada.com/{{ poem_type }}/create/{% endblock %}
 
-{% block title %}Create Question &amp; Answer{% endblock %}
+{% block title %}Create a poem{% endblock %}
 
 {% block head %}
 {{ super() }}
-<meta property="og:title" content="Create a &quot;Question &amp; Answer&quot; Poem!"/>
-<meta property="og:description" content="Submit your own profound question or answer to be randomly paired with questions/answers from others in an exercise of global collaborative poetry!"/>
+<meta property="og:title" content="{{ self.title() }}!"/>
 <style>
   #content {
     min-height: 500px;
@@ -15,21 +14,15 @@
 </style>
 {% endblock %}
 
+{% block twitter_text %}Create your own poem:{% endblock %}
+
 {% block content %}
 {{ super() }}
 <div id="instructions-container">
   <div>
-    Submit your own <span class="accent">profound</span> question and/or
-    <span class="accent">unrelated</span> answer. The more poignant and specific, the better.<br>
+    {% block instructions %}INSTRUCTIONS{% endblock %}<br>
     <br>
-    <label for="question-textbox">Q:</label>
-    <input id="question-textbox" type="text" maxlength="64" placeholder="What is life?"></input>
-    <br>
-    <label for="answer-textbox">A:</label>
-    <input id="answer-textbox" type="text" maxlength="64" placeholder="Scrambled eggs nailed to a wall."></input>
-    <br>
-    <label for="author-textbox">By:</label>
-    <input id="author-textbox" type="text" maxlength="32" placeholder="Your name..."></input>
+    {% block inputs %}INPUTS{% endblock %}
     <div id="instructions-buttons-container">
       <button class="submit-button"><img src="/static/envelope.svg" alt="Submit"/></button>
     </div>
@@ -47,6 +40,10 @@
 {% block footer_script %}
 {{ super() }}
 <script>
+  var entryTypes = {{ entry_types | to_json | safe }};
+
+  var $entryInputs = $('#{{ entry_types | join('-textbox, #') }}-textbox');
+
   $(function() {  
     $('#author-textbox').val(localStorage.getItem('author') || '');
     $(document).keydown(function(e) { if(e.which == 13) submit(); });
@@ -69,8 +66,7 @@
       return;
     }
 
-    createEntries(['question', 'answer'], $('#question-textbox, #answer-textbox'),
-                  $('#author-textbox'));
+    createEntries(entryTypes, $entryInputs, $('#author-textbox'));
   }
 </script>
 {% endblock %}
