@@ -25,13 +25,16 @@ function rotateBanner() {
     var $activeBannerText = $activeBanner.find('.banner-text');
     $activeBannerText.text(message);
     $activeBanner.fadeIn();
-    $activeBannerText.textFit({
-      alignVert: true,
-      alignHoriz: true,
-      multiLine: true,
-      reProcess: true,
-      maxFontSize: 120
-    });
+    // Allow a tiny bit of time for the banner to be barely visible.
+    setTimeout(function() {
+      $activeBannerText.textFit({
+        alignVert: true,
+        alignHoriz: true,
+        multiLine: true,
+        reProcess: true,
+        maxFontSize: 120
+      });
+    }, 30);
     setTimeout(rotateBanner, 2500);
   }
 }
