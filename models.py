@@ -72,16 +72,16 @@ class Entry(ndb.Model):
 
   def canonicalized_text(self):
     if self.type == Entry.QUESTION:
-      return self.text[0].upper() + self.text[1:] + ('?' if self.text[-1] not in '?.!,;' else '')
+      return self.text[0].upper() + self.text[1:] + ('?' if self.text[-1] not in '?.!,;"\'' else '')
     elif self.type == Entry.ANSWER:
-      return self.text[0].upper() + self.text[1:] + ('.' if self.text[-1] not in '.!?,;' else '')
+      return self.text[0].upper() + self.text[1:] + ('.' if self.text[-1] not in '.!?,;"\'' else '')
     elif self.type == Entry.CONDITION:
       text = self.text
       if text.lower().startswith('if'):
         text = text[2:]
       return text.strip(' .!?,;')
     elif self.type == Entry.CONSEQUENCE:
-      return self.text + ('.' if self.text[-1] not in '.!?,;' else '')
+      return self.text + ('.' if self.text[-1] not in '.!?,;"\'' else '')
     else:
       return self.text
 
