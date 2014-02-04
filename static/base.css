@@ -249,7 +249,6 @@ label {
 
 .consequence:before {
   content: "\2026\00A0";
-  font-style: normal;
 }
 
 .answer,
@@ -257,7 +256,6 @@ label {
 .answer-author,
 .answer-author:before,
 .consequence,
-.consequence:before,
 .consequence-author,
 .consequence-author:before {
   font-style: italic;
