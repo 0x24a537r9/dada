@@ -137,7 +137,9 @@
 
   function vote(vote) {
     hideVoteButtons();
-    sendVote(poemType, poems[0].encoded_ids, vote);
+    if (vote > -1 || !poems[0].is_new) {
+      sendVote(poemType, poems[0].encoded_ids, vote);
+    }
 
     incCounter(poemType + '-poems-viewed')
     poems = poems.splice(1)

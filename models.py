@@ -9,6 +9,7 @@ ENTRY_KEY = 'entry'
 ENTRY_TYPE_KEY = 'entry_type'
 ENTRY_TYPES_KEY = 'entry_types'
 ERRORS_KEY = 'errors'
+IS_NEW_KEY = 'is_new'
 POEM_TYPE_KEY = 'poem_type'
 POEMS_KEY = 'poems'
 RANK_KEY = 'rank'
@@ -142,6 +143,7 @@ class Poem(ndb.Model):
       d[entry_type] = self.entries[i]
     d[ENCODED_IDS_KEY] = encode_ids(tuple(entry.key.id() for entry in self.entries))
     d[RANK_KEY] = self.rank
+    d[IS_NEW_KEY] = self.key == None
     return d
 
 
