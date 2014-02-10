@@ -13,4 +13,5 @@ app = webapp2.WSGIApplication([
     (r'^/x/get-(%s)/$' % '|'.join(Poem.TYPES), AjaxGetPoemHandler),
     (r'^/x/create-entries/$', AjaxCreateEntriesHandler),
     (r'^/x/vote/$', AjaxVoteHandler),
+    (r'^/_ah/warmup$', WarmupHandler),
 ], debug=True)

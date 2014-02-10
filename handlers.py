@@ -106,6 +106,12 @@ def get_poems(poem_type, encoded_ids=None, rank=None):
   return poems
 
 
+class WarmupHandler(webapp2.RequestHandler):
+  @rate_limit(seconds_per_request=10)
+  def get(self):
+    self.response.write('Warmed up!')
+
+
 class HomeHandler(webapp2.RequestHandler):
   @rate_limit(seconds_per_request=10)
   @render_to('home.html')
