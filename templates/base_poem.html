@@ -73,7 +73,9 @@
   ];
 
   var poemType = '{{ poem_type }}',
-      activePoemContainerIndex = 0,
+      currentPoemIndex = 0,
+      currentPoem = poems[currentPoemIndex],
+      activePoemContainerIndex = 1,
       canVote = true;
 
   var $instructionsContainer = $('#instructions-container'),
@@ -108,12 +110,26 @@
       }
 
       switch (event.which) {
+        case 37: history.back(); break;
         case 38: vote(1); break;
         case 13: case 32: case 39: vote(0); break;
         case 40: vote(-1); break;
       }
     });
-    refreshPoem();
+    showPoem(currentPoemIndex);
+    
+    $(window).on('popstate', function(e) {
+      if (e.originalEvent.state == null) {
+        return;
+      }
+      showPoem(e.originalEvent.state);
+    });
+
+    try {
+      history.replaceState(0, document.title, location.href);
+    } catch (e) {
+      window.console.error(e.message);
+    }
   });
 
   function closeInstructions() {
@@ -137,44 +153,55 @@
 
   function vote(vote) {
     hideVoteButtons();
-    if (vote > -1 || !poems[0].is_new) {
-      sendVote(poemType, poems[0].encoded_ids, vote);
+    if (vote > -1 || !currentPoem.is_new) {
+      sendVote(poemType, currentPoem.encoded_ids, vote);
     }
 
-    incCounter(poemType + '-poems-viewed')
-    poems = poems.splice(1)
-	  $poemContainers.eq(activePoemContainerIndex).fadeOut();
-    activePoemContainerIndex = 1 - activePoemContainerIndex
-    refreshPoem();
-	  $poemContainers.eq(activePoemContainerIndex).fadeIn();
+    incCounter(poemType + '-poems-viewed');
+    showPoem(currentPoemIndex + 1);
+
+    try {
+      history.pushState(currentPoemIndex, document.title,
+          location.protocol + '//' + location.host + '/{{ poem_type }}/' +
+              currentPoem.encoded_ids + '/');
+    } catch (e) {
+      window.console.error(e.message);
+    }
 
     if (ga != null) ga('send', 'event', poemType, 'vote', vote.toString());
   }
 
-  function refreshPoem() {
-    if (poems.length < 1) {
-      setTimeout(refreshPoem, LOAD_POEMS_RETRY_DELAY);
+  function showPoem(poemIndex) {
+    if (poemIndex >= poems.length - 1) {
+      setTimeout(function () { showPoem(poemIndex); }, LOAD_POEMS_RETRY_DELAY);
       return;
     }
-    
-    var $poemContainer = $poemContainers.eq(activePoemContainerIndex);
-    renderPoem(poems[0], $poemContainer);
+
+    $poemContainers.eq(activePoemContainerIndex).fadeOut();
+
+    currentPoem = poems[currentPoemIndex = poemIndex];
+    var $poemContainer = $poemContainers.eq(activePoemContainerIndex ^= 1);
+    renderPoem(currentPoem, $poemContainer);
     var $poemRank = $poemContainer.find('.poem-rank');
-    if (poems[0].rank != null) {
+    if (currentPoem.rank != null) {
       $poemRank.show();
-      $poemRank.text('#' + (poems[0].rank + 1));
+      $poemRank.text('#' + (currentPoem.rank + 1));
     } else {
       $poemRank.hide();
     }
 
+    if (!$instructionsContainer.is(':visible')) {
+      $poemContainers.eq(activePoemContainerIndex).fadeIn();
+    }
+
     var encodedUrl = encodeURIComponent('http://open-dada.com/{{ poem_type }}/' +
-                                        poems[0].encoded_ids + '/');
+                                        currentPoem.encoded_ids + '/');
     $fbShareLink.attr('href', 'https://www.facebook.com/sharer/sharer.php?u=' + encodedUrl);
     $twitterShareLink.attr('href',
         'https://twitter.com/share?url=' + encodedUrl + '&text=%22' +
-            encodeURIComponent(getPoemText(poems[0])) + '%22&via=OpenDadaProject');
+            encodeURIComponent(getPoemText(currentPoem)) + '%22&via=OpenDadaProject');
 
-    if (poems.length < MIN_CACHED_POEMS) {
+    if (poems.length - currentPoemIndex < MIN_CACHED_POEMS) {
       loadPoems();
     }
 
