@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block url %}http://www.open-dada.com/{{ poem_type }}/{{ encoded_ids + '/' if encoded_ids }}{% endblock %}
+{% block url %}http://open-dada.com/{{ poem_type }}/{{ encoded_ids + '/' if encoded_ids }}{% endblock %}
 
 {% block title %}BASE_POEM{% endblock %}
 
@@ -167,7 +167,7 @@
       $poemRank.hide();
     }
 
-    var encodedUrl = encodeURIComponent('http://www.open-dada.com/{{ poem_type }}/' +
+    var encodedUrl = encodeURIComponent('http://open-dada.com/{{ poem_type }}/' +
                                         poems[0].encoded_ids + '/');
     $fbShareLink.attr('href', 'https://www.facebook.com/sharer/sharer.php?u=' + encodedUrl);
     $twitterShareLink.attr('href',
