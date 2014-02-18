@@ -40,7 +40,7 @@
 {% block footer_script %}
 {{ super() }}
 <script>
-  var entryTypes = {{ entry_types | to_json | safe }};
+  var entryTypes = {{ entry_types | to_json }};
 
   var $entryInputs = $('#{{ entry_types | join('-textbox, #') }}-textbox');
 

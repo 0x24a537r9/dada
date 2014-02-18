@@ -57,7 +57,7 @@ def json_handler(obj):
 
 def to_json(value):
   return json.dumps(value, default=json_handler)
-JINJA_ENVIRONMENT.filters.update({'to_json': to_json})
+JINJA_ENVIRONMENT.filters.update({'to_json': lambda obj: jinja2.Markup(to_json(obj))})
 
 
 def ajax_request(function):

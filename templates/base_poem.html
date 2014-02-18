@@ -68,7 +68,7 @@
 
   var poems = [
     {% for poem in poems %}
-      {{ poem | to_json | safe }}{{ ',' if not loop.last }}
+      {{ poem | to_json }}{{ ',' if not loop.last }}
     {% endfor %}
   ];
 
