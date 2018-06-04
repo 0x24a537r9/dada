@@ -1,21 +1,24 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <title>The Open Dada Project</title>
   <link rel="shortcut icon" href="/static/favicon.ico"/>
   <link href="/static/base.css" rel="stylesheet" type="text/css">
+  <link href="/static/base-mobile.css" rel="stylesheet" type="text/css">
   <script src="/static/jquery.min.js"></script>
   <script src="/static/jquery.cookie.js"></script>
   <script src="/static/jquery.textFit.min.js"></script>
   <script src="/static/base.js"></script>
   <script src="/static/ajax.js"></script>
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
 
     <meta property="og:site_name" content="The Open Dada Project"/>
     <meta property="og:type" content="website"/>
     <meta property="og:image" content="http://open-dada.com/static/open-graph-logo.png"/>
     <meta property="og:url" content="http://open-dada.com/"/>
-  
+
 <meta property="og:title" content="The Open Dada Project"/>
 <meta property="og:description" content="Explore an infinite library of never-before-written, collaborative poems randomly assembled from phrases submitted by poets like you. Join the global literary experiment by submitting your own phrases!"/>
 
@@ -23,7 +26,7 @@
 <body>
   <a href="/"><img id="logo" src="/static/logo.svg" alt="The Open Dada Project"/></a>
   <div id="content">
-    
+
 <div>
   <div id="project-quotes-container">
     <blockquote cite="http://www.gutenberg.org/files/16989/16989-h/16989-h.htm" lang="fr">La
@@ -78,12 +81,12 @@
     </a>
   </div>
   <div id="footer">
-    
+
   </div>
   <!-- Use two banners for smooth cross-fading. -->
   <div class="banner"><div class="banner-text"></div></div>
   <div class="banner"><div class="banner-text"></div></div>
-  
+
 
 <script>
   var $projectQuotesContainer = $('#project-quotes-container');

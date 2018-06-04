@@ -1,0 +1,146 @@
+@media (max-width: 600px), (max-height: 600px) {
+  blockquote {
+    font-size: 18pt;
+  }
+
+  #logo {
+    top: 14px;
+    left: 14px;
+    width: 64px;
+  }
+
+  #content {
+    top: 24px;
+    right: 14px;
+    bottom: 24px;
+    left: 92px;
+  }
+
+  #project-quotes-container {
+    margin-top: 0;
+  }
+
+  .project-description {
+    font-size: 14pt;
+  }
+
+  #question-answer-link {
+    margin: 10px 20px 0 20px;
+  }
+
+  #conditional-link {
+    margin: 18px 20px 7px 20px;
+  }
+
+  #the-exquisite-corpse-link {
+    margin: 15px 20px 0 20px;
+  }
+
+  #the-exquisite-corpse-link:after {
+    font-size: 14px;
+  }
+
+  #instructions-container {
+    font-size: 22pt;
+  }
+
+  #contact-us-container a {
+    font-size: 12pt;
+  }
+
+  .poem-text {
+    font-size: 22pt;
+  }
+
+  .authors-container {
+    font-size: 16pt;
+  }
+
+  #question-textbox,
+  #answer-textbox,
+  #condition-textbox,
+  #consequence-textbox,
+  #author-textbox {
+    width: 70%;
+    border-bottom: 2px solid #CCC;
+    font: 18pt 'Old Press';
+  }
+
+  #author-textbox {
+    width: 60%;
+  }
+
+  .submit-button img {
+    width: 66px;
+  }
+
+  .upvote-button {
+    margin-left: -26.25px;
+  }
+
+  .upvote-button img {
+    width: 72px;
+  }
+
+  .next-button {
+    margin: 0 15px 0 18.5px;
+  }
+
+  .next-button img {
+    width: 75.75px;
+  }
+
+  .downvote-button {
+    margin-top: 21px;
+  }
+
+  .downvote-button img {
+    width: 39px;
+  }
+
+  .poem-rank {
+    font-size: 20pt;
+  }
+
+  #social-footer {
+    left: 14px;
+  }
+
+  #footer {
+    bottom: 14px;
+    left: 100px;
+    right: 14px;
+  }
+
+  #fingerprint {
+    margin: 0 6.67px -10.67px 0;
+    width: 27.75px;
+  }
+
+  #die {
+    margin: 0 6.67px -6.67px 0;
+    width: 30.75px;
+  }
+
+  #top-hat {
+    margin: 0 5.33px -7.33px 0;
+    width: 36.75px;
+  }
+
+  #create-poem-link,
+  #random-poems-link,
+  #top-poems-link {
+    margin-top: 10px;
+    font-size: 18pt;
+  }
+
+  .banner {
+    height: 200px;
+    margin-top: -100px;
+  }
+
+  .banner-text {
+    height: 200px;
+    padding: 30px 50px;
+  }
+}

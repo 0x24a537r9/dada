@@ -3,11 +3,17 @@
   src: local('Old Press'), url('/static/old-press.woff');
 }
 
-html, body {
+html {
   height: 100%;
   margin: 0;
   background: url('/static/paper.png');
   font-family: 'Old Press';
+}
+
+body {
+  height: 100%;
+  margin: 0;
+  position: relative;
 }
 
 div, input {
@@ -44,8 +50,12 @@ a {
   -webkit-tap-highlight-color: transparent;
 }
 
-a:focus { 
-  outline: none; 
+a:focus {
+  outline: none;
+}
+
+button {
+  padding: 0;
 }
 
 button::-moz-focus-inner {
@@ -68,7 +78,6 @@ button::-moz-focus-inner {
   right: 52px;
   bottom: 75px;
   left: 206px;
-  min-height: 400px;
   text-align: center;
 }
 
@@ -116,6 +125,12 @@ button::-moz-focus-inner {
   display: inline-block;
   position: relative;
   vertical-align: top;
+}
+
+#question-answer-link img,
+#conditional-link img,
+#the-exquisite-corpse-link img {
+  max-width: 100%;
 }
 
 #question-answer-link {
@@ -218,7 +233,7 @@ button::-moz-focus-inner {
 
 #contact-us-container {
   text-align: right;
-  height: 30px;
+  margin-bottom: 14px;
 }
 
 #contact-us-container a {
@@ -454,7 +469,10 @@ label {
 }
 
 #fb-share-link:hover img,
-#twitter-share-link:hover img {
+#twitter-share-link:hover img,
+#create-poem-link:hover img,
+#random-poems-link:hover img,
+#top-poems-link:hover img {
   -webkit-transform: rotate(4deg);
      -moz-transform: rotate(4deg);
       -ms-transform: rotate(4deg);
@@ -463,7 +481,10 @@ label {
 }
 
 #fb-share-link:active img,
-#twitter-share-link:active img {
+#twitter-share-link:active img,
+#create-poem-link:active img,
+#random-poems-link:active img,
+#top-poems-link:active img {
   -webkit-transform: rotate(8deg);
      -moz-transform: rotate(8deg);
       -ms-transform: rotate(8deg);
@@ -474,6 +495,7 @@ label {
 #footer {
   position: absolute;
   bottom: 16px;
+  left: 132px;
   right: 32px;
   text-align: right;
 }
@@ -483,7 +505,7 @@ label {
 }
 
 #die {
-  margin: 0 10px -8px 0;
+  margin: 0 10px -10px 0;
 }
 
 #top-hat {
@@ -493,10 +515,13 @@ label {
 #create-poem-link,
 #random-poems-link,
 #top-poems-link {
+  display: inline-block;
   margin-left: 17px;
+  margin-top: 14px;
   color: #555;
   font-size: 24pt;
   text-decoration: none;
+  white-space: nowrap;
   -webkit-transition: opacity 500ms;
      -moz-transition: opacity 500ms;
       -ms-transition: opacity 500ms;
