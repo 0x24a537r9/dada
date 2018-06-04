@@ -32,7 +32,10 @@
 
 {% block footer %}
 {{ super() }}
-<a id="top-poems-link" href="/{{ poem_type }}/top/">
+<a id="random-poems-link" class="hideable" href="/{{ poem_type }}/">
+  <img id="die" src="/static/die.svg" alt="Die"/>Random poems
+</a>
+<a id="top-poems-link" class="hideable" href="/{{ poem_type }}/top/">
   <img id="top-hat" src="/static/top-hat.svg" alt="Top hat"/>Top poems
 </a>
 {% endblock %}
@@ -44,7 +47,7 @@
 
   var $entryInputs = $('#{{ entry_types | join('-textbox, #') }}-textbox');
 
-  $(function() {  
+  $(function() {
     $('#author-textbox').val(localStorage.getItem('author') || '');
     $(document).keydown(function(e) { if(e.which == 13) submit(); });
     $('.submit-button').click(submit);

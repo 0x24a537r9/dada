@@ -144,3 +144,9 @@
     padding: 30px 50px;
   }
 }
+
+@media (max-height: 600px) {
+  .hideable {
+    display: none !important;
+  }
+}
