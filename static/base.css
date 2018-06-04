@@ -17,9 +17,7 @@ body {
 }
 
 div, input {
-  -webkit-box-sizing: border-box;
-     -moz-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 input[type="text"] {
@@ -92,11 +90,7 @@ button::-moz-focus-inner {
   margin: 0;
   width: 100%;
   opacity: 0;
-  -webkit-transition: opacity 1s;
-     -moz-transition: opacity 1s;
-      -ms-transition: opacity 1s;
-       -o-transition: opacity 1s;
-          transition: opacity 1s;
+  transition: opacity 1s;
 }
 
 #project-quotes-container.translated blockquote {
@@ -138,19 +132,11 @@ button::-moz-focus-inner {
 }
 
 #question-answer-link:hover {
-  -webkit-transform: translateY(-4px);
-     -moz-transform: translateY(-4px);
-      -ms-transform: translateY(-4px);
-       -o-transform: translateY(-4px);
-          transform: translateY(-4px);
+  transform: translateY(-4px);
 }
 
 #question-answer-link:active {
-  -webkit-transform: translateY(-2px);
-     -moz-transform: translateY(-2px);
-      -ms-transform: translateY(-2px);
-       -o-transform: translateY(-2px);
-          transform: translateY(-2px);
+  transform: translateY(-2px);
 }
 
 #conditional-link {
@@ -158,19 +144,11 @@ button::-moz-focus-inner {
 }
 
 #conditional-link:hover {
-  -webkit-transform: translateX(4px);
-     -moz-transform: translateX(4px);
-      -ms-transform: translateX(4px);
-       -o-transform: translateX(4px);
-          transform: translateX(4px);
+  transform: translateX(4px);
 }
 
 #conditional-link:active {
-  -webkit-transform: translateX(2px);
-     -moz-transform: translateX(2px);
-      -ms-transform: translateX(2px);
-       -o-transform: translateX(2px);
-          transform: translateX(2px);
+  transform: translateX(2px);
 }
 
 #the-exquisite-corpse-link {
@@ -188,14 +166,8 @@ button::-moz-focus-inner {
   color: #DE5547;
   background: #F8F8F8;
   border: 1px solid #999;
-  -webkit-box-shadow: -1px 1px 4px rgba(0, 0, 0, 0.4);
-     -moz-box-shadow: -1px 1px 4px rgba(0, 0, 0, 0.4);
-          box-shadow: -1px 1px 4px rgba(0, 0, 0, 0.4);
-  -webkit-transform: rotate(-15deg);
-     -moz-transform: rotate(-15deg);
-      -ms-transform: rotate(-15deg);
-       -o-transform: rotate(-15deg);
-          transform: rotate(-15deg);
+  box-shadow: -1px 1px 4px rgba(0, 0, 0, 0.4);
+  transform: rotate(-15deg);
 }
 
 #instructions-container,
@@ -203,23 +175,9 @@ button::-moz-focus-inner {
   position: absolute;
   width: 100%;
   height: 100%;
-
-  /* Because fuck flexbox syntax. */
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -moz-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-     -moz-box-align: center;
-     -ms-flex-align: center;
-  -webkit-box-pack: center;
-     -moz-box-pack: center;
-     -ms-flex-pack: center;
-  -webkit-align-items: center;
-          align-items: center;
-  -webkit-justify-content: center;
-          justify-content: center;
+  align-items: center;
+  justify-content: center;
 }
 
 #instructions-container > div,
@@ -341,22 +299,14 @@ label {
   outline: none;
   cursor: pointer;
   vertical-align: middle;
-  -webkit-transition: opacity 1s;
-     -moz-transition: opacity 1s;
-      -ms-transition: opacity 1s;
-       -o-transition: opacity 1s;
-          transition: opacity 1s;
+  transition: opacity 1s;
   -webkit-tap-highlight-color: transparent;
 }
 
 #instructions-buttons-container button.hidden,
 .vote-buttons-container button.hidden {
   cursor: default;
-  -webkit-transition: none;
-     -moz-transition: none;
-      -ms-transition: none;
-       -o-transition: none;
-          transition: none;
+  transition: none;
   opacity: 0;
 }
 
@@ -365,19 +315,11 @@ label {
 }
 
 .upvote-button:hover {
-  -webkit-transform: translateY(-4px);
-     -moz-transform: translateY(-4px);
-      -ms-transform: translateY(-4px);
-       -o-transform: translateY(-4px);
-          transform: translateY(-4px);
+  transform: translateY(-4px);
 }
 
 .upvote-button:active {
-  -webkit-transform: translateY(-8px);
-     -moz-transform: translateY(-8px);
-      -ms-transform: translateY(-8px);
-       -o-transform: translateY(-8px);
-          transform: translateY(-8px);
+  transform: translateY(-8px);
 }
 
 .next-button {
@@ -385,19 +327,11 @@ label {
 }
 
 .next-button:hover {
-  -webkit-transform: translateX(4px);
-     -moz-transform: translateX(4px);
-      -ms-transform: translateX(4px);
-       -o-transform: translateX(4px);
-          transform: translateX(4px);
+  transform: translateX(4px);
 }
 
 .next-button:active {
-  -webkit-transform: translateX(8px);
-     -moz-transform: translateX(8px);
-      -ms-transform: translateX(8px);
-       -o-transform: translateX(8px);
-          transform: translateX(8px);
+  transform: translateX(8px);
 }
 
 .downvote-button {
@@ -405,35 +339,19 @@ label {
 }
 
 .downvote-button:hover {
-  -webkit-transform: translateY(4px);
-     -moz-transform: translateY(4px);
-      -ms-transform: translateY(4px);
-       -o-transform: translateY(4px);
-          transform: translateY(4px);
+  transform: translateY(4px);
 }
 
 .downvote-button:active {
-  -webkit-transform: translateY(8px);
-     -moz-transform: translateY(8px);
-      -ms-transform: translateY(8px);
-       -o-transform: translateY(8px);
-          transform: translateY(8px);
+  transform: translateY(8px);
 }
 
 .submit-button:hover {
-  -webkit-transform: rotate(-8deg);
-     -moz-transform: rotate(-8deg);
-      -ms-transform: rotate(-8deg);
-       -o-transform: rotate(-8deg);
-          transform: rotate(-8deg);
+  transform: rotate(-8deg);
 }
 
 .submit-button:active {
-  -webkit-transform: rotate(-4deg);
-     -moz-transform: rotate(-4deg);
-      -ms-transform: rotate(-4deg);
-       -o-transform: rotate(-4deg);
-          transform: rotate(-4deg);
+  transform: rotate(-4deg);
 }
 
 .poem-rank {
@@ -444,17 +362,9 @@ label {
   font-size: 28pt;
   padding: 0 5px 0 1px;
   background: rgba(255, 255, 255, 0.8);
-  -webkit-border-radius: 15px;
-     -moz-border-radius: 15px;
-          border-radius: 15px;
-  -webkit-box-shadow: 0 0 7px 4px rgba(255, 255, 255, 0.8);
-     -moz-box-shadow: 0 0 7px 4px rgba(255, 255, 255, 0.8);
-          box-shadow: 0 0 7px 4px rgba(255, 255, 255, 0.8);
-  -webkit-transform: rotate(15deg);
-     -moz-transform: rotate(15deg);
-      -ms-transform: rotate(15deg);
-       -o-transform: rotate(15deg);
-          transform: rotate(15deg);
+  border-radius: 15px;
+  box-shadow: 0 0 7px 4px rgba(255, 255, 255, 0.8);
+  transform: rotate(15deg);
 }
 
 #social-footer {
@@ -473,11 +383,7 @@ label {
 #create-poem-link:hover img,
 #random-poems-link:hover img,
 #top-poems-link:hover img {
-  -webkit-transform: rotate(4deg);
-     -moz-transform: rotate(4deg);
-      -ms-transform: rotate(4deg);
-       -o-transform: rotate(4deg);
-          transform: rotate(4deg);
+  transform: rotate(4deg);
 }
 
 #fb-share-link:active img,
@@ -485,11 +391,7 @@ label {
 #create-poem-link:active img,
 #random-poems-link:active img,
 #top-poems-link:active img {
-  -webkit-transform: rotate(8deg);
-     -moz-transform: rotate(8deg);
-      -ms-transform: rotate(8deg);
-       -o-transform: rotate(8deg);
-          transform: rotate(8deg);
+  transform: rotate(8deg);
 }
 
 #footer {
@@ -522,11 +424,7 @@ label {
   font-size: 24pt;
   text-decoration: none;
   white-space: nowrap;
-  -webkit-transition: opacity 500ms;
-     -moz-transition: opacity 500ms;
-      -ms-transition: opacity 500ms;
-       -o-transition: opacity 500ms;
-          transition: opacity 500ms;
+  transition: opacity 500ms;
 }
 
 #create-poem-link.hidden,
