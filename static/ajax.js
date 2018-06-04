@@ -1,10 +1,10 @@
 /* AJAX functions + functions to help with CSRF tokens.
  *
  * CSRF functions adapted from https://docs.djangoproject.com/en/dev/ref/contrib/csrf/#ajax.
- */   
+ */
 
 var csrftoken = $.cookie('csrftoken');
-    
+
 function isCsrfSafeMethod(method) {
   // These HTTP methods do not require CSRF protection.
   return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
@@ -61,6 +61,10 @@ function createEntries(entryTypes, $entries, $author) {
     $entries.val('');
     localStorage.setItem('author', $author.val());
     showBannerMessage('Thanks for contributing!');
+    if (!localStorage.getItem('hasCreated')) {
+      localStorage.setItem('hasCreated', true);
+      showBannerMessage('How about another?');
+    }
   }).fail(function() {
     showBannerMessage('Uh-oh, we done goofed!');
   }).always(function() {
@@ -72,7 +76,7 @@ function sendVote(poemType, encodedIds, vote) {
   if (vote != 1 && vote != -1) {
     return;
   }
-  
+
   var data = {};
   data.poem_type = poemType
   data.encoded_ids = encodedIds;
