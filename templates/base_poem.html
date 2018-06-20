@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block url %}http://open-dada.com/{{ poem_type }}/{{ encoded_ids + '/' if encoded_ids }}{% endblock %}
+{% block url %}http://opendada.org/{{ poem_type }}/{{ encoded_ids + '/' if encoded_ids }}{% endblock %}
 
 {% block title %}BASE_POEM{% endblock %}
 
@@ -117,7 +117,7 @@
       }
     });
     showPoem(currentPoemIndex);
-    
+
     $(window).on('popstate', function(e) {
       if (e.originalEvent.state == null) {
         return;
@@ -129,6 +129,10 @@
       history.replaceState(0, document.title, location.href);
     } catch (e) {
       window.console.error(e.message);
+      gtag('event', 'exception', {
+        'description': err,
+        'fatal': false
+      });
     }
   });
 
@@ -166,9 +170,17 @@
               currentPoem.encoded_ids + '/');
     } catch (e) {
       window.console.error(e.message);
+      gtag('event', 'exception', {
+        'description': err,
+        'fatal': false
+      });
     }
 
-    if (ga != null) ga('send', 'event', poemType, 'vote', vote.toString());
+    gtag('event', 'vote', {
+      'event_category': poemType,
+      'event_label': vote == 1 ? 'upvote' : vote == 0 ? 'skip' : 'downvote',
+      'value': vote.toString(),
+    });
   }
 
   function showPoem(poemIndex) {
@@ -194,7 +206,7 @@
       $poemContainers.eq(activePoemContainerIndex).fadeIn();
     }
 
-    var encodedUrl = encodeURIComponent('http://open-dada.com/{{ poem_type }}/' +
+    var encodedUrl = encodeURIComponent('http://opendada.org/{{ poem_type }}/' +
                                         currentPoem.encoded_ids + '/');
     $fbShareLink.attr('href', 'https://www.facebook.com/sharer/sharer.php?u=' + encodedUrl);
     $twitterShareLink.attr('href',
