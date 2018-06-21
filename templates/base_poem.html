@@ -176,11 +176,13 @@
       });
     }
 
+    var label = vote == 1 ? 'upvote' : vote == 0 ? 'skip' : 'downvote';
     gtag('event', 'vote', {
       'event_category': poemType,
-      'event_label': vote == 1 ? 'upvote' : vote == 0 ? 'skip' : 'downvote',
+      'event_label': label,
       'value': vote.toString(),
     });
+    FB && FB.AppEvents.logEvent('vote', vote, {category: poemType, label: label});
   }
 
   function showPoem(poemIndex) {

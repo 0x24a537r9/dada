@@ -43,6 +43,7 @@
 {% block footer_script %}
 {{ super() }}
 <script>
+  var poemType = {{ poem_type | to_json }};
   var entryTypes = {{ entry_types | to_json }};
 
   var $entryInputs = $('#{{ entry_types | join('-textbox, #') }}-textbox');
@@ -69,7 +70,7 @@
       return;
     }
 
-    createEntries(entryTypes, $entryInputs, $('#author-textbox'));
+    createEntries(poemType, entryTypes, $entryInputs, $('#author-textbox'));
   }
 </script>
 {% endblock %}

@@ -32,7 +32,7 @@ $.ajaxSetup({
   }
 });
 
-function createEntries(entryTypes, $entries, $author) {
+function createEntries(poemType, entryTypes, $entries, $author) {
   var hasEntryText = false;
   $entries.each(function(i, entry) {
     if ($(entry).val().trim()) {
@@ -65,6 +65,12 @@ function createEntries(entryTypes, $entries, $author) {
       localStorage.setItem('hasCreated', true);
       showBannerMessage('How about another?');
     }
+
+    gtag('event', 'create', {
+      'event_category': poemType,
+      'event_label': 'entries',
+    });
+    FB && FB.AppEvents.logEvent('create', null, {category: poemType, label: 'entries'});
   }).fail(function() {
     showBannerMessage('Uh-oh, we done goofed!');
   }).always(function() {

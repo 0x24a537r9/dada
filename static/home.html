@@ -3,6 +3,36 @@
 <html lang="en">
 <head>
   <title>The Open Dada Project</title>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-47488889-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-47488889-1');
+  </script>
+  <script>
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId      : '1404334723149304',
+        cookie     : true,
+        xfbml      : true,
+        version    : 'v3.0'
+      });
+
+      FB.AppEvents.logPageView();
+
+    };
+
+    (function(d, s, id){
+       var js, fjs = d.getElementsByTagName(s)[0];
+       if (d.getElementById(id)) {return;}
+       js = d.createElement(s); js.id = id;
+       js.src = "https://connect.facebook.net/en_US/sdk.js";
+       fjs.parentNode.insertBefore(js, fjs);
+     }(document, 'script', 'facebook-jssdk'));
+  </script>
   <link rel="shortcut icon" href="/static/favicon.ico"/>
   <link href="/static/base.css" rel="stylesheet" type="text/css">
   <link href="/static/base-mobile.css" rel="stylesheet" type="text/css">
@@ -22,14 +52,6 @@
 <meta property="og:title" content="The Open Dada Project"/>
 <meta property="og:description" content="Explore an infinite library of never-before-written, collaborative poems randomly assembled from phrases submitted by poets like you. Join the global literary experiment by submitting your own phrases!"/>
 
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-47488889-1"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'UA-47488889-1');
-  </script>
 </head>
 <body>
   <a href="/"><img id="logo" src="/static/logo.svg" alt="The Open Dada Project"/></a>
