@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Conditional Preview</title>
+  <link rel="shortcut icon" href="/static/favicon.ico"/>
+  <link href="/static/preview.css" rel="stylesheet" type="text/css">
+  <script src="/static/jquery.min.js"></script>
+  <script src="/static/jquery.textFit.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+  <div id="content">
+    <div class="poem-container">
+      <span class="condition poem-text">{{ poems[0].entries[0].text }}</span><br>
+      <span class="consequence poem-text">{{ poems[0].entries[1].text }}</span><br>
+      <div class="authors-container">
+        <span class="condition-author poem-author">{{ poems[0].entries[0].author }}</span><br>
+        <span class="consequence-author poem-author">{{ poems[0].entries[1].author }}</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

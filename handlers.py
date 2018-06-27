@@ -141,6 +141,20 @@ class PoemHandler(webapp2.RequestHandler):
     return r
 
 
+class PoemPreviewHandler(webapp2.RequestHandler):
+  @rate_limit(seconds_per_request=1)
+  @render_to()
+  def get(self, poem_type, encoded_ids):
+    r = {}
+    r[POEM_TYPE_KEY] = poem_type
+    r[TEMPLATE_KEY] = '%s_preview.html' % poem_type.replace('-', '_')
+
+    r[ENCODED_IDS_KEY] = encoded_ids
+    r[POEMS_KEY] = get_poems(poem_type, encoded_ids=encoded_ids)
+
+    return r
+
+
 class AjaxGetPoemHandler(webapp2.RequestHandler):
   @rate_limit(seconds_per_request=5)
   @ajax_request
@@ -188,7 +202,7 @@ class AjaxCreateEntriesHandler(webapp2.RequestHandler):
       return {ERRORS_KEY: 'The number of entry texts doesn\'t match the number of entry types...'}
 
     for entry_type, entry_text in zip(entry_types, entry_texts):
-      # TODO: Entry-type-specific length-check. 
+      # TODO: Entry-type-specific length-check.
       if len(entry_text) == 0:
         continue
       elif len(entry_text) > 64:
@@ -258,4 +272,3 @@ class AjaxVoteHandler(webapp2.RequestHandler):
     ndb.put_multi_async(entries + [poem])
 
     return poem
-

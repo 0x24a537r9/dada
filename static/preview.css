@@ -1,0 +1,93 @@
+@font-face {
+  font-family: 'Old Press';
+  src: local('Old Press'), url('/static/old-press.woff');
+}
+
+html {
+  width: 1024px;
+  height: 1024px;
+  margin: 0;
+  font-family: 'Old Press';
+  background: url('/static/paper.png');
+}
+
+body {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+div {
+  box-sizing: border-box;
+}
+
+#content {
+  text-align: center;
+}
+
+.accent,
+.question:before,
+.answer:before,
+.condition:before,
+.condition:after,
+.consequence:before,
+.poem-author:before,
+label {
+  color: #DE5547;
+}
+
+.poem-text {
+  font-size: 70pt;
+}
+
+.question:before {
+  content: "Q: ";
+}
+
+.answer:before {
+  content: "A: ";
+}
+
+.condition:before {
+  content: "If ";
+}
+
+.condition:after {
+  content: "\00A0\2026";
+}
+
+.consequence:before {
+  content: "\2026\00A0";
+  font-style: normal;
+}
+
+.answer,
+.answer:before,
+.answer-author,
+.answer-author:before,
+.consequence,
+.consequence-author,
+.consequence-author:before {
+  font-style: italic;
+}
+
+.authors-container {
+  display: inline-block;
+  padding-left: 60%;
+  width: 100%;
+  text-align: left;
+  white-space: nowrap;
+  font-size: 38pt;
+}
+
+.poem-author {
+  white-space: nowrap;
+  color: #555;
+}
+
+.poem-author:before {
+  content: "- ";
+}
